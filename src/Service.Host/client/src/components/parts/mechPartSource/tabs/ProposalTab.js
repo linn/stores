@@ -114,29 +114,18 @@ function ProposalTab({
                     onChange={handleFieldChange}
                 />
             </Grid>
-            {mechanicalOrElectrical === 'E' ? (
-                <Grid item xs={3}>
-                    <Dropdown
-                        label="Part Type*"
-                        propertyName="partType"
-                        items={electricalPartTypes}
-                        fullWidth
-                        value={partType}
-                        onChange={handleFieldChange}
-                    />
-                </Grid>
-            ) : (
-                <Grid item xs={3}>
-                    <Dropdown
-                        label="Part Type*"
-                        propertyName="partType"
-                        items={mechanicalPartTypes}
-                        fullWidth
-                        value={partType}
-                        onChange={handleFieldChange}
-                    />
-                </Grid>
-            )}
+            <Grid item xs={3}>
+                <Dropdown
+                    label="Part Type*"
+                    propertyName="partType"
+                    items={
+                        mechanicalOrElectrical === 'E' ? electricalPartTypes : mechanicalPartTypes
+                    }
+                    fullWidth
+                    value={partType}
+                    onChange={handleFieldChange}
+                />
+            </Grid>
             <Grid item xs={6}>
                 <InputField
                     onChange={handleFieldChange}
@@ -146,7 +135,6 @@ function ProposalTab({
                     label="description"
                 />
             </Grid>
-
             <Grid item xs={3}>
                 <Dropdown
                     label="Safety Critical"
@@ -171,7 +159,6 @@ function ProposalTab({
                 />
             </Grid>
             <Grid item xs={9} />
-
             <Grid item xs={3}>
                 <Dropdown
                     label="EMC Critical"
@@ -184,7 +171,6 @@ function ProposalTab({
                 />
             </Grid>
             <Grid item xs={9} />
-
             <Grid item xs={3}>
                 <Dropdown
                     label="Single Source"
@@ -206,7 +192,6 @@ function ProposalTab({
                     label="SafetyDataDirectory"
                 />
             </Grid>
-            <Grid item xs={12} />
             <Grid item xs={2}>
                 <InputField
                     onChange={handleFieldChange}
@@ -291,7 +276,7 @@ function ProposalTab({
                 <Dropdown
                     label="Assembly Type*"
                     propertyName="assemblyType"
-                    items={['TH', 'SM']}
+                    items={['SM', 'TH']}
                     fullWidth
                     value={assemblyType}
                     onChange={handleFieldChange}

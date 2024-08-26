@@ -9,6 +9,7 @@
     using ExternalServices;
 
     using Linn.Common.Authorisation;
+    using Linn.Common.Configuration;
     using Linn.Common.Persistence;
 
     public class PartService : IPartService
@@ -328,29 +329,12 @@
 
             part.Device = source.TransistorDeviceName;
 
-            var to = this.phoneList.FindBy(x => x.UserNumber == 16008);
-            var bcc1 = this.phoneList.FindBy(x => x.UserNumber == 33145);
-            var bcc2 = this.phoneList.FindBy(x => x.UserNumber == 5000);
-
-            var cc = new List<Dictionary<string, string>>
-                          { 
-                              new Dictionary<string, string>
-                                {
-                                    { "name", bcc1.User.Name },
-                                    { "address", bcc1.EmailAddress }
-                                },
-                              new Dictionary<string, string>
-                                  {
-                                      { "name", bcc2.User.Name },
-                                      { "address", bcc2.EmailAddress }
-                                  }
-                          };
             if (source.MechanicalOrElectrical == "E")
             {
                 this.emailService.SendEmail(
-                    to.EmailAddress,
-                    to.User.Name,
-                    cc,
+                    ConfigurationManager.Configuration["ELECTRONIC_SOURCING_EMAIL"],
+                    "Electronic Sourcing Sheet",
+                    null,
                     null,
                     "stores@linn.co.uk",
                     "Parts Utility",
@@ -359,10 +343,10 @@
                     null,
                     null);
             }
-            else
+            else if (source.MechanicalOrElectrical == "M")
             {
                 this.emailService.SendEmail(
-                    "mechanicalsourcingsheet@linn.co.uk",
+                    ConfigurationManager.Configuration["MECHANICAL_SOURCING_EMAIL"],
                     "Mechanical Sourcing Sheet",
                     null,
                     null,

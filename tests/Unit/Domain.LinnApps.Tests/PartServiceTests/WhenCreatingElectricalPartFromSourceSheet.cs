@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq.Expressions;
 
+    using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps.Parts;
 
     using NSubstitute;
@@ -33,9 +34,9 @@
         public void ShouldSendEmail()
         {
             this.EmailService.Received().SendEmail(
-                "user1@linn.co.uk",
-                "user1",
-                Arg.Any<List<Dictionary<string, string>>>(),
+                ConfigurationManager.Configuration["ELECTRONIC_SOURCING_EMAIL"],
+                "Electronic Sourcing Sheet",
+                Arg.Is<List<Dictionary<string, string>>>(x => x == null),
                 Arg.Is<List<Dictionary<string, string>>>(x => x == null),
                 "stores@linn.co.uk",
                 "Parts Utility",
