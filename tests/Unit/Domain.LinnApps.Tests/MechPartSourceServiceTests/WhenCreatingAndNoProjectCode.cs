@@ -4,23 +4,22 @@
 
     using FluentAssertions;
 
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
 
     using NSubstitute;
 
     using NUnit.Framework;
 
-    public class WhenCreating : ContextBase
+    public class WhenCreatingAndNoProjectCode : ContextBase
     {
         private MechPartSource candidate;
-
-        private MechPartSource result;
 
         [SetUp]
         public void SetUp()
         {
             this.candidate = new MechPartSource
-                                 {
+                                 { 
                                      Id = 1,
                                      SafetyCritical = "Y",
                                      SafetyDataDirectory = "/path",
@@ -28,20 +27,17 @@
                                      Usages = new List<MechPartUsage>
                                                   {
                                                       new MechPartUsage { Product = "TEST" }
-                                                  },
-                                     ProjectCode = "Project Code"
-                                 };
-
-            var userPrivileges = new List<string>();
+                                                  }
+            };
 
             this.AuthorisationService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(true);
-            this.result = this.Sut.Create(this.candidate, userPrivileges);
         }
 
         [Test]
-        public void ShouldReturnItem()
+        public void ShouldThrowException()
         {
-            this.result.Id.Should().Be(1);
+            var ex = Assert.Throws<CreatePartException>(() => this.Sut.Create(this.candidate, new List<string>()));
+            ex.Message.Should().Be("You must enter a project code when creating a source sheet");
         }
     }
 }
