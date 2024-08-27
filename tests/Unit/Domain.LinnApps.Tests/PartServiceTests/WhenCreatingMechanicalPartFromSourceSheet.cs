@@ -16,9 +16,6 @@
         [SetUp]
         public void SetUp()
         {
-            this.PhoneList.FindBy(Arg.Any<Expression<Func<PhoneListEntry, bool>>>()).Returns(
-                new PhoneListEntry { EmailAddress = "user1@linn.co.uk", User = new AuthUser { Name = "user1" } });
-
             this.PartRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>()).Returns(new Part { PartNumber = "PART" });
             this.SourceRepository.FindById(1).Returns(new MechPartSource { PartNumber = "PART", MechanicalOrElectrical = "M", Id = 1 });
             this.PartPack.CreatePartFromSourceSheet(1, 33087, out var message).Returns(
