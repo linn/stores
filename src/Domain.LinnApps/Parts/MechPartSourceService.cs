@@ -85,6 +85,11 @@
                 throw new CreatePartException("You must enter at least one Usage when creating a source sheet");
             }
 
+            if (candidate.ProjectCode == null)
+            {
+                throw new CreatePartException("You must enter a project code when creating a source sheet");
+            }
+
             return candidate;
         }
 
