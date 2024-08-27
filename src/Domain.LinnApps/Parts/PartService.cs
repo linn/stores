@@ -332,11 +332,11 @@
             if (source.MechanicalOrElectrical == "E")
             {
                 this.emailService.SendEmail(
-                    ConfigurationManager.Configuration["ELECTRONIC_SOURCING_EMAIL"],
+                    ConfigurationManager.Configuration["ELECTRONIC_SOURCING_ADDRESS"],
                     "Electronic Sourcing Sheet",
                     null,
                     null,
-                    "stores@linn.co.uk",
+                    ConfigurationManager.Configuration["FROM_STORES_ADDRESS"],
                     "Parts Utility",
                     $"New Source Sheet Created - {source.PartNumber}",
                     $"Click here to view: https://app.linn.co.uk/parts/sources/{source.Id}",
@@ -346,11 +346,11 @@
             else if (source.MechanicalOrElectrical == "M")
             {
                 this.emailService.SendEmail(
-                    ConfigurationManager.Configuration["MECHANICAL_SOURCING_EMAIL"],
+                    ConfigurationManager.Configuration["MECHANICAL_SOURCING_ADDRESS"],
                     "Mechanical Sourcing Sheet",
                     null,
                     null,
-                    "stores@linn.co.uk",
+                    ConfigurationManager.Configuration["FROM_STORES_ADDRESS"],
                     "Parts Utility",
                     $"New Source Sheet Created - {source.PartNumber}",
                     $"Click here to view: https://app.linn.co.uk/parts/sources/{source.Id}",
