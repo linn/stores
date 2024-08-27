@@ -55,21 +55,12 @@ Parameters:
   shipfilesFromAddress:
     Type: String
     Description: Email address shipfiles are sent from
-  mechanicalSourcingTestAddress:
-    Type: String
-    Description: Email address for mechanical sourcing sheets (test)
   mechanicalSourcingAddress:
     Type: String
     Description: Email address for mechanical sourcing sheets
-  electronicSourcingTestAddress:
-    Type: String
-    Description: Email address for electronic sourcing sheets (test)
   electronicSourcingAddress:
     Type: String
     Description: Email address for electronic sourcing sheets
-  fromStoresTestAddress:
-    Type: String
-    Description: Email address from stores (test)
   fromStoresAddress:
     Type: String
     Description: Email address from stores 
@@ -197,16 +188,10 @@ Resources:
           Value: !Ref pdfServiceRoot
         - Name: SHIPFILE_TEMPLATE_PATH
           Value: !Ref shipfileTemplatePath
-        - Name: MECHANICAL_SOURCING_TEST_ADDRESS
-          Value: !Ref mechanicalSourcingTestAddress
         - Name: MECHANICAL_SOURCING_ADDRESS
           Value: !Ref mechanicalSourcingAddress
-        - Name: ELECTRONIC_SOURCING_TEST_ADDRESS
-          Value: !Ref electronicSourcingTestAddress
         - Name: ELECTRONIC_SOURCING_ADDRESS
           Value: !Ref electronicSourcingAddress
-        - Name: FROM_STORES_TEST_ADDRESS
-          Value: !Ref fromStoresTestAddress
         - Name: FROM_STORES_ADDRESS
           Value: !Ref fromStoresAddress
         - Name: awsRegion

@@ -31,11 +31,11 @@
         public void ShouldSendEmail()
         {
             this.EmailService.Received().SendEmail(
-                ConfigurationManager.Configuration["ELECTRONIC_SOURCING_TEST_ADDRESS"],
+                ConfigurationManager.Configuration["TEST_EMAIL"],
                 "Electronic Sourcing Sheet",
                 Arg.Is<List<Dictionary<string, string>>>(x => x == null),
                 Arg.Is<List<Dictionary<string, string>>>(x => x == null),
-                ConfigurationManager.Configuration["FROM_STORES_TEST_ADDRESS"],
+                ConfigurationManager.Configuration["TEST_EMAIL"],
                 "Parts Utility",
                 "New Source Sheet Created - PART",
                 "Click here to view: https://app.linn.co.uk/parts/sources/1",
