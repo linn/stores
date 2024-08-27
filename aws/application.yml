@@ -55,6 +55,24 @@ Parameters:
   shipfilesFromAddress:
     Type: String
     Description: Email address shipfiles are sent from
+  mechanicalSourcingTestAddress:
+    Type: String
+    Description: Email address for mechanical sourcing sheets (test)
+  mechanicalSourcingAddress:
+    Type: String
+    Description: Email address for mechanical sourcing sheets
+  electronicSourcingTestAddress:
+    Type: String
+    Description: Email address for electronic sourcing sheets (test)
+  electronicSourcingAddress:
+    Type: String
+    Description: Email address for electronic sourcing sheets
+  fromStoresTestAddress:
+    Type: String
+    Description: Email address from stores (test)
+  fromStoresAddress:
+    Type: String
+    Description: Email address from stores 
   pdfServiceRoot:
     Type: String
     Description: Pdf Service API root url  
