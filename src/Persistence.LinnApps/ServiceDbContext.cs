@@ -959,6 +959,7 @@
             q.Property(e => e.BatchRef).HasColumnName("BATCH_REF");
             q.Property(e => e.State).HasColumnName("STATE").HasMaxLength(6).IsRequired();
             q.Property(e => e.Category).HasColumnName("CATEGORY").HasMaxLength(6).IsRequired();
+            q.Property(e => e.CurrentStock).HasColumnName("CURRENT_STOCK").HasMaxLength(1);
             q.Ignore(e => e.TriggerLevel);
         }
 

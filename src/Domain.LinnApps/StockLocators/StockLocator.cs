@@ -38,6 +38,8 @@
 
         public string Category { get; set; }
 
+        public string CurrentStock { get; set; }
+
         public IEnumerable<ReqMove> ReqMoves { get; set; }
 
         public StockTriggerLevel TriggerLevel { get; set; }
