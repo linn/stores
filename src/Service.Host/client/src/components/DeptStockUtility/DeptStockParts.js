@@ -14,6 +14,10 @@ function DeptStockParts({ items, itemsLoading, history }) {
         }
     }, [items, hasSearched]);
 
+    useEffect(() => {
+        document.title = 'Deptartment Pallets Search';
+    }, []);
+
     return (
         <Page>
             <Grid container spacing={3}>

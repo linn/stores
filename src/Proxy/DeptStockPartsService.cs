@@ -25,23 +25,19 @@
                     SELECT 1
                     FROM STOCK_LOCATORS SL
                     WHERE SL.PART_NUMBER = PART.PART_NUMBER
-                      AND SL.STOCK_POOL_CODE IN ('LINN DEPT', 'LS DEPT')
-                )
+                      AND SL.STOCK_POOL_CODE IN ('LINN DEPT', 'LS DEPT'))
                 OR (PART.STOCK_CONTROLLED = 'N'
                     AND NVL(PART.BASE_UNIT_PRICE, 0) = 0
                     AND NVL(PART.LINN_PRODUCED, 'N') = 'N'
                     AND NOT EXISTS (
                         SELECT 1
                         FROM STOCK_LOCATORS SL
-                        WHERE SL.PART_NUMBER = PART.PART_NUMBER
-                    )
-                )
+                        WHERE SL.PART_NUMBER = PART.PART_NUMBER))
                 OR EXISTS (
                     SELECT 1
                     FROM STOCK_LOCATORS SL
                     WHERE SL.PART_NUMBER = PART.PART_NUMBER
-                      AND SL.BUDGET_ID IS NULL
-                )";
+                      AND SL.BUDGET_ID IS NULL)";
 
             var rows = this.databaseService.ExecuteQuery(query).Tables[0].Rows;
             var result = new List<Part>();

@@ -69,6 +69,10 @@ function StockLocator({
         }
     }, [quantities, items]);
 
+    useEffect(() => {
+        document.title = 'Stock Locator';
+    }, []);
+
     const columns = [
         {
             title: 'Part',

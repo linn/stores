@@ -50,6 +50,10 @@ function DeptStockUtility({
         }
     }, [items, stockLocators, prevStockLocators, options]);
 
+    useEffect(() => {
+        document.title = 'Deptartmental Pallets Utility';
+    }, []);
+
     const handleSelectRows = selected => {
         setStockLocators(
             stockLocators.map(r =>
