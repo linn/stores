@@ -146,6 +146,7 @@ import stockTriggerLevels from './stockTriggerLevels';
 import partLibraries from './parts/partLibraries';
 import storesTransactionDefinitions from './storesTransactionDefinitions';
 import partSources from './parts/partSources';
+import stockLocatorReport from './stockLocatorReport';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -258,6 +259,7 @@ const rootReducer = history =>
         stockMoves,
         stockPools,
         stockQuantities,
+        stockLocatorReport,
         stockTriggerLevel,
         stockTriggerLevels,
         storageLocations,

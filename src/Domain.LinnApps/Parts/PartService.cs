@@ -9,6 +9,7 @@
     using ExternalServices;
 
     using Linn.Common.Authorisation;
+    using Linn.Common.Configuration;
     using Linn.Common.Persistence;
 
     public class PartService : IPartService
@@ -306,12 +307,12 @@
 
             part.ResistorTolerance = source.ResistorTolerance;
 
-            if (part.LibraryName == "Resistors")
+            if (part.LibraryName == "Resistors" || source.PartType == "RES")
             {
                 part.AltiumValueRkm = source.RkmCode;
                 part.AltiumValue = source.Resistance.ToString();
             }
-            else if (part.LibraryName == "Capacitors")
+            else if (part.LibraryName == "Capacitors" || source.PartType == "CAP")
             {
                 part.AltiumValueRkm = source.CapacitanceLetterAndNumeralCode;
                 part.AltiumValue = source.Capacitance.ToString();
@@ -328,34 +329,35 @@
 
             part.Device = source.TransistorDeviceName;
 
-            var to = this.phoneList.FindBy(x => x.UserNumber == 16008);
-            var bcc1 = this.phoneList.FindBy(x => x.UserNumber == 33145);
-            var bcc2 = this.phoneList.FindBy(x => x.UserNumber == 5000);
+            if (source.MechanicalOrElectrical == "E")
+            {
+                this.emailService.SendEmail(
+                    ConfigurationManager.Configuration["ELECTRONIC_SOURCING_ADDRESS"],
+                    "Electronic Sourcing Sheet",
+                    null,
+                    null,
+                    ConfigurationManager.Configuration["FROM_STORES_ADDRESS"],
+                    "Parts Utility",
+                    $"New Source Sheet Created - {source.PartNumber}",
+                    $"Click here to view: https://app.linn.co.uk/parts/sources/{source.Id}",
+                    null,
+                    null);
+            }
+            else if (source.MechanicalOrElectrical == "M")
+            {
+                this.emailService.SendEmail(
+                    ConfigurationManager.Configuration["MECHANICAL_SOURCING_ADDRESS"],
+                    "Mechanical Sourcing Sheet",
+                    null,
+                    null,
+                    ConfigurationManager.Configuration["FROM_STORES_ADDRESS"],
+                    "Parts Utility",
+                    $"New Source Sheet Created - {source.PartNumber}",
+                    $"Click here to view: https://app.linn.co.uk/parts/sources/{source.Id}",
+                    null,
+                    null);
+            }
 
-            var cc = new List<Dictionary<string, string>>
-                          { 
-                              new Dictionary<string, string>
-                                {
-                                    { "name", bcc1.User.Name },
-                                    { "address", bcc1.EmailAddress }
-                                },
-                              new Dictionary<string, string>
-                                  {
-                                      { "name", bcc2.User.Name },
-                                      { "address", bcc2.EmailAddress }
-                                  }
-                          };
-            this.emailService.SendEmail(
-                to.EmailAddress,
-                to.User.Name,
-                cc,
-                null,
-                "stores@linn.co.uk",
-                "Parts Utility",
-                $"New Source Sheet Created - {source.PartNumber}",
-                $"Click here to view: https://app.linn.co.uk/parts/sources/{source.Id}",
-                null,
-                null);
             return part; 
         }
 

@@ -21,7 +21,7 @@ function UsagesTab({
             editable: true
         },
         {
-            title: 'Quantity Used',
+            title: 'Quantity Per Assembly',
             id: 'quantityUsed',
             type: 'number',
             editable: true

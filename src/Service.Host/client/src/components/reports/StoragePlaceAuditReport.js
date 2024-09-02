@@ -83,7 +83,14 @@ export default function StoragePlaceAuditReport({ reportData, loading, error }) 
 
         return (
             <>
-                <SingleEditTable editable={false} columns={columns} rows={rows} />
+                <div style={{ padding: '100px', marginTop: '100px' }}>
+                    <SingleEditTable
+                        style={{ padding: '100px' }}
+                        editable={false}
+                        columns={columns}
+                        rows={rows}
+                    />
+                </div>
                 <Table className={classes.printTable}>
                     <TableHead>
                         <TableRow>

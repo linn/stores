@@ -16,7 +16,6 @@ function ProposalTab({
     emcCritical,
     singleSource,
     safetyDataDirectory,
-    productionDate,
     estimatedVolume,
     samplesRequired,
     sampleQuantity,
@@ -39,7 +38,7 @@ function ProposalTab({
     clearSearchDepartments,
     handleProjectChange
 }) {
-    const partTypes = [
+    const electricalPartTypes = [
         'CAP',
         'CONN',
         'CRYS',
@@ -56,6 +55,22 @@ function ProposalTab({
         'PROT',
         'ANT',
         'MOD'
+    ];
+
+    const mechanicalPartTypes = [
+        'RECORD',
+        'MCP',
+        'BOX',
+        'GRILL',
+        'LBL',
+        'MECH',
+        'CAB',
+        'MOLD',
+        'RAW',
+        'SPKR',
+        'TAPE',
+        'GLUE',
+        'WOOD'
     ];
     return (
         <Grid container spacing={3}>
@@ -99,20 +114,18 @@ function ProposalTab({
                     onChange={handleFieldChange}
                 />
             </Grid>
-            {mechanicalOrElectrical === 'E' ? (
-                <Grid item xs={3}>
-                    <Dropdown
-                        label="Part Type*"
-                        propertyName="partType"
-                        items={partTypes}
-                        fullWidth
-                        value={partType}
-                        onChange={handleFieldChange}
-                    />
-                </Grid>
-            ) : (
-                <Grid item xs={3} />
-            )}
+            <Grid item xs={3}>
+                <Dropdown
+                    label="Part Type*"
+                    propertyName="partType"
+                    items={
+                        mechanicalOrElectrical === 'E' ? electricalPartTypes : mechanicalPartTypes
+                    }
+                    fullWidth
+                    value={partType}
+                    onChange={handleFieldChange}
+                />
+            </Grid>
             <Grid item xs={6}>
                 <InputField
                     onChange={handleFieldChange}
@@ -122,7 +135,6 @@ function ProposalTab({
                     label="description"
                 />
             </Grid>
-
             <Grid item xs={3}>
                 <Dropdown
                     label="Safety Critical"
@@ -147,7 +159,6 @@ function ProposalTab({
                 />
             </Grid>
             <Grid item xs={9} />
-
             <Grid item xs={3}>
                 <Dropdown
                     label="EMC Critical"
@@ -160,7 +171,6 @@ function ProposalTab({
                 />
             </Grid>
             <Grid item xs={9} />
-
             <Grid item xs={3}>
                 <Dropdown
                     label="Single Source"
@@ -182,17 +192,6 @@ function ProposalTab({
                     label="SafetyDataDirectory"
                 />
             </Grid>
-            <Grid item xs={4} />
-            <Grid item xs={4}>
-                <DatePicker
-                    label="Production Date"
-                    value={productionDate}
-                    onChange={value => {
-                        handleFieldChange('productionDate', value);
-                    }}
-                />
-            </Grid>
-            <Grid item xs={8} />
             <Grid item xs={2}>
                 <InputField
                     onChange={handleFieldChange}
@@ -279,7 +278,6 @@ function ProposalTab({
                     propertyName="assemblyType"
                     items={['SM', 'TH']}
                     fullWidth
-                    allowNoValue
                     value={assemblyType}
                     onChange={handleFieldChange}
                 />
@@ -290,7 +288,7 @@ function ProposalTab({
                     onSelect={newValue => {
                         handleProjectChange(newValue);
                     }}
-                    label="Project Code"
+                    label="Project Code*"
                     modal
                     items={departmentsSearchResults}
                     value={projectCode}
@@ -299,6 +297,7 @@ function ProposalTab({
                     fetchItems={searchDepartments}
                     links={false}
                     clearSearch={clearSearchDepartments}
+                    required
                     placeholder="Search for project code"
                 />
             </Grid>
@@ -341,7 +340,6 @@ ProposalTab.propTypes = {
     emcCritical: PropTypes.string,
     singleSource: PropTypes.string,
     safetyDataDirectory: PropTypes.string,
-    productionDate: PropTypes.string,
     estimatedVolume: PropTypes.number,
     samplesRequired: PropTypes.string,
     sampleQuantity: PropTypes.number,
@@ -377,7 +375,6 @@ ProposalTab.defaultProps = {
     emcCritical: null,
     singleSource: null,
     safetyDataDirectory: null,
-    productionDate: null,
     estimatedVolume: null,
     samplesRequired: null,
     sampleQuantity: null,

@@ -71,6 +71,9 @@ function App() {
                 <ListItem component={Link} to="/inventory/reports/stores-move-log" button>
                     <Typography color="primary">Stores Move Log Report</Typography>
                 </ListItem>
+                <ListItem component={Link} to="/inventory/reports/stock-locators-report" button>
+                    <Typography color="primary">Stock Locator Report</Typography>
+                </ListItem>
             </List>
         </Page>
     );
