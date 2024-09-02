@@ -180,7 +180,7 @@ export default function StoragePlaceAuditReportOptions({
                             >
                                 Run Report
                             </Button>
-                        </Grid>{' '}
+                        </Grid>
                     </>
                 )}
             </Grid>

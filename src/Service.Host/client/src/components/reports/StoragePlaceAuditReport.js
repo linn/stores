@@ -4,8 +4,10 @@ import {
     ReportTable,
     Loading,
     ErrorCard,
-    SingleEditTable
+    SingleEditTable,
+    ExportButton
 } from '@linn-it/linn-form-components-library';
+import { useLocation } from 'react-router';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
@@ -14,6 +16,7 @@ import TableBody from '@material-ui/core/TableBody';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
+import config from '../../config';
 
 const useStyles = makeStyles(theme => ({
     printButton: {
@@ -30,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function StoragePlaceAuditReport({ reportData, loading, error }) {
     const classes = useStyles();
-
+    const location = useLocation();
     const ViewLayout = () => (
         <Page>
             <Grid container spacing={3}>
@@ -39,6 +42,11 @@ export default function StoragePlaceAuditReport({ reportData, loading, error }) 
                         <ErrorCard errorMessage={error} />
                     </Grid>
                 )}
+                <Grid item xs={12}>
+                    <ExportButton
+                        href={`${config.appRoot}/inventory/reports/storage-place-audit/report/export${location.search}`}
+                    />
+                </Grid>
                 <Grid item xs={12}>
                     {loading ? (
                         <Loading />

@@ -8,5 +8,8 @@
     public interface IStoragePlaceAuditReportFacadeService
     {
         IResult<ResultsModel> GetStoragePlaceAuditReport(IEnumerable<string> locationList, string locationRange);
+
+        IResult<IEnumerable<IEnumerable<string>>> GetStoragePlaceAuditReportExport(IEnumerable<string> locationList, string locationRange);
+
     }
 }
