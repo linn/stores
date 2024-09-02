@@ -15,7 +15,7 @@ function DeptStockParts({ items, itemsLoading, history }) {
     }, [items, hasSearched]);
 
     useEffect(() => {
-        document.title = 'Deptartment Pallets Search';
+        document.title = 'Department Pallets Search';
     }, []);
 
     return (

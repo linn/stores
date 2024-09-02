@@ -51,7 +51,7 @@ function DeptStockUtility({
     }, [items, stockLocators, prevStockLocators, options]);
 
     useEffect(() => {
-        document.title = 'Deptartmental Pallets Utility';
+        document.title = 'Departmental Pallets Utility';
     }, []);
 
     const handleSelectRows = selected => {
