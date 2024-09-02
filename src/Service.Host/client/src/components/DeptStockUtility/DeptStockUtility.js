@@ -282,16 +282,11 @@ function DeptStockUtility({
                                             disableSelectionOnClick
                                             onSelectionModelChange={handleSelectRows}
                                             checkboxSelection
-                                            // isRowSelectable={params =>
-                                            //     !stockLocators
-                                            //         .filter(s => s.id !== params.row.id)
-                                            //         .some(x => x.selected)
-                                            // }
-                                            // isCellEditable={params =>
-                                            //     (!stockLocators.some(x => x.edited) &&
-                                            //         !stockLocators.some(x => x.selected)) ||
-                                            //     params.row.edited
-                                            // }
+                                            isCellEditable={params =>
+                                                (!stockLocators.some(x => x.edited) &&
+                                                    !stockLocators.some(x => x.selected)) ||
+                                                params.row.edited
+                                            }
                                         />
                                     </div>
                                 </Grid>
