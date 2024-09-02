@@ -37,6 +37,7 @@
 
             this.Get("/inventory/reports/storage-place-audit/report", _ => this.StoragePlaceAuditReport());
             this.Get("/inventory/reports/storage-place-audit", _ => this.StoragePlaceAuditReportOptions());
+            this.Get("/inventory/reports/storage-place-audit/report/export", _ => this.StoragePlaceAuditReportExport());
             this.Get("/inventory/audit-locations", _ => this.GetAuditLocations());
             this.Get("/inventory/storage-places", _ => this.GetStoragePlaces());
             this.Get("/inventory/storage-place", _ => this.GetStoragePlace());
@@ -54,6 +55,15 @@
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get())
+                .WithView("Index");
+        }
+
+        private object StoragePlaceAuditReportExport()
+        {
+            var resource = this.Bind<StoragePlaceAuditReportRequestResource>();
+            var results = this.auditReportService.GetStoragePlaceAuditReportExport(resource.LocationList, resource.LocationRange);
+
+            return this.Negotiate.WithModel(results).WithAllowedMediaRange("text/csv")
                 .WithView("Index");
         }
 

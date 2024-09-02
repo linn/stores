@@ -50,6 +50,10 @@ function DeptStockUtility({
         }
     }, [items, stockLocators, prevStockLocators, options]);
 
+    useEffect(() => {
+        document.title = 'Departmental Pallets Utility';
+    }, []);
+
     const handleSelectRows = selected => {
         setStockLocators(
             stockLocators.map(r =>
@@ -242,10 +246,6 @@ function DeptStockUtility({
                         Double click a cell to start editing or use the buttons at the bottom of the
                         page to add or delete a row.
                     </Typography>
-                    <Typography variant="subtitle2">
-                        The table currently only supports adding/updating/deleting one row at a
-                        time.
-                    </Typography>
                 </Grid>
                 {itemError && (
                     <Grid item xs={12}>
@@ -261,6 +261,9 @@ function DeptStockUtility({
                     </Grid>
                 ) : (
                     <>
+                        <Grid item xs={12}>
+                            <Typography variant="h6">{part?.partNumber}</Typography>
+                        </Grid>
                         <Grid item xs={12}>
                             {stockLocators && (
                                 <Grid item xs={12}>
@@ -279,11 +282,6 @@ function DeptStockUtility({
                                             disableSelectionOnClick
                                             onSelectionModelChange={handleSelectRows}
                                             checkboxSelection
-                                            isRowSelectable={params =>
-                                                !stockLocators
-                                                    .filter(s => s.id !== params.row.id)
-                                                    .some(x => x.selected)
-                                            }
                                             isCellEditable={params =>
                                                 (!stockLocators.some(x => x.edited) &&
                                                     !stockLocators.some(x => x.selected)) ||

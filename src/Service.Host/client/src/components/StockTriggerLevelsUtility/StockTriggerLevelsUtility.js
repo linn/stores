@@ -56,6 +56,10 @@ function StockTriggerLevelsUtility({
         storagePlace: ''
     });
 
+    useEffect(() => {
+        document.title = 'Stock Trigger Levels';
+    }, []);
+
     const handleOptionsChange = (propertyName, newValue) =>
         setOptions({ ...options, [propertyName]: newValue });
 
