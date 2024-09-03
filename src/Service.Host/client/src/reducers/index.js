@@ -147,6 +147,7 @@ import partLibraries from './parts/partLibraries';
 import storesTransactionDefinitions from './storesTransactionDefinitions';
 import partSources from './parts/partSources';
 import stockLocatorReport from './stockLocatorReport';
+import partLibraryRefs from './parts/partLibraryRefs';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -216,6 +217,7 @@ const rootReducer = history =>
         parcels,
         part,
         partDataSheetValues,
+        partLibraryRefs,
         partLiveTest,
         parts,
         partSources,

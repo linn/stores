@@ -196,6 +196,8 @@
                 .As<IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource>>();
             builder.RegisterType<StoresTransactionDefinitionFacadeService>()
                 .As<IFacadeService<StoresTransactionDefinition, string, StoresTransactionDefinitionResource, StoresTransactionDefinitionResource>>();
+            builder.RegisterType<LibraryRefsFacadeService>()
+                .As<IFacadeService<LibraryRef, string, LibraryRefResource, LibraryRefResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

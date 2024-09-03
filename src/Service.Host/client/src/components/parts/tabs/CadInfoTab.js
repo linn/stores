@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { InputField, Dropdown } from '@linn-it/linn-form-components-library';
@@ -26,8 +26,11 @@ function CadInfoTab({
     capPositiveTolerance,
     capVoltageRating,
     frequency,
-    frequencyLabel
+    frequencyLabel,
+    partLibraryRefs
 }) {
+    const [libraryRefOption, setLibraryRefOption] = useState();
+
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -57,10 +60,28 @@ function CadInfoTab({
                     value={libraryRef}
                     label="Library Ref"
                     onChange={handleFieldChange}
+                    helperText="enter a new value, or pick one from the dropdown to the right"
                     propertyName="libraryRef"
                 />
             </Grid>
-            <Grid item xs={6} />
+            <Grid item xs={6}>
+                {libraryName && (
+                    <Dropdown
+                        label="Library Ref options"
+                        propertyName="libraryRefOption"
+                        items={partLibraryRefs
+                            ?.filter(x => x.libraryName === libraryName || x.libraryName === 'All')
+                            .map(l => l.libraryRef)}
+                        fullWidth
+                        allowNoValue
+                        value={libraryRefOption}
+                        onChange={(_, newValue) => {
+                            handleFieldChange('libraryRef', newValue);
+                            setLibraryRefOption(newValue);
+                        }}
+                    />
+                )}
+            </Grid>
 
             <Grid item xs={6}>
                 <InputField
@@ -302,7 +323,8 @@ CadInfoTab.propTypes = {
     capPositiveTolerance: PropTypes.string,
     capVoltageRating: PropTypes.string,
     frequency: PropTypes.string,
-    frequencyLabel: PropTypes.string
+    frequencyLabel: PropTypes.string,
+    partLibraryRefs: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 CadInfoTab.defaultProps = {
@@ -326,7 +348,8 @@ CadInfoTab.defaultProps = {
     capPositiveTolerance: null,
     capVoltageRating: null,
     frequency: null,
-    frequencyLabel: null
+    frequencyLabel: null,
+    partLibraryRefs: []
 };
 
 export default CadInfoTab;
