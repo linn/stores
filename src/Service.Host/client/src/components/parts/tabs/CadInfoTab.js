@@ -60,6 +60,7 @@ function CadInfoTab({
                     value={libraryRef}
                     label="Library Ref"
                     onChange={handleFieldChange}
+                    helperText="enter a new value, or pick one from the dropdown to the right"
                     propertyName="libraryRef"
                 />
             </Grid>
