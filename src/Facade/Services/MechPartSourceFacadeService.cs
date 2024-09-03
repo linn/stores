@@ -150,11 +150,7 @@
                                                                                            PartNumber = a.PartNumber,
                                                                                            Sequence = a.Sequence,
                                                                                            Supplier = a.SupplierId == null ? null :
-                                                                                                          new Supplier
-                                                                                                              {
-                                                                                                                  Id = (int)a.SupplierId,
-                                                                                                                  Name = a.SupplierName
-                                                                                                              }
+                                                                                                         this.supplierRepository.FindBy(x => x.Id == a.SupplierId)
                                                                                        }).ToList(),
                                  ApprovedReferenceStandards = resource.ApprovedReferenceStandards,
                                  ApprovedReferencesAvailable = resource.ApprovedReferencesAvailable,
