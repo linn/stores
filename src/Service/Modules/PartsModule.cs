@@ -56,6 +56,8 @@
         private readonly IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource>
             partLibrariesService;
 
+        private readonly IFacadeService<LibraryRef, string, LibraryRefResource, LibraryRefResource> libraryRefsService;
+
         public PartsModule(
             IPartsFacadeService partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -69,7 +71,8 @@
             IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService,
             IPartDataSheetValuesService dataSheetsValuesService,
             IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource> tqmsOverridesService,
-            IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource> partLibrariesService)
+            IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource> partLibrariesService,
+            IFacadeService<LibraryRef, string, LibraryRefResource, LibraryRefResource> libraryRefsService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -128,6 +131,10 @@
 
             this.partLibrariesService = partLibrariesService;
             this.Get("/parts/libraries", _ => this.GetPartLibraries());
+
+            this.libraryRefsService = libraryRefsService;
+            this.Get("/parts/library-refs", _ => this.GetPartLibraryRefs());
+
         }
 
         public object GetApp()
@@ -389,6 +396,13 @@
         {
             return this.Negotiate.WithModel(
                     this.partLibrariesService.GetAll())
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetPartLibraryRefs()
+        {
+            return this.Negotiate.WithModel(
+                    this.libraryRefsService.GetAll())
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 

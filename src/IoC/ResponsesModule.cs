@@ -249,6 +249,7 @@
             builder.RegisterType<StoresTransactionDefinitionResourceBuilder>().As<IResourceBuilder<StoresTransactionDefinition>>();
             builder.RegisterType<StoresTransactionDefinitionsResourceBuilder>().As<IResourceBuilder<IEnumerable<StoresTransactionDefinition>>>();
             builder.RegisterType<MechPartSourcesResourceBuilder>().As<IResourceBuilder<IEnumerable<MechPartSource>>>();
+            builder.RegisterType<LibraryRefsResourceBuilder>().As<IResourceBuilder<IEnumerable<LibraryRef>>>();
         }
     }
 }

@@ -162,6 +162,7 @@
             builder.RegisterType<StoresTransactionDefinitionRepository>().As<IRepository<StoresTransactionDefinition, string>>();
             builder.RegisterType<AddressesRepository>().As<IRepository<Address, int>>();
             builder.RegisterType<InvoiceRepository>().As<IRepository<Invoice, int>>();
+            builder.RegisterType<LibraryRefsQueryRepository>().As<IQueryRepository<LibraryRef>>();
         }
     }
 }
