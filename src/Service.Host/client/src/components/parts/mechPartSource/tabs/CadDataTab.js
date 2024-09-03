@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { InputField, Dropdown } from '@linn-it/linn-form-components-library';
@@ -13,7 +13,7 @@ export default function CadDataTab({
     footprintRef3,
     partLibraryRefs
 }) {
-    console.log(partLibraryRefs);
+    const [libraryRefOption, setLibraryRefOption] = useState();
     return (
         <Grid container spacing={3}>
             <Grid item xs={6}>
@@ -35,10 +35,28 @@ export default function CadDataTab({
                     value={libraryRef}
                     propertyName="libraryRef"
                     fullWidth
+                    helperText="enter a new value, or pick one from the dropdown to the right"
                     onChange={handleFieldChange}
                 />
             </Grid>
-            <Grid item xs={6} />
+            <Grid item xs={6}>
+                {libraryName && (
+                    <Dropdown
+                        label="Library Ref options"
+                        propertyName="libraryRefOption"
+                        items={partLibraryRefs
+                            ?.map(l => l.libraryRef)
+                            .filter(x => x.libraryName === libraryName || x.librayName === 'All')}
+                        fullWidth
+                        allowNoValue
+                        value={libraryRefOption}
+                        onChange={(_, newValue) => {
+                            handleFieldChange('libraryRef', newValue);
+                            setLibraryRefOption(newValue);
+                        }}
+                    />
+                )}
+            </Grid>
             <Grid item xs={6}>
                 <InputField
                     label="Footprint Ref"
