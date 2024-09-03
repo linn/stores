@@ -166,8 +166,8 @@ function MechPartSource({
         clearErrors();
         body.resistanceUnits = rkmLetters[mechPartSource.resistanceUnits];
         body.capacitanceUnit = capacitanceUnits[mechPartSource.capacitanceUnits];
-        body.mechPartAlts = suppliersData.map(m => ({ ...m, id: Number(m.supplierId) }));
-        body.mechPartManufacturerAlts = manufacturersData.map(m => ({ ...m, id: m.preference }));
+        body.mechPartAlts = suppliersData?.map(m => ({ ...m, id: Number(m.supplierId) }));
+        body.mechPartManufacturerAlts = manufacturersData?.map(m => ({ ...m, id: m.preference }));
         body.capacitance =
             typeof mechPartSource.capacitance === 'string'
                 ? mechPartSource.capacitance
