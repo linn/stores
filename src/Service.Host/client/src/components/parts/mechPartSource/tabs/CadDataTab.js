@@ -45,8 +45,8 @@ export default function CadDataTab({
                         label="Library Ref options"
                         propertyName="libraryRefOption"
                         items={partLibraryRefs
-                            ?.map(l => l.libraryRef)
-                            .filter(x => x.libraryName === libraryName || x.librayName === 'All')}
+                            ?.filter(x => x.libraryName === libraryName || x.librayName === 'All')
+                            .map(l => l.libraryRef)}
                         fullWidth
                         allowNoValue
                         value={libraryRefOption}
