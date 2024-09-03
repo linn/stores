@@ -166,8 +166,8 @@ function MechPartSource({
         clearErrors();
         body.resistanceUnits = rkmLetters[mechPartSource.resistanceUnits];
         body.capacitanceUnit = capacitanceUnits[mechPartSource.capacitanceUnits];
-        body.mechPartAlts = suppliersData;
-        body.mechPartManufacturerAlts = manufacturersData;
+        body.mechPartAlts = suppliersData.map(m => ({ ...m, id: Number(m.supplierId) }));
+        body.mechPartManufacturerAlts = manufacturersData.map(m => ({ ...m, id: m.preference }));
         body.capacitance =
             typeof mechPartSource.capacitance === 'string'
                 ? mechPartSource.capacitance
@@ -293,9 +293,9 @@ function MechPartSource({
         );
     };
 
-    const handleManufacturerChange = (sequence, newValue) => {
+    const handleManufacturerChange = (id, newValue) => {
         setManufacturersData(m =>
-            m.map(x => (x.sequence === sequence ? { ...x, manufacturerCode: newValue.name } : x))
+            m.map(x => (x.id === id ? { ...x, manufacturerCode: newValue.name } : x))
         );
     };
 
