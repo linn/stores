@@ -429,6 +429,7 @@
         private void BuildLibraryRefs(ModelBuilder builder)
         {
             var q = builder.Entity<LibraryRef>().ToTable("ECIT_LIBRARY_REFS");
+            q.HasKey(c => c.Ref);
             q.Property(c => c.LibraryName).HasColumnName("LIBRARY_NAME").HasMaxLength(100);
             q.Property(c => c.Ref).HasColumnName("LIBRARY_REF").HasMaxLength(100);
         }

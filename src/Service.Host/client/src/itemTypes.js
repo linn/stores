@@ -507,3 +507,9 @@ export const storesTransactionDefinitions = new ItemType(
     'STORES_TRANSACTION_DEFINITIONS',
     '/inventory/stores-transaction-definitions'
 );
+
+export const partLibraryRefs = new ItemType(
+    'partLibraryRefs',
+    'PART_LIBRARY_REFS',
+    '/parts/library-refs'
+);

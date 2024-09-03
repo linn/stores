@@ -10,8 +10,10 @@ export default function CadDataTab({
     libraryRef,
     footprintRef,
     footprintRef2,
-    footprintRef3
+    footprintRef3,
+    partLibraryRefs
 }) {
+    console.log(partLibraryRefs);
     return (
         <Grid container spacing={3}>
             <Grid item xs={6}>
@@ -78,7 +80,8 @@ CadDataTab.propTypes = {
     footprintRef: PropTypes.string,
     footprintRef2: PropTypes.string,
     footprintRef3: PropTypes.string,
-    partLibraries: PropTypes.arrayOf(PropTypes.shape({}))
+    partLibraries: PropTypes.arrayOf(PropTypes.shape({})),
+    partLibraryRefs: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 CadDataTab.defaultProps = {
@@ -87,5 +90,6 @@ CadDataTab.defaultProps = {
     footprintRef: null,
     footprintRef2: null,
     footprintRef3: null,
-    partLibraries: []
+    partLibraries: [],
+    partLibraryRefs: []
 };

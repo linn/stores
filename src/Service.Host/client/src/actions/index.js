@@ -407,3 +407,5 @@ export const partSourcesActionTypes = makeActionTypes(itemTypes.partSources.acti
 export const stockLocatorReportActionTypes = makeReportActionTypes(
     reportTypes.stockLocatorReport.actionType
 );
+
+export const partLibraryRefsActionTypes = makeActionTypes(itemTypes.partLibraryRefs.actionType);
