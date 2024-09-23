@@ -28,7 +28,7 @@ function ManufacturersTab({
     };
 
     const selectManufacturerSearchResult = (_propertyName, manufacturer, updatedItem) => {
-        handleManufacturerChange(updatedItem.sequence, manufacturer);
+        handleManufacturerChange(updatedItem.id, manufacturer);
     };
 
     const columns = [

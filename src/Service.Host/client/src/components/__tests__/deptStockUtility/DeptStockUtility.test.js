@@ -63,7 +63,8 @@ const defaultProps = {
     snackbarVisible: false,
     setSnackbarVisible: jest.fn(),
     itemError: null,
-    history: { push }
+    history: { push },
+    part: { partNumber: 'EMPTY' }
 };
 
 //eslint-disable-next-line react/jsx-props-no-spreading
@@ -111,14 +112,6 @@ describe('When row selected...', () => {
             })
         ).toHaveClass('Mui-selected');
         expect(button).not.toBeDisabled();
-    });
-
-    test('Should not allow other row selection', () => {
-        // the one we selected should be enabled so we can unselect
-        expect(screen.getAllByRole('checkbox')[1]).not.toBeDisabled();
-
-        // the other should be disabled
-        expect(screen.getAllByRole('checkbox')[2]).toBeDisabled();
     });
 
     test('Should delete selected row when button clicked', () => {

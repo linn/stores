@@ -13,62 +13,44 @@
     {
         private readonly IReportingHelper reportingHelper;
 
-        private readonly IPartRepository partsRepository;
-
         private readonly IFilterByWildcardRepository<StockLocator, int> filterByWildcardRepository;
-
-        private readonly IQueryRepository<StoragePlace> storagePlaceRepository;
 
         public StoragePlaceAuditReportService(
             IReportingHelper reportingHelper,
-            IPartRepository partsRepository,
-            IFilterByWildcardRepository<StockLocator, int> filterByWildcardRepository,
-            IQueryRepository<StoragePlace> storagePlaceRepository)
+            IFilterByWildcardRepository<StockLocator, int> filterByWildcardRepository)
         {
             this.reportingHelper = reportingHelper;
-            this.partsRepository = partsRepository;
             this.filterByWildcardRepository = filterByWildcardRepository;
-            this.storagePlaceRepository = storagePlaceRepository;
         }
 
         public ResultsModel StoragePlaceAuditReport(IEnumerable<string> locationList, string locationRange)
         {
-            List<StoragePlace> storagePlaces;
+            var stockLocators = new List<StockLocator>();
 
             if (!string.IsNullOrEmpty(locationRange) && locationRange.StartsWith("E-K"))
             {
-                storagePlaces = this.storagePlaceRepository.FilterBy(s => s.Name.StartsWith(locationRange))
-                    .OrderBy(s => s.Name).ToList();
+                stockLocators = this.filterByWildcardRepository
+                    .FilterBy(s => s.CurrentStock == "Y" && s.StorageLocation.LocationCode.StartsWith(locationRange))
+                    .OrderBy(s => s.StorageLocation.LocationCode).ThenBy(s => s.PartNumber).ToList();
             }
             else
             {
-                storagePlaces = this.storagePlaceRepository.FilterBy(s => locationList.Any(l => s.Name == l))
-                    .OrderBy(s => s.Name).ToList();
+                foreach (var loc in locationList)
+                {
+                    if (loc.StartsWith("P"))
+                    {
+                        stockLocators.AddRange(this.filterByWildcardRepository
+                            .FilterBy(s => s.CurrentStock == "Y" && int.Parse(loc.Substring(1)) == s.PalletNumber));
+                    }
+                    else
+                    {
+                        stockLocators.AddRange(this.filterByWildcardRepository
+                            .FilterBy(s => s.CurrentStock == "Y" && loc == s.StorageLocation.LocationCode));
+                    }
+                }
+
+                stockLocators = stockLocators.OrderBy(a => a.PalletNumber).ThenBy(b => b.StorageLocation?.LocationCode).ThenBy(c => c.PartNumber).ToList();
             }
-
-            var stockLocators = this.filterByWildcardRepository
-                .FilterBy(
-                    s => s.Quantity > 0 && storagePlaces.Any(
-                             sp => sp.LocationId == s.LocationId && sp.PalletNumber == s.PalletNumber)).Select(
-                    sl => new StockLocator
-                              {
-                                  Id = sl.Id,
-                                  Quantity = sl.Quantity,
-                                  PalletNumber = sl.PalletNumber,
-                                  LocationId = sl.LocationId,
-                                  BudgetId = sl.BudgetId,
-                                  PartNumber = sl.PartNumber,
-                                  QuantityAllocated = sl.QuantityAllocated
-                              }).OrderBy(s => s.LocationId).ThenBy(s => s.PartNumber).ToList();
-
-            var parts = this.partsRepository.FilterBy(p => stockLocators.Any(s => s.PartNumber == p.PartNumber)).Select(
-                p => new Part
-                         {
-                             PartNumber = p.PartNumber,
-                             Description = p.Description,
-                             OurUnitOfMeasure = p.OurUnitOfMeasure,
-                             RawOrFinished = p.RawOrFinished
-                         }).ToList();
 
             var model = new ResultsModel { ReportTitle = new NameModel($"Storage Place: {locationRange}") };
 
@@ -76,61 +58,54 @@
 
             model.AddSortedColumns(columns);
 
-            var values = this.SetModelRows(storagePlaces, stockLocators, parts);
+            var values = this.SetModelRows(stockLocators);
 
             this.reportingHelper.AddResultsToModel(model, values, CalculationValueModelType.Quantity, true);
 
             return model;
         }
 
-        private List<CalculationValueModel> SetModelRows(
-            IReadOnlyCollection<StoragePlace> storagePlaces,
-            IEnumerable<StockLocator> stockLocators,
-            IReadOnlyCollection<Part> parts)
+        private List<CalculationValueModel> SetModelRows(IEnumerable<StockLocator> stockLocators)
         {
             var values = new List<CalculationValueModel>();
 
             foreach (var stockLocator in stockLocators)
             {
-                var storagePlace = storagePlaces.First(
-                    sp => sp.LocationId == stockLocator.LocationId && sp.PalletNumber == stockLocator.PalletNumber);
-
-                var quantity = stockLocator.Quantity;
-
-                var quantityAllocated = stockLocator.QuantityAllocated;
-
-                var part = parts.First(p => p.PartNumber == stockLocator.PartNumber);
-
                 var rowId = $"{stockLocator.LocationId}{stockLocator.PalletNumber}{stockLocator.PartNumber}";
 
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = rowId, TextDisplay = storagePlace.Name, ColumnId = "Storage Place"
+                            RowId = rowId,
+                            TextDisplay =
+                                stockLocator.PalletNumber.HasValue
+                                    ? $"P{stockLocator.PalletNumber}"
+                                    : stockLocator.StorageLocation.LocationCode,
+                            ColumnId = "Storage Place"
                         });
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = rowId, TextDisplay = part.PartNumber, ColumnId = "Part Number"
+                            RowId = rowId, TextDisplay = stockLocator.PartNumber, ColumnId = "Part Number"
                         });
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = rowId, TextDisplay = part.RawOrFinished, ColumnId = "Raw or Finished"
+                            RowId = rowId, TextDisplay = stockLocator.Part.RawOrFinished, ColumnId = "Raw or Finished"
                         });
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = rowId, TextDisplay = part.Description, ColumnId = "Description"
+                            RowId = rowId, TextDisplay = stockLocator.Part.Description, ColumnId = "Description"
                         });
                 values.Add(
-                    new CalculationValueModel { RowId = rowId, TextDisplay = part.OurUnitOfMeasure, ColumnId = "UOM" });
+                    new CalculationValueModel { RowId = rowId, TextDisplay = stockLocator.Part.OurUnitOfMeasure, ColumnId = "UOM" });
                 values.Add(
-                    new CalculationValueModel { RowId = rowId, Quantity = quantity ?? 0, ColumnId = "Quantity" });
+                    new CalculationValueModel { RowId = rowId, Quantity = stockLocator.Quantity ?? 0, ColumnId = "Quantity" });
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = rowId, Quantity = quantityAllocated ?? 0, ColumnId = "Allocated"
+                            RowId = rowId, Quantity = stockLocator.QuantityAllocated ?? 0, ColumnId = "Allocated"
                         });
             }
 

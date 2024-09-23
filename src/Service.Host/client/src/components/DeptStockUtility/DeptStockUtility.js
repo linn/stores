@@ -19,6 +19,7 @@ import Page from '../../containers/Page';
 function DeptStockUtility({
     items,
     itemsLoading,
+    part,
     departments,
     clearDepartmentsSearch,
     searchDepartments,
@@ -48,6 +49,10 @@ function DeptStockUtility({
             }
         }
     }, [items, stockLocators, prevStockLocators, options]);
+
+    useEffect(() => {
+        document.title = 'Departmental Pallets Utility';
+    }, []);
 
     const handleSelectRows = selected => {
         setStockLocators(
@@ -204,7 +209,7 @@ function DeptStockUtility({
         <Grid item xs={12}>
             <SaveBackCancelButtons
                 backClick={() => history.push('/inventory/dept-stock-parts')}
-                saveDisabled={!stockLocators.some(x => x.edited)}
+                saveDisabled={!stockLocators.some(x => x.edited) || !part}
                 cancelClick={() => setStockLocators(items)}
                 saveClick={() => {
                     stockLocators
@@ -217,7 +222,7 @@ function DeptStockUtility({
                         .forEach(s => {
                             const body = s;
                             if (!body.partNumber) {
-                                body.partNumber = stockLocators.find(l => l.partNumber).partNumber;
+                                body.partNumber = part.partNumber;
                             }
                             createStockLocator(body);
                         });
@@ -241,10 +246,6 @@ function DeptStockUtility({
                         Double click a cell to start editing or use the buttons at the bottom of the
                         page to add or delete a row.
                     </Typography>
-                    <Typography variant="subtitle2">
-                        The table currently only supports adding/updating/deleting one row at a
-                        time.
-                    </Typography>
                 </Grid>
                 {itemError && (
                     <Grid item xs={12}>
@@ -260,6 +261,9 @@ function DeptStockUtility({
                     </Grid>
                 ) : (
                     <>
+                        <Grid item xs={12}>
+                            <Typography variant="h6">{part?.partNumber}</Typography>
+                        </Grid>
                         <Grid item xs={12}>
                             {stockLocators && (
                                 <Grid item xs={12}>
@@ -278,11 +282,6 @@ function DeptStockUtility({
                                             disableSelectionOnClick
                                             onSelectionModelChange={handleSelectRows}
                                             checkboxSelection
-                                            isRowSelectable={params =>
-                                                !stockLocators
-                                                    .filter(s => s.id !== params.row.id)
-                                                    .some(x => x.selected)
-                                            }
                                             isCellEditable={params =>
                                                 (!stockLocators.some(x => x.edited) &&
                                                     !stockLocators.some(x => x.selected)) ||
@@ -357,6 +356,9 @@ DeptStockUtility.propTypes = {
             errors: PropTypes.arrayOf(PropTypes.shape({}))
         })
     }),
+    part: PropTypes.shape({
+        partNumber: PropTypes.string
+    }),
     history: PropTypes.shape({ push: PropTypes.func }).isRequired
 };
 
@@ -369,7 +371,8 @@ DeptStockUtility.defaultProps = {
     storagePlaces: [],
     stockLocatorLoading: false,
     snackbarVisible: false,
-    itemError: null
+    itemError: null,
+    part: null
 };
 
 export default DeptStockUtility;

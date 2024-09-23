@@ -166,8 +166,8 @@ function MechPartSource({
         clearErrors();
         body.resistanceUnits = rkmLetters[mechPartSource.resistanceUnits];
         body.capacitanceUnit = capacitanceUnits[mechPartSource.capacitanceUnits];
-        body.mechPartAlts = suppliersData;
-        body.mechPartManufacturerAlts = manufacturersData;
+        body.mechPartAlts = suppliersData?.map(m => ({ ...m, id: Number(m.supplierId) }));
+        body.mechPartManufacturerAlts = manufacturersData?.map(m => ({ ...m, id: m.preference }));
         body.capacitance =
             typeof mechPartSource.capacitance === 'string'
                 ? mechPartSource.capacitance
@@ -293,9 +293,9 @@ function MechPartSource({
         );
     };
 
-    const handleManufacturerChange = (sequence, newValue) => {
+    const handleManufacturerChange = (id, newValue) => {
         setManufacturersData(m =>
-            m.map(x => (x.sequence === sequence ? { ...x, manufacturerCode: newValue.name } : x))
+            m.map(x => (x.id === id ? { ...x, manufacturerCode: newValue.name } : x))
         );
     };
 
@@ -406,12 +406,18 @@ function MechPartSource({
                                 />
                                 <Tab label="Quality Requirements" />
                                 <Tab label="Suppliers" />
-                                <Tab label="Manufacturers" />
+                                <Tab
+                                    label="Manufacturers"
+                                    disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
+                                />
                                 <Tab
                                     label="Param Data"
                                     disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
                                 />
-                                <Tab label="Cad Data" />
+                                <Tab
+                                    label="Cad Data"
+                                    disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
+                                />
                                 <Tab label="Quotes" />
                                 <Tab label="Usages" />
                                 <Tab label="Verification" />
@@ -431,7 +437,6 @@ function MechPartSource({
                                     emcCritical={mechPartSource.emcCritical}
                                     singleSource={mechPartSource.singleSource}
                                     safetyDataDirectory={mechPartSource.safetyDataDirectory}
-                                    productionDate={mechPartSource.productionDate}
                                     estimatedVolume={mechPartSource.estimatedVolume}
                                     samplesRequired={mechPartSource.samplesRequired}
                                     sampleQuantity={mechPartSource.sampleQuantity}

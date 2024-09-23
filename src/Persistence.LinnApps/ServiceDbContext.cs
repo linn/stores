@@ -273,6 +273,8 @@
 
         public DbSet<StoresBudgetPosting> StoresBudgetPostings { get; set; }
 
+        public DbSet<LibraryRef> LibraryRefs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -403,6 +405,7 @@
             this.QueryDespatchPalletQueueScsDetails(builder);
             this.BuildScsStorePallets(builder);
             this.BuildStoresBudgetPostings(builder);
+            this.BuildLibraryRefs(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -421,6 +424,14 @@
             optionsBuilder.UseLoggerFactory(MyLoggerFactory);
             optionsBuilder.EnableSensitiveDataLogging(true);
             base.OnConfiguring(optionsBuilder);
+        }
+
+        private void BuildLibraryRefs(ModelBuilder builder)
+        {
+            var q = builder.Entity<LibraryRef>().ToTable("ECIT_LIBRARY_REFS");
+            q.HasKey(c => c.Ref);
+            q.Property(c => c.LibraryName).HasColumnName("LIBRARY_NAME").HasMaxLength(100);
+            q.Property(c => c.Ref).HasColumnName("LIBRARY_REF").HasMaxLength(100);
         }
 
         private void BuildAccountingCompanies(ModelBuilder builder)
@@ -959,6 +970,7 @@
             q.Property(e => e.BatchRef).HasColumnName("BATCH_REF");
             q.Property(e => e.State).HasColumnName("STATE").HasMaxLength(6).IsRequired();
             q.Property(e => e.Category).HasColumnName("CATEGORY").HasMaxLength(6).IsRequired();
+            q.Property(e => e.CurrentStock).HasColumnName("CURRENT_STOCK").HasMaxLength(1);
             q.Ignore(e => e.TriggerLevel);
         }
 

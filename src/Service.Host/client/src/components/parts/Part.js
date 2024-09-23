@@ -79,6 +79,10 @@ function Part({
     });
 
     useEffect(() => {
+        document.title = 'Parts Utility';
+    }, []);
+
+    useEffect(() => {
         if (copy) {
             dispatch({
                 type: 'initialiseCopy',
