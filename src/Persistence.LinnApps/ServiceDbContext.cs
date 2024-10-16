@@ -275,6 +275,8 @@
 
         public DbSet<LibraryRef> LibraryRefs { get; set; }
 
+        public DbQuery<UnmatchedParcel> UnmatchedParcels { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -406,6 +408,7 @@
             this.BuildScsStorePallets(builder);
             this.BuildStoresBudgetPostings(builder);
             this.BuildLibraryRefs(builder);
+            this.QueryUnmatchedParcels(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -2389,6 +2392,20 @@
             q.Property(a => a.Level).HasColumnName("LVL");
             q.Property(a => a.Side).HasColumnName("SIDE");
             q.Property(a => a.LastUpdated).HasColumnName("LAST_UPDATED");
+        }
+
+        private void QueryUnmatchedParcels(ModelBuilder builder)
+        {
+            var q = builder.Query<UnmatchedParcel>().ToView("V_UNMATCHED_PARCELS");
+            q.Property(v => v.ParcelNumber).HasColumnName("PARCEL_NUMBER");
+            q.Property(v => v.DateCreated).HasColumnName("DATE_CREATED");
+            q.Property(v => v.DateReceived).HasColumnName("DATE_RECEIVED");
+            q.Property(v => v.SupplierId).HasColumnName("SUPPLIER_ID");
+            q.Property(v => v.SupplierName).HasColumnName("SUPPLIER_NAME").HasMaxLength(50);
+            q.Property(v => v.CarrierName).HasColumnName("CARRIER_NAME").HasMaxLength(50);
+            q.Property(v => v.CheckedBy).HasColumnName("CHECKED_BY").HasMaxLength(50);
+            q.Property(v => v.Comments).HasColumnName("COMMENTS").HasMaxLength(2000);
+            q.Property(v => v.ConsignmentNumber).HasColumnName("CONSIGNMENT_NUMBER").HasMaxLength(20);
         }
     }
 }
