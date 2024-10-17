@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class UnmatchedParcels
+    public class UnmatchedParcel
     {
         public int ParcelNumber { get; set; }
 
