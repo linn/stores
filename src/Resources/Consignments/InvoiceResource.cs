@@ -1,6 +1,8 @@
 ﻿namespace Linn.Stores.Resources.Consignments
 {
-    public class InvoiceResource
+    using Linn.Common.Resources;
+
+    public class InvoiceResource : HypermediaResource
     {
         public int DocumentNumber { get; set; }
 
