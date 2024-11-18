@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import config from '../../config';
 
 function InvoicesTab({
     invoices,
@@ -25,7 +26,9 @@ function InvoicesTab({
                         </Grid>
                         <Grid item xs={10}>
                             {invoices.map(i => (
-                                <Typography variant="subtitle2">{i.documentNumber}</Typography>
+                                <a href={`${config.proxyRoot}/sales/invoices/${i.documentNumber}`}>
+                                    <Typography variant="subtitle2">{i.documentNumber}</Typography>
+                                </a>
                             ))}
                         </Grid>
                     </>
