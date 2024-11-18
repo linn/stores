@@ -1,5 +1,5 @@
 import React from 'react';
-import { Loading, LinkButton } from '@linn-it/linn-form-components-library';
+import { Loading } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
