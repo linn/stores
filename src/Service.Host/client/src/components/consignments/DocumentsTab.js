@@ -1,5 +1,5 @@
 import React from 'react';
-import { Loading } from '@linn-it/linn-form-components-library';
+import { Loading, utilities } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
@@ -26,7 +26,7 @@ function InvoicesTab({
                         </Grid>
                         <Grid item xs={10}>
                             {invoices.map(i => (
-                                <a href={`${config.proxyRoot}/sales/invoices/${i.documentNumber}`}>
+                                <a href={`${config.proxyRoot}${utilities.getHref(i, 'self')}`}>
                                     <Typography variant="subtitle2">{i.documentNumber}</Typography>
                                 </a>
                             ))}
