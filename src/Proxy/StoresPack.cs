@@ -152,7 +152,7 @@
 
                 var result = new OracleParameter("G_ERR", OracleDbType.Varchar2)
                                  {
-                                     Direction = ParameterDirection.ReturnValue, Size = 50
+                                     Direction = ParameterDirection.ReturnValue, Size = 500
                                  };
                 cmd.Parameters.Add(result);
 
