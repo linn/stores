@@ -73,7 +73,7 @@
         }
 
         [Test]
-        public void ShouldHaveAddedPeriodNumber()
+        public void ShouldThrow()
         {
             this.action.Should().Throw<ImportBookException>()
                 .WithMessage("Detail lines cannot specify both an order and an rsn.");
