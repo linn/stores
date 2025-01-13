@@ -116,6 +116,7 @@ function OrderDetailsTab({
     const handleRsnUpdate = (row, rsn) => {
         updateRow({
             ...row,
+            orderNumber: null,
             rsnNumber: rsn.id,
             orderDescription: rsn.description,
             qty: rsn.quantity,
@@ -133,6 +134,9 @@ function OrderDetailsTab({
         }
         updateRow({
             ...row,
+            rsnNumber: null,
+            qty: null,
+            weight: null,
             orderNumber: order.id,
             orderDescription: order.description,
             tariffCode: order.tariffCode
