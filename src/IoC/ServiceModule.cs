@@ -51,7 +51,6 @@
             builder.RegisterType<AllocationReportsService>().As<IAllocationReportsService>();
             builder.RegisterType<PartService>().As<IPartService>();
             builder.RegisterType<WhatWillDecrementReportService>().As<IWhatWillDecrementReportService>();
-            builder.RegisterType<StoragePlaceAuditReportService>().As<IStoragePlaceAuditReportService>();
             builder.RegisterType<MechPartSourceService>().As<IMechPartSourceService>();
             builder.RegisterType<WorkstationService>().As<IWorkstationService>();
             builder.RegisterType<StockLocatorService>().As<IStockLocatorService>();
@@ -110,7 +109,6 @@
             builder.RegisterType<PartTemplateService>()
                 .As<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             builder.RegisterType<PartLiveService>().As<IPartLiveService>();
-            builder.RegisterType<StoragePlaceAuditReportFacadeService>().As<IStoragePlaceAuditReportFacadeService>();
             builder.RegisterType<AuditLocationService>().As<IAuditLocationService>();
             builder.RegisterType<StoragePlaceService>().As<IStoragePlaceService>();
             builder.RegisterType<SosAllocHeadFacadeService>().As<ISosAllocHeadFacadeService>();
@@ -204,7 +202,6 @@
             builder.RegisterType<PartPack>().As<IPartPack>();
             builder.RegisterType<DatabaseService>().As<IDatabaseService>();
             builder.RegisterType<WwdPack>().As<IWwdPack>();
-            builder.RegisterType<StoragePlaceAuditPack>().As<IStoragePlaceAuditPack>();
             builder.RegisterType<AllocPack>().As<IAllocPack>();
             builder.RegisterType<WorkstationPackProxy>().As<IWorkstationPack>();
             builder.RegisterType<WcsPack>().As<IWcsPack>();
