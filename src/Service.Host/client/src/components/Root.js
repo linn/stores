@@ -21,8 +21,6 @@ import StartAllocation from '../containers/allocations/StartAllocation';
 import SosAllocHeads from '../containers/allocations/SosAllocHeads';
 import WwdReportOptions from '../containers/reports/WwdReportOptions';
 import WwdReport from '../containers/reports/WwdReport';
-import StoragePlaceAuditReportOptions from '../containers/reports/StoragePlaceAuditReportOptions';
-import StoragePlaceAuditReport from '../containers/reports/StoragePlaceAuditReport';
 import NotFoundPage from './NotFoundPage';
 import Parcel from '../containers/parcels/Parcel';
 import Parcels from '../containers/parcels/Parcels';
@@ -195,17 +193,6 @@ const Root = ({ store }) => (
                                         component={Parcel}
                                     />
                                     <Route exact path="/logistics/parcels/:id" component={Parcel} />
-
-                                    <Route
-                                        exact
-                                        path="/inventory/reports/storage-place-audit/report"
-                                        component={StoragePlaceAuditReport}
-                                    />
-                                    <Route
-                                        exact
-                                        path="/inventory/reports/storage-place-audit"
-                                        component={StoragePlaceAuditReportOptions}
-                                    />
                                     <Route
                                         exact
                                         path="/logistics/workstations/top-up"
