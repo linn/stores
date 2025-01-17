@@ -75,10 +75,6 @@ export const auditLocationActionTypes = makeActionTypes(itemTypes.auditLocation.
 
 export const auditLocationsActionTypes = makeActionTypes(itemTypes.auditLocations.actionType);
 
-export const storagePlaceAuditReportActionTypes = makeReportActionTypes(
-    reportTypes.storagePlaceAuditReport.actionType
-);
-
 export const createAuditReqsActionTypes = makeProcessActionTypes(
     processTypes.createAuditReqs.actionType
 );

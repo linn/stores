@@ -28,7 +28,6 @@ import * as processTypes from '../processTypes';
 import stockPools from './stockPools';
 import despatchLocations from './despatchLocations';
 import countries from './countries';
-import storagePlaceAuditReport from './storagePlaceAuditReport';
 import storagePlace from './storagePlace';
 import storagePlaces from './storagePlaces';
 import auditLocation from './auditLocation';
@@ -267,7 +266,6 @@ const rootReducer = history =>
         storageLocations,
         storagePlace,
         storagePlaces,
-        storagePlaceAuditReport,
         storesMoveLogReport,
         storesTransactionDefinitions,
         suppliers,
