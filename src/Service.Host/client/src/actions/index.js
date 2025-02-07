@@ -405,3 +405,7 @@ export const stockLocatorReportActionTypes = makeReportActionTypes(
 );
 
 export const partLibraryRefsActionTypes = makeActionTypes(itemTypes.partLibraryRefs.actionType);
+
+export const footprintRefOptionsActionTypes = makeActionTypes(
+    itemTypes.footprintRefOptions.actionType
+);

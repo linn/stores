@@ -58,6 +58,8 @@
 
         private readonly IFacadeService<LibraryRef, string, LibraryRefResource, LibraryRefResource> libraryRefsService;
 
+        private readonly IFootprintRefOptionsService footprintRefOptionsService;
+
         public PartsModule(
             IPartsFacadeService partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -72,7 +74,8 @@
             IPartDataSheetValuesService dataSheetsValuesService,
             IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource> tqmsOverridesService,
             IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource> partLibrariesService,
-            IFacadeService<LibraryRef, string, LibraryRefResource, LibraryRefResource> libraryRefsService)
+            IFacadeService<LibraryRef, string, LibraryRefResource, LibraryRefResource> libraryRefsService,
+            IFootprintRefOptionsService footprintRefOptionsService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -135,6 +138,8 @@
             this.libraryRefsService = libraryRefsService;
             this.Get("/parts/library-refs", _ => this.GetPartLibraryRefs());
 
+            this.footprintRefOptionsService = footprintRefOptionsService;
+            this.Get("/parts/footprint-ref-options", _ => this.GetFootprintRefOptions());
         }
 
         public object GetApp()
@@ -403,6 +408,13 @@
         {
             return this.Negotiate.WithModel(
                     this.libraryRefsService.GetAll())
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetFootprintRefOptions()
+        {
+            return this.Negotiate.WithModel(
+                    this.footprintRefOptionsService.GetOptions())
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 

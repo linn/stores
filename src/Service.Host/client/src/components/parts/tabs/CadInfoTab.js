@@ -27,9 +27,11 @@ function CadInfoTab({
     capVoltageRating,
     frequency,
     frequencyLabel,
-    partLibraryRefs
+    partLibraryRefs,
+    footprintRefOptions
 }) {
     const [libraryRefOption, setLibraryRefOption] = useState();
+    const [footprintRefOption, setFootPrintRefOption] = useState();
 
     return (
         <Grid container spacing={3}>
@@ -92,7 +94,30 @@ function CadInfoTab({
                     propertyName="footprintRef1"
                 />
             </Grid>
-            <Grid item xs={6} />
+            <Grid item xs={6}>
+                {libraryName && (
+                    <Dropdown
+                        label="Footprint Ref options"
+                        propertyName="footprintRefOption"
+                        items={footprintRefOptions
+                            ?.filter(x => x.libraryName === libraryName || x.libraryName === 'All')
+                            .map(l => `${l.ref1} ,  ${l.ref2}, ${l.ref3}`)}
+                        fullWidth
+                        allowNoValue
+                        helperText="You can enter your own values for footprint refs, or just pick a default from the list"
+                        value={footprintRefOption}
+                        onChange={(_, newValue) => {
+                            const parts = newValue.split(',');
+
+                            handleFieldChange('footprintRef1', parts[0]);
+                            handleFieldChange('footprintRef2', parts[1]);
+                            handleFieldChange('footprintRef3', parts[2]);
+
+                            setFootPrintRefOption(newValue);
+                        }}
+                    />
+                )}
+            </Grid>
             <Grid item xs={6}>
                 <InputField
                     fullWidth
@@ -324,7 +349,8 @@ CadInfoTab.propTypes = {
     capVoltageRating: PropTypes.string,
     frequency: PropTypes.string,
     frequencyLabel: PropTypes.string,
-    partLibraryRefs: PropTypes.arrayOf(PropTypes.shape({}))
+    partLibraryRefs: PropTypes.arrayOf(PropTypes.shape({})),
+    footprintRefOptions: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 CadInfoTab.defaultProps = {
@@ -349,7 +375,8 @@ CadInfoTab.defaultProps = {
     capVoltageRating: null,
     frequency: null,
     frequencyLabel: null,
-    partLibraryRefs: []
+    partLibraryRefs: [],
+    footprintRefOptions: []
 };
 
 export default CadInfoTab;

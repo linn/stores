@@ -196,6 +196,8 @@
                 .As<IFacadeService<StoresTransactionDefinition, string, StoresTransactionDefinitionResource, StoresTransactionDefinitionResource>>();
             builder.RegisterType<LibraryRefsFacadeService>()
                 .As<IFacadeService<LibraryRef, string, LibraryRefResource, LibraryRefResource>>();
+            builder.RegisterType<FootprintRefOptionsService>()
+                .As<IFootprintRefOptionsService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

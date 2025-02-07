@@ -29,10 +29,17 @@
         protected IPartsFacadeService PartsFacadeService { get; private set; }
 
         protected IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>
-            AssemblyTechnologyService { get; private set; }
+            AssemblyTechnologyService
+        {
+            get; 
+            private set;
+        }
 
         protected IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>
-            DecrementRuleService { get; private set; }
+            DecrementRuleService
+        {
+            get; private set;
+        }
 
         protected IUnitsOfMeasureService UnitsOfMeasureService { get; private set; }
 
@@ -57,7 +64,10 @@
         }
 
         protected IFacadeFilterService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource,
-            MechPartSourceSearchResource> MechPartSourceService { get; private set; }
+            MechPartSourceSearchResource> MechPartSourceService
+        {
+            get; private set;
+        }
 
         protected IPartLiveService PartLiveService { get; private set; }
 
@@ -74,7 +84,10 @@
         protected IPartPack PartPack { get; private set; }
 
         protected IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource>
-            TqmsCategoriesService { get; private set; }
+            TqmsCategoriesService
+        {
+            get; private set;
+        }
 
         protected IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource> PartLibrariesService
         {
@@ -89,6 +102,8 @@
             get;
             private set;
         }
+
+        protected IFootprintRefOptionsService FootprintRefOptionsService { get; private set; }
 
         [SetUp]
         public void EstablishContext()
@@ -124,6 +139,7 @@
             this.AuthorisationService = Substitute.For<IAuthorisationService>();
             this.LibraryRefService =
                 Substitute.For<IFacadeService<LibraryRef, string, LibraryRefResource, LibraryRefResource>>();
+            this.FootprintRefOptionsService = Substitute.For<IFootprintRefOptionsService>();
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
@@ -147,6 +163,8 @@
                         with.Dependency(this.TqmsCategoriesService);
                         with.Dependency(this.PartLibrariesService);
                         with.Dependency(this.LibraryRefService);
+                        with.Dependency(this.FootprintRefOptionsService);
+
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
                         with.Dependency<IResourceBuilder<ResponseModel<PartTemplate>>>(new PartTemplateResourceBuilder(this.AuthorisationService));
@@ -179,6 +197,8 @@
                             new PartLibrariesResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<LibraryRef>>>(
                             new LibraryRefsResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<FootprintRefOption>>>(
+                            new FootprintRefsOptionResourceBuilder());
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();
@@ -195,6 +215,7 @@
                         with.ResponseProcessor<PartLibrariesResponseProcessor>();
                         with.ResponseProcessor<MechPartSourcesResponseProcessor>();
                         with.ResponseProcessor<LibraryRefsResponseProcessor>();
+                        with.ResponseProcessor<FootprintRefOptionsResponseProcessor>();
 
                         with.RequestStartup(
                             (container, pipelines, context) =>
