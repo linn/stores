@@ -277,7 +277,6 @@
 
         public DbQuery<FootprintRefOption> FootRefOptions { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
