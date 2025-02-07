@@ -27,7 +27,8 @@ function CadInfoTab({
     capVoltageRating,
     frequency,
     frequencyLabel,
-    partLibraryRefs
+    partLibraryRefs,
+    footprintRefOptions
 }) {
     const [libraryRefOption, setLibraryRefOption] = useState();
 
@@ -324,7 +325,9 @@ CadInfoTab.propTypes = {
     capVoltageRating: PropTypes.string,
     frequency: PropTypes.string,
     frequencyLabel: PropTypes.string,
-    partLibraryRefs: PropTypes.arrayOf(PropTypes.shape({}))
+    partLibraryRefs: PropTypes.arrayOf(PropTypes.shape({})),
+    footprintRefOptions: PropTypes.arrayOf(PropTypes.shape({}))
+
 };
 
 CadInfoTab.defaultProps = {
@@ -349,7 +352,8 @@ CadInfoTab.defaultProps = {
     capVoltageRating: null,
     frequency: null,
     frequencyLabel: null,
-    partLibraryRefs: []
+    partLibraryRefs: [],
+    footprintRefOptions: []
 };
 
 export default CadInfoTab;
