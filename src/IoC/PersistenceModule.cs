@@ -163,6 +163,7 @@
             builder.RegisterType<AddressesRepository>().As<IRepository<Address, int>>();
             builder.RegisterType<InvoiceRepository>().As<IRepository<Invoice, int>>();
             builder.RegisterType<LibraryRefsRepository>().As<IRepository<LibraryRef, string>>();
+            builder.RegisterType<FootprintRefOptionsRepository>().As<IQueryRepository<FootprintRefOption>>();
         }
     }
 }

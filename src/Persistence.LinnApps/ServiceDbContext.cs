@@ -275,6 +275,9 @@
 
         public DbSet<LibraryRef> LibraryRefs { get; set; }
 
+        public DbSet<FootprintRefOption> FootRefOptions { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -406,6 +409,7 @@
             this.BuildScsStorePallets(builder);
             this.BuildStoresBudgetPostings(builder);
             this.BuildLibraryRefs(builder);
+            this.BuildFootPrintRefOptions(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -432,6 +436,15 @@
             q.HasKey(c => c.Ref);
             q.Property(c => c.LibraryName).HasColumnName("LIBRARY_NAME").HasMaxLength(100);
             q.Property(c => c.Ref).HasColumnName("LIBRARY_REF").HasMaxLength(100);
+        }
+
+        private void BuildFootPrintRefOptions(ModelBuilder builder)
+        {
+            var q = builder.Query<FootprintRefOption>().ToView("ECIT_FOOTPRINT_REFS");
+            q.Property(c => c.LibraryName).HasColumnName("LIBRARY_NAME");
+            q.Property(c => c.Ref1).HasColumnName("REF1");
+            q.Property(c => c.Ref2).HasColumnName("REF2");
+            q.Property(c => c.Ref3).HasColumnName("REF3");
         }
 
         private void BuildAccountingCompanies(ModelBuilder builder)
