@@ -519,6 +519,8 @@ function Part({
                                     CapVoltageRating={state.part.CapVoltageRating}
                                     CapNegativeTolerance={state.part.CapNegativeTolerance}
                                     CapPositiveTolerance={state.part.CapPositiveTolerance}
+                                    frequency={state.part.frequency}
+                                    frequencyLabel={state.part.frequencyLabel}
                                 />
                             )}
                             <Grid item xs={12}>
