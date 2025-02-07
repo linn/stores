@@ -275,7 +275,7 @@
 
         public DbSet<LibraryRef> LibraryRefs { get; set; }
 
-        public DbSet<FootprintRefOption> FootRefOptions { get; set; }
+        public DbQuery<FootprintRefOption> FootRefOptions { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

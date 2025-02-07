@@ -16,8 +16,8 @@
                 {
                                      LibraryName = a.LibraryName,
                                      Ref1 = a.Ref1,
-                                     Ref2 = a.Ref2,
-                                     Ref3 = a.Ref3
+                                     Ref2 = string.IsNullOrEmpty(a.Ref2) ? string.Empty : a.Ref2,
+                                     Ref3 = string.IsNullOrEmpty(a.Ref3) ? string.Empty : a.Ref3
                 });
         }
 
