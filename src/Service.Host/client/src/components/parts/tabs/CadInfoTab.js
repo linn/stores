@@ -101,7 +101,7 @@ function CadInfoTab({
                         propertyName="footprintRefOption"
                         items={footprintRefOptions
                             ?.filter(x => x.libraryName === libraryName || x.libraryName === 'All')
-                            .map(l => `${l.ref1} ,  ${l.ref2}, ${l.ref3}`)}
+                            .map(l => `${l.ref1},${l.ref2},${l.ref3}`)}
                         fullWidth
                         allowNoValue
                         helperText="You can enter your own values for footprint refs, or just pick a default from the list"
