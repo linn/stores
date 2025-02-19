@@ -516,9 +516,9 @@ function Part({
                                     resistorTolerance={state.part.resistorTolerance}
                                     device={state.part.device}
                                     dielectric={state.part.dielectric}
-                                    CapVoltageRating={state.part.CapVoltageRating}
-                                    CapNegativeTolerance={state.part.CapNegativeTolerance}
-                                    CapPositiveTolerance={state.part.CapPositiveTolerance}
+                                    capVoltageRating={state.part.capVoltageRating}
+                                    capNegativeTolerance={state.part.capNegativeTolerance}
+                                    capPositiveTolerance={state.part.capPositiveTolerance}
                                     frequency={state.part.frequency}
                                     frequencyLabel={state.part.frequencyLabel}
                                 />

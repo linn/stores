@@ -188,11 +188,6 @@ function CadInfoTab({
                             propertyName="resistorTolerance"
                         />
                     </Grid>
-                    <Grid item xs={6} />
-                </>
-            )}
-            {(libraryName === 'Resistors' || libraryName === 'Capacitors') && (
-                <>
                     <Grid item xs={6}>
                         <InputField
                             fullWidth
@@ -202,7 +197,10 @@ function CadInfoTab({
                             propertyName="construction"
                         />
                     </Grid>
-                    <Grid item xs={6} />
+                </>
+            )}
+            {(libraryName === 'Resistors' || libraryName === 'Capacitors') && (
+                <>
                     <Grid item xs={6}>
                         <InputField
                             fullWidth
@@ -233,7 +231,7 @@ function CadInfoTab({
                             value={capVoltageRating}
                             label="Voltage Rating"
                             onChange={handleFieldChange}
-                            propertyName="capVoltageRatingc"
+                            propertyName="capVoltageRating"
                         />
                     </Grid>
                     <Grid item xs={6} />
