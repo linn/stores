@@ -115,6 +115,7 @@
                                 DateCreated = DateTime.UnixEpoch,
                                 OrderLine = 1,
                                 OrderNumber = 1000,
+                                StoragePlace = "E",
                                 Quantity = 1
                             }
                     });
