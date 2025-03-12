@@ -23,6 +23,7 @@ import Page from '../../containers/Page';
 import Parcel from '../../containers/parcels/Parcel';
 import LoanDetails from './LoanDetails';
 import RsnDetails from './RsnDetails';
+import config from '../../config';
 
 function GoodsInUtility({
     validatePurchaseOrder,
@@ -552,8 +553,8 @@ function GoodsInUtility({
                         </div>
                     </div>
                 </Dialog>
-                <Grid item xs={6}>
-                    <Typography variant="h3"> Goods In Utility </Typography>
+                <Grid item xs={4}>
+                    <Typography variant="h4"> Goods In Utility </Typography>
                 </Grid>
                 <Grid item xs={6}>
                     <InputField
@@ -579,6 +580,15 @@ function GoodsInUtility({
                         label="Message"
                         propertyName="message"
                     />
+                </Grid>
+                <Grid item xs={2}>
+                    <a
+                        href={`${config.appRoot}/stores2/goods-in-log`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <Typography variant="subtitle">View Goods In Log</Typography>
+                    </a>
                 </Grid>
                 {parcelNumber && (
                     <>

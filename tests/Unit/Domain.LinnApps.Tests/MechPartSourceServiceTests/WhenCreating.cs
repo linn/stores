@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.MechPartSourceServiceTests
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using FluentAssertions;
 
@@ -29,7 +30,11 @@
                                                   {
                                                       new MechPartUsage { Product = "TEST" }
                                                   },
-                                     ProjectCode = "Project Code"
+                                     ProjectCode = "Project Code",
+                                     MechPartManufacturerAlts = new List<MechPartManufacturerAlt>
+                                                                    {
+                                                                        new MechPartManufacturerAlt()
+                                                                    }
                                  };
 
             var userPrivileges = new List<string>();
@@ -42,6 +47,7 @@
         public void ShouldReturnItem()
         {
             this.result.Id.Should().Be(1);
+            this.result.MechPartManufacturerAlts.First().Sequence.Should().Be(1);
         }
     }
 }

@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Linq.Expressions;
 
-    using FluentAssertions;
-
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Requisitions;
@@ -14,7 +12,8 @@
 
     using NUnit.Framework;
 
-    public class WhenMultipleBookIn : ContextBase
+    public class WhenMultipleBookInAndFirstLineNotPalletAndSecondLinePallet 
+        : ContextBase
     {
         private BookInResult result;
 
@@ -119,9 +118,9 @@
         }
 
         [Test]
-        public void ShouldNotCreateParcel()
+        public void ShouldOnlyCallPalletAnalysisPackCheckOnPalletLine()
         {
-            this.result.CreateParcel.Should().BeFalse();
+            this.PalletAnalysisPack.Received(1).CanPutPartOnPallet(Arg.Any<string>(), Arg.Any<string>());
         }
     }
 }
