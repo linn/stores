@@ -471,6 +471,8 @@ function Part({
                                     tqmsCategoryOverride={state.part.tqmsCategoryOverride}
                                     stockNotes={state.part.stockNotes}
                                     plannerStory={state.part.plannerStory}
+                                    dateQcFlagLastChanged={state.part.dateQcFlagLastChanged}
+                                    whoLastChangedQcFlag={state.part.whoLastChangedQcFlag}
                                 />
                             )}
                             {tab === 4 && (

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
@@ -202,5 +203,51 @@
         public string AltiumValueRkm { get; set; }
 
         public decimal? ResistorTolerance { get; set; }
+
+        public DateTime? GetDateQcFlagLastChanged()
+        {
+            if (this.QcOnReceipt == "Y")
+            {
+                var lastQcControl = this.QcControls.OrderByDescending(x => x.Id).FirstOrDefault();
+                if (lastQcControl != null && lastQcControl.OnOrOffQc == "ON")
+                {
+                    return lastQcControl.TransactionDate;
+                }
+            }
+
+            if (string.IsNullOrEmpty(this.QcOnReceipt) || this.QcOnReceipt == "N")
+            {
+                var lastQcControl = this.QcControls.OrderByDescending(x => x.Id).FirstOrDefault();
+                if (lastQcControl != null && lastQcControl.OnOrOffQc == "OFF")
+                {
+                    return lastQcControl.TransactionDate;
+                }
+            }
+
+            return null;
+        }
+
+        public Employee GetQcFlagLastChangedBy()
+        {
+            if (this.QcOnReceipt == "Y")
+            {
+                var lastQcControl = this.QcControls.OrderByDescending(x => x.Id).FirstOrDefault();
+                if (lastQcControl != null && lastQcControl.OnOrOffQc == "ON")
+                {
+                    return lastQcControl.Employee;
+                }
+            }
+
+            if (string.IsNullOrEmpty(this.QcOnReceipt) || this.QcOnReceipt == "N")
+            {
+                var lastQcControl = this.QcControls.OrderByDescending(x => x.Id).FirstOrDefault();
+                if (lastQcControl != null && lastQcControl.OnOrOffQc == "OFF")
+                {
+                    return lastQcControl.Employee;
+                }
+            }
+
+            return null;
+        }
     }
 }

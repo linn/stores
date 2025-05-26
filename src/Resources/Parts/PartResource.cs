@@ -227,5 +227,9 @@
         public string AltiumValue { get; set; }
 
         public decimal? ResistorTolerance { get; set; }
+
+        public string WhoLastChangedQcFlag { get; set; }
+
+        public string DateQcFlagLastChanged { get; set; }
     }
 }
