@@ -79,6 +79,16 @@ export default function partReducer(state = initialState, action) {
                     }
                 };
             }
+            if (action.fieldName === 'qcOnReceipt') {
+                return {
+                    ...state,
+                    part: {
+                        ...state.part,
+                        qcOnReceipt: action.payload,
+                        qcInformation: ''
+                    }
+                };
+            }
             if (action.fieldName === 'accountingCompany') {
                 const updated =
                     action.payload === 'RECORDS'

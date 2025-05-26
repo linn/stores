@@ -206,44 +206,28 @@
 
         public DateTime? GetDateQcFlagLastChanged()
         {
-            if (this.QcOnReceipt == "Y")
-            {
-                var lastQcControl = this.QcControls.OrderByDescending(x => x.Id).FirstOrDefault();
-                if (lastQcControl != null && lastQcControl.OnOrOffQc == "ON")
-                {
-                    return lastQcControl.TransactionDate;
-                }
-            }
-
-            if (string.IsNullOrEmpty(this.QcOnReceipt) || this.QcOnReceipt == "N")
-            {
-                var lastQcControl = this.QcControls.OrderByDescending(x => x.Id).FirstOrDefault();
-                if (lastQcControl != null && lastQcControl.OnOrOffQc == "OFF")
-                {
-                    return lastQcControl.TransactionDate;
-                }
-            }
-
-            return null;
+            return this.GetRelevantQcControl()?.TransactionDate;
         }
 
         public Employee GetQcFlagLastChangedBy()
         {
-            if (this.QcOnReceipt == "Y")
+            return this.GetRelevantQcControl()?.Employee;
+        }
+
+        private QcControl GetRelevantQcControl()
+        {
+            var lastQcControl = this.QcControls.OrderByDescending(x => x.Id).FirstOrDefault();
+
+            if (this.QcOnReceipt == "Y" && lastQcControl?.OnOrOffQc == "ON")
             {
-                var lastQcControl = this.QcControls.OrderByDescending(x => x.Id).FirstOrDefault();
-                if (lastQcControl != null && lastQcControl.OnOrOffQc == "ON")
-                {
-                    return lastQcControl.Employee;
-                }
+                return lastQcControl;
             }
 
             if (string.IsNullOrEmpty(this.QcOnReceipt) || this.QcOnReceipt == "N")
             {
-                var lastQcControl = this.QcControls.OrderByDescending(x => x.Id).FirstOrDefault();
-                if (lastQcControl != null && lastQcControl.OnOrOffQc == "OFF")
+                if (lastQcControl?.OnOrOffQc == "OFF")
                 {
-                    return lastQcControl.Employee;
+                    return lastQcControl;
                 }
             }
 

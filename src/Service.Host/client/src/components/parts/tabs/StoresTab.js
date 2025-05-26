@@ -38,7 +38,7 @@ function StoresTab({
                 <InputField
                     fullWidth
                     value={qcInformation}
-                    label="QC Info"
+                    label="QC Change Reason"
                     onChange={handleFieldChange}
                     propertyName="qcInformation"
                 />
