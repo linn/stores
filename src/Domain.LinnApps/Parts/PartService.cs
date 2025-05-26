@@ -351,9 +351,10 @@
             part.LibraryName = source.LibraryName;
 
             var who = this.employeeRepository.FindById(createdBy);
-
+            var info = $"NEW PART - {who?.FullName}";
             part.QcOnReceipt = "Y";
-            this.AddOnQcControl(source.PartNumber, createdBy, $"NEW PART - {who?.FullName}");
+            part.QcInformation = info;
+            this.AddOnQcControl(source.PartNumber, createdBy, info);
 
             part.ResistorTolerance = source.ResistorTolerance;
 

@@ -230,6 +230,11 @@
 
                 if (!string.IsNullOrEmpty(resource.QcOnReceipt) && resource.QcOnReceipt.Equals("Y"))
                 {
+                    // bit of a hack, need to add QC_CONTROL after part is created and committed
+                    // but ideally this process would live in the domain
+                    // todo - could we refactor this to be in the domain?
+                    // e.g. just add a QcControl to the Parts ICollection<QcControl> QcControls
+                    // and let EFCore figure it out
                     this.partDomainService.AddOnQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
                 }
 

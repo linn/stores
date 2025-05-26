@@ -52,8 +52,10 @@
         public void ShouldAddQcControl()
         {
             this.result.QcOnReceipt.Should().Be("Y");
+            var expectedInfo = "NEW PART - MONSIEUR ENGINEER";
+            this.result.QcInformation.Should().Be(expectedInfo);
             this.QcControlRepo.Received(1).Add(
-                Arg.Is<QcControl>(x => x.Reason == "NEW PART - MONSIEUR ENGINEER"));
+                Arg.Is<QcControl>(x => x.Reason == expectedInfo));
         }
     }
 }
