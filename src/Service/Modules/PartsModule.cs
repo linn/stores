@@ -226,11 +226,6 @@
             resource.CreatedBy = int.Parse(userId);
             try
             {
-                if (!string.IsNullOrEmpty(resource.QcOnReceipt) && resource.QcOnReceipt.Equals("Y"))
-                {
-                    this.partDomainService.CheckCanChangeQc(resource.UserPrivileges.ToList());
-                }
-
                 var result = this.partsFacadeService.Add(resource);
 
                 if (!string.IsNullOrEmpty(resource.QcOnReceipt) && resource.QcOnReceipt.Equals("Y"))

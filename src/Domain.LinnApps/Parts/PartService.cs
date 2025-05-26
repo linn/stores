@@ -267,7 +267,7 @@
             return partToCreate;
         }
 
-        public void CheckCanChangeQc(List<string> privileges)
+        private void CheckCanChangeQc(List<string> privileges)
         {
             if (!this.authService.HasPermissionFor(AuthorisedAction.PartQcController, privileges))
             {

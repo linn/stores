@@ -8,8 +8,6 @@
 
         Part CreatePart(Part partToCreate, List<string> privileges, bool fromTemplate);
 
-        void CheckCanChangeQc(List<string> privileges);
-
         void AddOnQcControl(string partNumber, int? createdBy, string qcInfo);
 
         Part CreateFromSource(int sourceId, int createdBy, IEnumerable<PartDataSheet> dataSheets);
