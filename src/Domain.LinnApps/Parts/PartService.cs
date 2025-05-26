@@ -115,11 +115,9 @@
                 from.MadeLiveBy = to.MadeLiveBy;
             }
 
-            this.Validate(to);
-
             // putting a part on QC?
             var notCurrentlyOnQc = string.IsNullOrEmpty(from.QcOnReceipt) || from.QcOnReceipt != "Y";
-            if (notCurrentlyOnQc && to.QcOnReceipt.Equals("Y"))
+            if (notCurrentlyOnQc && !string.IsNullOrEmpty(to.QcOnReceipt) && to.QcOnReceipt.Equals("Y"))
             {
                 this.CheckCanChangeQc(privileges);
                 from.QcOnReceipt = "Y";
@@ -136,6 +134,8 @@
                 from.QcInformation = to.QcInformation;
                 this.AddOffQcControl(to.PartNumber, who, to.QcInformation);
             }
+
+            this.Validate(to);
 
             from.PhasedOutBy = to.PhasedOutBy;
             from.DatePhasedOut = to.DatePhasedOut;
@@ -279,7 +279,7 @@
         {
             if (string.IsNullOrEmpty(qcInfo))
             {
-                throw new CreatePartException("Must specify QC Information if setting part to be QC.");
+                throw new UpdatePartException("Must specify QC Information if setting part to be QC.");
             }
 
             this.qcControlRepository.Add(new QcControl
@@ -298,7 +298,7 @@
         {
             if (string.IsNullOrEmpty(qcInfo))
             {
-                throw new CreatePartException("Must specify a reasong (QC Information) if setting part to be off QC.");
+                throw new UpdatePartException("Must specify a reason (QC Information) if setting part to be off QC.");
             }
 
             this.qcControlRepository.Add(new QcControl
