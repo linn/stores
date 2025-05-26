@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Linn.Common.Domain.Exceptions;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
@@ -225,7 +226,13 @@
             resource.CreatedBy = int.Parse(userId);
             try
             {
+                if (!string.IsNullOrEmpty(resource.QcOnReceipt) && resource.QcOnReceipt.Equals("Y"))
+                {
+                    this.partDomainService.CheckCanChangeQc(resource.UserPrivileges.ToList());
+                }
+
                 var result = this.partsFacadeService.Add(resource);
+
                 if (!string.IsNullOrEmpty(resource.QcOnReceipt) && resource.QcOnReceipt.Equals("Y"))
                 {
                     this.partDomainService.AddOnQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
@@ -234,7 +241,7 @@
                 return this.Negotiate.WithModel(result)
                     .WithMediaRangeModel("text/html", ApplicationSettings.Get);
             }
-            catch (CreatePartException e)
+            catch (DomainException e)
             {
                 var res = new BadRequestResult<Part>(e.Message);
                 return this.Negotiate.WithModel(res)

@@ -121,11 +121,7 @@
             var notCurrentlyOnQc = string.IsNullOrEmpty(from.QcOnReceipt) || from.QcOnReceipt != "Y";
             if (notCurrentlyOnQc && to.QcOnReceipt.Equals("Y"))
             {
-                if (!this.authService.HasPermissionFor(AuthorisedAction.PartQcController, privileges))
-                {
-                    throw new UpdatePartException("You are not authorised to put parts on QC");
-                }
-
+                this.CheckCanChangeQc(privileges);
                 from.QcOnReceipt = "Y";
                 from.QcInformation = to.QcInformation;
                 this.AddOnQcControl(to.PartNumber, who, to.QcInformation);
@@ -135,11 +131,7 @@
             var currentlyOnQc = from.QcOnReceipt == "Y";
             if (currentlyOnQc && (string.IsNullOrEmpty(to.QcOnReceipt) || !to.QcOnReceipt.Equals("Y")))
             {
-                if (!this.authService.HasPermissionFor(AuthorisedAction.PartQcController, privileges))
-                {
-                    throw new UpdatePartException("You are not authorised to take parts off QC");
-                }
-
+                this.CheckCanChangeQc(privileges);
                 from.QcOnReceipt = "N";
                 from.QcInformation = to.QcInformation;
                 this.AddOffQcControl(to.PartNumber, who, to.QcInformation);
@@ -273,6 +265,14 @@
             this.Validate(partToCreate);
 
             return partToCreate;
+        }
+
+        public void CheckCanChangeQc(List<string> privileges)
+        {
+            if (!this.authService.HasPermissionFor(AuthorisedAction.PartQcController, privileges))
+            {
+                throw new UpdatePartException("You are not authorised to change parts QC status");
+            }
         }
 
         public void AddOnQcControl(string partNumber, int? createdBy, string qcInfo)

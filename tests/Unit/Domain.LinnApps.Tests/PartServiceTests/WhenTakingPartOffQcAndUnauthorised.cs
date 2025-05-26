@@ -51,7 +51,7 @@
         [Test]
         public void ShouldThrow()
         {
-            this.act.Should().Throw<UpdatePartException>("You are not authorised to take parts off QC");
+            this.act.Should().Throw<UpdatePartException>().WithMessage("You are not authorised to change parts QC status");
         }
     }
 }
