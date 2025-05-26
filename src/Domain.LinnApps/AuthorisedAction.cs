@@ -4,6 +4,8 @@
     {
         public const string PartAdmin = "part.admin";
 
+        public const string PartQcController = "part.qc-controller";
+
         public const string WorkstationAdmin = "workstation.admin";
 
         public const string CreateStockLocator = "stock-locator.create";

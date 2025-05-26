@@ -38,7 +38,7 @@
 
         protected IEmailService EmailService { get; private set; }
 
-        protected IQueryRepository<PhoneListEntry> PhoneList { get; set; }
+        protected IRepository<Employee, int> EmployeeRepository{ get; set; }
 
         [SetUp]
         public void SetUpContext()
@@ -55,7 +55,7 @@
             this.DataSheetRepository = Substitute.For<IRepository<PartDataSheet, PartDataSheetKey>>();
             this.DeptStockPartsService = Substitute.For<IDeptStockPartsService>();
             this.EmailService = Substitute.For<IEmailService>();
-            this.PhoneList = Substitute.For<IQueryRepository<PhoneListEntry>>();
+            this.EmployeeRepository = Substitute.For<IRepository<Employee, int>>();
 
             this.Sut = new PartService(
                 this.AuthService,
@@ -68,7 +68,7 @@
                 this.PartPack,
                 this.DeptStockPartsService,
                 this.EmailService,
-                this.PhoneList);
+                this.EmployeeRepository);
         }
     }
 }
