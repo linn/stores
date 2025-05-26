@@ -21,7 +21,9 @@
 
         public Part FindById(int key)
         {
-            var result = this.serviceDbContext.Parts.SingleOrDefault(p => p.Id == key);
+            var result = this.serviceDbContext.Parts
+                .Include(p => p.QcControls).ThenInclude(q => q.Employee)
+                .SingleOrDefault(p => p.Id == key);
 
             return result;
         }
@@ -89,6 +91,7 @@
                 .Include(p => p.PhasedOutBy)
                 .Include(p => p.SernosSequence)
                 .Include(p => p.PreferredSupplier)
+                .Include(p => p.QcControls).ThenInclude(q => q.Employee)
                 .Include(p => p.NominalAccount).ThenInclude(a => a.Department)
                 .Include(p => p.NominalAccount).ThenInclude(a => a.Nominal)
                 .Include(p => p.DataSheets)

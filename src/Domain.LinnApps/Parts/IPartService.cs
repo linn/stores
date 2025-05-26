@@ -8,7 +8,7 @@
 
         Part CreatePart(Part partToCreate, List<string> privileges, bool fromTemplate);
 
-        void AddQcControl(string partNumber, int? createdBy, string qcInfo);
+        void AddOnQcControl(string partNumber, int? createdBy, string qcInfo);
 
         Part CreateFromSource(int sourceId, int createdBy, IEnumerable<PartDataSheet> dataSheets);
 

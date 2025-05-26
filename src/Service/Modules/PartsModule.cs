@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Linn.Common.Domain.Exceptions;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
@@ -226,15 +227,21 @@
             try
             {
                 var result = this.partsFacadeService.Add(resource);
+
                 if (!string.IsNullOrEmpty(resource.QcOnReceipt) && resource.QcOnReceipt.Equals("Y"))
                 {
-                    this.partDomainService.AddQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
+                    // bit of a hack, need to add QC_CONTROL after part is created and committed
+                    // but ideally this process would live in the domain
+                    // todo - could we refactor this to be in the domain?
+                    // e.g. just add a QcControl to the Parts ICollection<QcControl> QcControls
+                    // and let EFCore figure it out
+                    this.partDomainService.AddOnQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
                 }
 
                 return this.Negotiate.WithModel(result)
                     .WithMediaRangeModel("text/html", ApplicationSettings.Get);
             }
-            catch (CreatePartException e)
+            catch (DomainException e)
             {
                 var res = new BadRequestResult<Part>(e.Message);
                 return this.Negotiate.WithModel(res)

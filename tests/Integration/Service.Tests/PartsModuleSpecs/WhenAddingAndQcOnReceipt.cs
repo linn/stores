@@ -65,7 +65,7 @@
         public void ShouldAddQcInfo()
         {
             this.PartsDomainService.Received()
-                .AddQcControl(Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<string>());
+                .AddOnQcControl(Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<string>());
         }
 
         [Test]

@@ -17,11 +17,13 @@ function StoresTab({
     tqmsCategoryOverride,
     stockNotes,
     tqmsCategories,
-    plannerStory
+    plannerStory,
+    dateQcFlagLastChanged,
+    whoLastChangedQcFlag
 }) {
     return (
         <Grid container spacing={3}>
-            <Grid item xs={4}>
+            <Grid item xs={2}>
                 <Dropdown
                     label="QC On Receipt"
                     propertyName="qcOnReceipt"
@@ -32,13 +34,35 @@ function StoresTab({
                     onChange={handleFieldChange}
                 />
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={4}>
                 <InputField
                     fullWidth
                     value={qcInformation}
-                    label="QC Info"
+                    label="QC Change Reason"
                     onChange={handleFieldChange}
                     propertyName="qcInformation"
+                />
+            </Grid>
+            <Grid item xs={3}>
+                <InputField
+                    fullWidth
+                    value={whoLastChangedQcFlag}
+                    label="Last Change By "
+                    onChange={handleFieldChange}
+                    propertyName="whoLastChangedQcFlag"
+                />
+            </Grid>
+            <Grid item xs={3}>
+                <InputField
+                    fullWidth
+                    value={
+                        dateQcFlagLastChanged
+                            ? new Date(dateQcFlagLastChanged).toLocaleDateString()
+                            : ''
+                    }
+                    label="Changed On"
+                    onChange={dateQcFlagLastChanged}
+                    propertyName="dateQcFlagLastChanged"
                 />
             </Grid>
             <Grid item xs={4}>
@@ -169,7 +193,9 @@ StoresTab.propTypes = {
     tqmsCategories: PropTypes.arrayOf(
         PropTypes.shape({ name: PropTypes.string, description: PropTypes.string })
     ),
-    plannerStory: PropTypes.string
+    plannerStory: PropTypes.string,
+    dateQcFlagLastChanged: PropTypes.string,
+    whoLastChangedQcFlag: PropTypes.string
 };
 
 StoresTab.defaultProps = {
@@ -185,7 +211,9 @@ StoresTab.defaultProps = {
     tqmsCategoryOverride: null,
     stockNotes: null,
     tqmsCategories: [],
-    plannerStory: null
+    plannerStory: null,
+    dateQcFlagLastChanged: null,
+    whoLastChangedQcFlag: null
 };
 
 export default StoresTab;

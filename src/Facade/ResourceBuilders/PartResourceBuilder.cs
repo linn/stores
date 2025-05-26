@@ -14,7 +14,7 @@
 
         public PartResource Build(Part part)
         {
-            return new PartResource
+            var resource = new PartResource
                        {
                            Id = part.Id,
                            PartNumber = part.PartNumber,
@@ -131,7 +131,15 @@
                            SimModelName = part.SimModelName,
                            AltiumValue = part.AltiumValue,
                            ResistorTolerance = part.ResistorTolerance
-            };
+                       };
+
+            if (part.QcControls != null && part.QcControls.Any())
+            {
+                resource.DateQcFlagLastChanged = part.GetDateQcFlagLastChanged()?.ToString("o");
+                resource.WhoLastChangedQcFlag = part.GetQcFlagLastChangedBy()?.FullName;
+            }
+
+            return resource;
         }
 
         public string GetLocation(Part part)

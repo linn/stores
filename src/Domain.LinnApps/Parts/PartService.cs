@@ -34,7 +34,7 @@
 
         private readonly IEmailService emailService;
 
-        private readonly IQueryRepository<PhoneListEntry> phoneList;
+        private readonly IRepository<Employee, int> employeeRepository;
 
         public PartService(
             IAuthorisationService authService,
@@ -47,7 +47,7 @@
             IPartPack partPack,
             IDeptStockPartsService deptStockPartsService,
             IEmailService emailService,
-            IQueryRepository<PhoneListEntry> phoneList)
+            IRepository<Employee, int> employeeRepository)
         {
             this.authService = authService;
             this.supplierRepository = supplierRepository;
@@ -59,7 +59,7 @@
             this.dataSheetRepository = dataSheetRepository;
             this.deptStockPartsService = deptStockPartsService;
             this.emailService = emailService;
-            this.phoneList = phoneList;
+            this.employeeRepository = employeeRepository;
         }
 
         public void UpdatePart(Part from, Part to, List<string> privileges, int who)
@@ -115,12 +115,27 @@
                 from.MadeLiveBy = to.MadeLiveBy;
             }
 
-            this.Validate(to);
-
-            if (to.QcOnReceipt.Equals("Y"))
+            // putting a part on QC?
+            var notCurrentlyOnQc = string.IsNullOrEmpty(from.QcOnReceipt) || from.QcOnReceipt != "Y";
+            if (notCurrentlyOnQc && !string.IsNullOrEmpty(to.QcOnReceipt) && to.QcOnReceipt.Equals("Y"))
             {
-                this.AddQcControl(to.PartNumber, who, to.QcInformation);
+                this.CheckCanChangeQc(privileges);
+                from.QcOnReceipt = "Y";
+                from.QcInformation = to.QcInformation;
+                this.AddOnQcControl(to.PartNumber, who, to.QcInformation);
             }
+
+            // taking a part off QC?
+            var currentlyOnQc = from.QcOnReceipt == "Y";
+            if (currentlyOnQc && (string.IsNullOrEmpty(to.QcOnReceipt) || !to.QcOnReceipt.Equals("Y")))
+            {
+                this.CheckCanChangeQc(privileges);
+                from.QcOnReceipt = "N";
+                from.QcInformation = to.QcInformation;
+                this.AddOffQcControl(to.PartNumber, who, to.QcInformation);
+            }
+
+            this.Validate(to);
 
             from.PhasedOutBy = to.PhasedOutBy;
             from.DatePhasedOut = to.DatePhasedOut;
@@ -160,7 +175,6 @@
             from.LinnProduced = to.LinnProduced;
             from.PreferredSupplier = to.PreferredSupplier;
             from.QcOnReceipt = to.QcOnReceipt;
-            from.QcInformation = to.QcInformation;
             from.RawOrFinished = to.RawOrFinished;
             from.OurInspectionWeeks = to.OurInspectionWeeks;
             from.SafetyWeeks = to.SafetyWeeks;
@@ -212,7 +226,6 @@
 
             var partRoot = this.partPack.PartRoot(partToCreate.PartNumber);
 
-
             if (partRoot != null && fromTemplate)
             {
                 var template = this.templateRepository.FindById(partRoot);
@@ -254,8 +267,21 @@
             return partToCreate;
         }
 
-        public void AddQcControl(string partNumber, int? createdBy, string qcInfo)
+        private void CheckCanChangeQc(List<string> privileges)
         {
+            if (!this.authService.HasPermissionFor(AuthorisedAction.PartQcController, privileges))
+            {
+                throw new UpdatePartException("You are not authorised to change parts QC status");
+            }
+        }
+
+        public void AddOnQcControl(string partNumber, int? createdBy, string qcInfo)
+        {
+            if (string.IsNullOrEmpty(qcInfo))
+            {
+                throw new UpdatePartException("Must specify QC Information if setting part to be QC.");
+            }
+
             this.qcControlRepository.Add(new QcControl
                                              {
                                                  Id = null,
@@ -264,6 +290,25 @@
                                                  ChangedBy = createdBy,
                                                  NumberOfBookIns = 0,
                                                  OnOrOffQc = "ON",
+                                                 Reason = qcInfo
+                                             });
+        }
+
+        public void AddOffQcControl(string partNumber, int? createdBy, string qcInfo)
+        {
+            if (string.IsNullOrEmpty(qcInfo))
+            {
+                throw new UpdatePartException("Must specify a reason (QC Information) if setting part to be off QC.");
+            }
+
+            this.qcControlRepository.Add(new QcControl
+                                             {
+                                                 Id = null,
+                                                 PartNumber = partNumber,
+                                                 TransactionDate = DateTime.Today.Date,
+                                                 ChangedBy = createdBy,
+                                                 NumberOfBookIns = 0,
+                                                 OnOrOffQc = "OFF",
                                                  Reason = qcInfo
                                              });
         }
@@ -304,6 +349,12 @@
             part.AltiumType = source.IcType;
 
             part.LibraryName = source.LibraryName;
+
+            var who = this.employeeRepository.FindById(createdBy);
+            var info = $"NEW PART - {who?.FullName}";
+            part.QcOnReceipt = "Y";
+            part.QcInformation = info;
+            this.AddOnQcControl(source.PartNumber, createdBy, info);
 
             part.ResistorTolerance = source.ResistorTolerance;
 
@@ -407,16 +458,15 @@
                 throw new CreatePartException("Must specify QC Yes/No");
             }
 
-            if (to.QcOnReceipt.Equals("Y") && string.IsNullOrEmpty(to.QcInformation))
-            {
-                throw new CreatePartException("Must specify QC Information if setting part to be QC.");
-            }
-
             if (to.TqmsCategoryOverride != null && to.StockNotes == null)
             {
                 throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
             }
 
+            if (to.QcOnReceipt.Equals("Y") && string.IsNullOrEmpty(to.QcInformation))
+            {
+                throw new CreatePartException("Must specify QC Information if setting part to be QC.");
+            }
 
             if (to.LinnProduced == "Y" && to.BomType == "C")
             {

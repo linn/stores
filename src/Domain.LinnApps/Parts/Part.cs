@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
@@ -202,5 +203,35 @@
         public string AltiumValueRkm { get; set; }
 
         public decimal? ResistorTolerance { get; set; }
+
+        public DateTime? GetDateQcFlagLastChanged()
+        {
+            return this.GetRelevantQcControl()?.TransactionDate;
+        }
+
+        public Employee GetQcFlagLastChangedBy()
+        {
+            return this.GetRelevantQcControl()?.Employee;
+        }
+
+        private QcControl GetRelevantQcControl()
+        {
+            var lastQcControl = this.QcControls.OrderByDescending(x => x.Id).FirstOrDefault();
+
+            if (this.QcOnReceipt == "Y" && lastQcControl?.OnOrOffQc == "ON")
+            {
+                return lastQcControl;
+            }
+
+            if (string.IsNullOrEmpty(this.QcOnReceipt) || this.QcOnReceipt == "N")
+            {
+                if (lastQcControl?.OnOrOffQc == "OFF")
+                {
+                    return lastQcControl;
+                }
+            }
+
+            return null;
+        }
     }
 }
