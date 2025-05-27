@@ -16,6 +16,7 @@
                        {
                            DepartmentCode = department.DepartmentCode,
                            Description = department.Description,
+                           ProjectDepartment = department.ProjectDepartment
                        };
         }
 

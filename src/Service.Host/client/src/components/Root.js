@@ -21,8 +21,6 @@ import StartAllocation from '../containers/allocations/StartAllocation';
 import SosAllocHeads from '../containers/allocations/SosAllocHeads';
 import WwdReportOptions from '../containers/reports/WwdReportOptions';
 import WwdReport from '../containers/reports/WwdReport';
-import StoragePlaceAuditReportOptions from '../containers/reports/StoragePlaceAuditReportOptions';
-import StoragePlaceAuditReport from '../containers/reports/StoragePlaceAuditReport';
 import NotFoundPage from './NotFoundPage';
 import Parcel from '../containers/parcels/Parcel';
 import Parcels from '../containers/parcels/Parcels';
@@ -31,7 +29,6 @@ import WorkstationTopUpStatus from '../containers/workstations/WorkstationTopUpS
 import DeptStockUtility from '../containers/DeptStockUtility/DeptStockUtility';
 import DeptStockParts from '../containers/DeptStockUtility/DeptStockParts';
 import DespatchPickingSummaryReport from '../containers/reports/DespatchPickingSummaryReport';
-import DespatchPalletQueueReport from '../containers/reports/DespatchPalletQueueReport';
 import StockViewerOptions from '../containers/stockLocatorUtility/StockViewerOptions';
 import StockLocator from '../containers/stockLocatorUtility/StockLocator';
 import Wand from '../containers/Wand';
@@ -60,10 +57,12 @@ import QcPartsReport from '../containers/reports/QcPartsReport';
 import EuCreditInvoicesReport from '../containers/reports/EuCreditInvoicesReport';
 import WhatToWandReprint from '../containers/WhatToWandReprint';
 import TriggerLevelsForAStoragePlaceReport from '../containers/reports/TriggerLevelsForAStoragePlaceReport';
-import BahnhofKoenig from '../containers/BahnofKoenig';
 import StoresMoveLogReport from '../containers/reports/StoresMoveLogReport';
 import StoresMoveLogReportOptions from '../containers/reports/StoresMoveLogReportOptions';
 import StockTriggerLevelsUtility from '../containers/stockTriggerLevelsUtility/StockTriggerLevelsUtility';
+import LabelReprint from '../containers/LabelReprint';
+import PartSources from '../containers/parts/PartSources';
+import StockLocatorReport from '../containers/reports/StockLocatorReport';
 
 const Root = ({ store }) => (
     <div>
@@ -122,6 +121,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/parts/sources/create"
                                         component={MechPartSource}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/parts/sources/report"
+                                        component={PartSources}
                                     />
                                     <Route
                                         exact
@@ -189,17 +193,6 @@ const Root = ({ store }) => (
                                         component={Parcel}
                                     />
                                     <Route exact path="/logistics/parcels/:id" component={Parcel} />
-
-                                    <Route
-                                        exact
-                                        path="/inventory/reports/storage-place-audit/report"
-                                        component={StoragePlaceAuditReport}
-                                    />
-                                    <Route
-                                        exact
-                                        path="/inventory/reports/storage-place-audit"
-                                        component={StoragePlaceAuditReportOptions}
-                                    />
                                     <Route
                                         exact
                                         path="/logistics/workstations/top-up"
@@ -239,11 +232,6 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/stock-locator/rotations"
                                         component={StockBatchesInRotationOrder}
-                                    />
-                                    <Route
-                                        exact
-                                        path="/logistics/allocations/despatch-pallet-queue"
-                                        component={DespatchPalletQueueReport}
                                     />
                                     <Route exact path="/logistics/wand" component={Wand} />
                                     <Route
@@ -364,7 +352,6 @@ const Root = ({ store }) => (
                                         path="/inventory/storage-places/reports/stock-trigger-levels"
                                         component={TriggerLevelsForAStoragePlaceReport}
                                     />
-                                    <Route exact path="/logistics/bk" component={BahnhofKoenig} />
                                     <Route
                                         exact
                                         path="/inventory/reports/stores-move-log"
@@ -384,6 +371,16 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/stock-trigger-levels/:id"
                                         component={StockTriggerLevelsUtility}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/labels-reprint"
+                                        component={LabelReprint}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/reports/stock-locators-report"
+                                        component={StockLocatorReport}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

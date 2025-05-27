@@ -4,14 +4,18 @@ import decrementRulesActions from '../../../../actions/decrementRulesActions';
 import partLibrariesSelectors from '../../../../selectors/partLibrariesSelectors';
 import partLibrariesActions from '../../../../actions/partLibrariesActions';
 import CadDataTab from '../../../../components/parts/mechPartSource/tabs/CadDataTab';
+import partLibraryRefsSelectors from '../../../../selectors/partLibraryRefsSelectors';
+import partLibraryRefsActions from '../../../../actions/partLibraryRefsActions';
 
 const mapStateToProps = state => ({
-    partLibraries: partLibrariesSelectors.getItems(state)
+    partLibraries: partLibrariesSelectors.getItems(state),
+    partLibraryRefs: partLibraryRefsSelectors.getItems(state)
 });
 
 const initialise = () => dispatch => {
     dispatch(partLibrariesActions.fetch());
     dispatch(decrementRulesActions.fetch());
+    dispatch(partLibraryRefsActions.fetch());
 };
 
 const mapDispatchToProps = {

@@ -21,7 +21,7 @@
 
         public Department FindBy(Expression<Func<Department, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.Departments.Where(expression).SingleOrDefault();
         }
 
         public IQueryable<Department> FilterBy(Expression<Func<Department, bool>> expression)

@@ -45,6 +45,8 @@
 
         protected ILog Logger { get; set; }
 
+        protected IProductUpgradePack ProductUpgradePack { get; set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -52,6 +54,7 @@
             this.TpkView = Substitute.For<IQueryRepository<TransferableStock>>();
             this.AccountingCompaniesRepository = Substitute.For<IQueryRepository<AccountingCompany>>();
             this.TpkPack = Substitute.For<ITpkPack>();
+            this.ProductUpgradePack = Substitute.For<IProductUpgradePack>();
             this.BundleLabelPack = Substitute.For<IBundleLabelPack>();
             this.WhatToWandService = Substitute.For<IWhatToWandService>();
             this.StoresPack = Substitute.For<IStoresPack>();
@@ -93,7 +96,8 @@
                 this.SalesOrderRepository,
                 this.ReqMovesRepository,
                 this.ProductUpgradeRuleRepository,
-                this.Logger);
+                this.Logger,
+                this.ProductUpgradePack);
         }
     }
 }

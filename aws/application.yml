@@ -55,6 +55,15 @@ Parameters:
   shipfilesFromAddress:
     Type: String
     Description: Email address shipfiles are sent from
+  mechanicalSourcingAddress:
+    Type: String
+    Description: Email address for mechanical sourcing sheets
+  electronicSourcingAddress:
+    Type: String
+    Description: Email address for electronic sourcing sheets
+  fromStoresAddress:
+    Type: String
+    Description: Email address from stores 
   pdfServiceRoot:
     Type: String
     Description: Pdf Service API root url  
@@ -179,6 +188,12 @@ Resources:
           Value: !Ref pdfServiceRoot
         - Name: SHIPFILE_TEMPLATE_PATH
           Value: !Ref shipfileTemplatePath
+        - Name: MECHANICAL_SOURCING_ADDRESS
+          Value: !Ref mechanicalSourcingAddress
+        - Name: ELECTRONIC_SOURCING_ADDRESS
+          Value: !Ref electronicSourcingAddress
+        - Name: FROM_STORES_ADDRESS
+          Value: !Ref fromStoresAddress
         - Name: awsRegion
           Value: !Ref AWS::Region
         - Name: KEYS_BUCKET_NAME

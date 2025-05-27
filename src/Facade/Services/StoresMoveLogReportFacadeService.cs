@@ -8,7 +8,6 @@
     using Linn.Common.Reporting.Resources.Extensions;
     using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Resources.RequestResources;
-    using Org.BouncyCastle.Asn1.Ocsp;
 
     public class StoresMoveLogReportFacadeService : IStoresMoveLogReportFacadeService
     {
@@ -21,7 +20,7 @@
 
         public IResult<ResultsModel> GetReport(StoresMoveLogReportRequestResource request)
         {
-            return new SuccessResult<ResultsModel>(this.domainService.GetReport(Convert.ToDateTime(request.From), Convert.ToDateTime(request.To), request.PartNumber, request.TransType, request.Location, request.StockPool));
+            return new SuccessResult<ResultsModel>(this.domainService.GetReport(Convert.ToDateTime(request.From).Date, Convert.ToDateTime(request.To).Date.AddHours(23), request.PartNumber, request.TransType, request.Location, request.StockPool));
         }
 
         public IResult<IEnumerable<IEnumerable<string>>> GetExport(StoresMoveLogReportRequestResource request)

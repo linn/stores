@@ -38,6 +38,8 @@
 
         private readonly IPartService partService;
 
+        private readonly ITransactionManager transactionManager;
+
         public PartFacadeService(
             IPartRepository partRepository,
             IRepository<ParetoClass, string> paretoClassRepository,
@@ -67,6 +69,7 @@
             this.employeeRepository = employeeRepository;
             this.partService = partService;
             this.databaseService = databaseService;
+            this.transactionManager = transactionManager;
         }
 
         public IResult<IEnumerable<Part>> GetDeptStockPalletParts()
@@ -85,6 +88,7 @@
                         PdfFilePath = s.PdfFilePath,
                         Sequence = s.Sequence ?? -1
                     }));
+            this.transactionManager.Commit();
         }
 
         public IResult<IEnumerable<Part>> GetPartByPartNumber(string partNumber)
@@ -233,7 +237,25 @@
                                     LibraryRef = resource.LibraryRef,
                                     FootprintRef1 = resource.FootprintRef1,
                                     FootprintRef2 = resource.FootprintRef2,
-                                    FootprintRef3 = resource.FootprintRef3
+                                    FootprintRef3 = resource.FootprintRef3,
+                                    AltiumType = resource.AltiumType,
+                                    DataSheetPdfPath = resource.DatasheetPath,
+                                    ManufacturersPartNumber = resource.TheirPartNumber,
+                                    ResistorTolerance = resource.ResistorTolerance,
+                                    AltiumValueRkm = resource.AltiumValueRkm,
+                                    CapNegativeTolerance = resource.CapNegativeTolerance,
+                                    CapPositiveTolerance = resource.CapPositiveTolerance,
+                                    Construction = resource.Construction,
+                                    AltiumValue = resource.AltiumValue,
+                                    Device = resource.Device,
+                                    Frequency = resource.Frequency,
+                                    Dielectric = resource.Dielectric,
+                                    TemperatureCoefficient = resource.TemperatureCoefficient,
+                                    FrequencyLabel = resource.FrequencyLabel,
+                                    CapVoltageRating = resource.CapVoltageRating,
+                                    SimKind = resource.SimKind,
+                                    SimSubKind = resource.SimSubKind,
+                                    SimModelName = resource.SimModelName
                                 };
             return this.partService.CreatePart(partToAdd, resource.UserPrivileges.ToList(), resource.FromTemplate);
         }
@@ -347,7 +369,25 @@
                                       LibraryRef = resource.LibraryRef,
                                       FootprintRef1 = resource.FootprintRef1,
                                       FootprintRef2 = resource.FootprintRef2,
-                                      FootprintRef3 = resource.FootprintRef3
+                                      FootprintRef3 = resource.FootprintRef3,
+                                      AltiumType = resource.AltiumType,
+                                      DataSheetPdfPath = resource.DatasheetPath,
+                                      ManufacturersPartNumber = resource.TheirPartNumber,
+                                      ResistorTolerance = resource.ResistorTolerance,
+                                      AltiumValueRkm = resource.AltiumValueRkm,
+                                      CapNegativeTolerance = resource.CapNegativeTolerance,
+                                      CapPositiveTolerance = resource.CapPositiveTolerance,
+                                      Construction = resource.Construction,
+                                      AltiumValue = resource.AltiumValue,
+                                      Device = resource.Device,
+                                      Frequency = resource.Frequency,
+                                      Dielectric = resource.Dielectric,
+                                      TemperatureCoefficient = resource.TemperatureCoefficient,
+                                      FrequencyLabel = resource.FrequencyLabel,
+                                      CapVoltageRating = resource.CapVoltageRating,
+                                      SimKind = resource.SimKind,
+                                      SimSubKind = resource.SimSubKind,
+                                      SimModelName = resource.SimModelName
             };
           
             this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList(), resource.UpdatedBy.Value);

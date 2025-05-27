@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Facade.Tests.AllocationFacadeServiceTests
 {
+    using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Facade.Services;
 
@@ -15,12 +16,15 @@
 
         protected IAllocationReportsService AllocationReportsService { get;  private set; }
 
+        protected IQueryRepository<DespatchPalletQueueScsDetail> DpqRepository { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
             this.AllocationService = Substitute.For<IAllocationService>();
             this.AllocationReportsService = Substitute.For<IAllocationReportsService>();
-            this.Sut = new AllocationFacadeService(this.AllocationService, this.AllocationReportsService);
+            this.DpqRepository = Substitute.For<IQueryRepository<DespatchPalletQueueScsDetail>>();
+            this.Sut = new AllocationFacadeService(this.AllocationService, this.AllocationReportsService, this.DpqRepository);
         }
     }
 }

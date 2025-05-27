@@ -30,8 +30,8 @@
                     try
                     {
                         labelServiceResult = this.logisticsLabelService.PrintCartonLabel(
-                            resource.ConsignmentId,
-                            resource.FirstItem,
+                            resource.ConsignmentId.Value,
+                            resource.FirstItem.Value,
                             resource.LastItem,
                             resource.UserNumber,
                             resource.NumberOfCopies);
@@ -46,8 +46,8 @@
                     try
                     {
                         labelServiceResult = this.logisticsLabelService.PrintPalletLabel(
-                            resource.ConsignmentId,
-                            resource.FirstItem,
+                            resource.ConsignmentId.Value,
+                            resource.FirstItem.Value,
                             resource.LastItem,
                             resource.UserNumber,
                             resource.NumberOfCopies);
@@ -58,6 +58,48 @@
                     }
 
                     break;
+
+                case "Address":
+                    try
+                    {
+                        if (resource.AddressId == null)
+                        {
+                            return new BadRequestResult<ProcessResult>("Address Id not supplied");
+                        }
+
+                        labelServiceResult = this.logisticsLabelService.PrintAddressLabel(
+                            resource.AddressId.Value, 
+                            resource.Line1,
+                            resource.Line2,
+                            resource.UserNumber,
+                            resource.NumberOfCopies);
+                    }
+                    catch (ProcessException exception)
+                    {
+                        return new BadRequestResult<ProcessResult>(exception.Message);
+                    }
+
+                    break;
+
+                case "General":
+                    try
+                    {
+                        labelServiceResult = this.logisticsLabelService.PrintGeneralLabel(
+                            resource.Line1,
+                            resource.Line2,
+                            resource.Line3,
+                            resource.Line4,
+                            resource.Line5,
+                            resource.UserNumber,
+                            resource.NumberOfCopies);
+                    }
+                    catch (ProcessException exception)
+                    {
+                        return new BadRequestResult<ProcessResult>(exception.Message);
+                    }
+
+                    break;
+
                 default:
                     return new BadRequestResult<ProcessResult>($"Cannot print label type {resource.LabelType}");
             }

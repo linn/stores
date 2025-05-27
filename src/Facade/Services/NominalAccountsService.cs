@@ -23,7 +23,7 @@
             var exactMatches = this.nominalAccountRepository
                 .FilterBy(n
                     => !n.Department.DateClosed.HasValue && !n.Nominal.DateClosed.HasValue &&
-                       n.Department.ObseleteInStores == "N" &&
+                       n.Department.ObsoleteInStores == "N" &&
                        n.StoresPostsAllowed == "Y" &&
                        (n.Department.Description.ToUpper().Equals(searchTerm.ToUpper())
                         || n.Department.DepartmentCode.ToUpper().Equals(searchTerm.ToUpper())
@@ -37,7 +37,7 @@
             var result = this.nominalAccountRepository
                 .FilterBy(n
                     => !n.Department.DateClosed.HasValue && !n.Nominal.DateClosed.HasValue &&
-                       n.Department.ObseleteInStores == "N" &&
+                       n.Department.ObsoleteInStores == "N" &&
                        n.StoresPostsAllowed == "Y" &&
                        (n.Department.DepartmentCode.ContainsIgnoringCase(searchTerm)
                         || n.Department.Description.ContainsIgnoringCase(searchTerm)

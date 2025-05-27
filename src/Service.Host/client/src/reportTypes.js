@@ -7,12 +7,6 @@ export const wwdReport = new ItemType(
     '/inventory/reports/what-will-decrement/report'
 );
 
-export const storagePlaceAuditReport = new ItemType(
-    'storagePlaceAuditReport',
-    'STORAGE_PLACE_AUDIT_REPORT',
-    '/inventory/reports/storage-place-audit/report'
-);
-
 export const despatchPickingSummaryReport = new ItemType(
     'despatchPickingSummaryReport',
     'DESPATCH_PICKING_SUMMARY_REPORT',
@@ -65,4 +59,10 @@ export const storesMoveLogReport = new ItemType(
     'storesMoveLogReport',
     'STORES_MOVE_LOG_REPORT',
     '/inventory/reports/stores-move-log/report'
+);
+
+export const stockLocatorReport = new ItemType(
+    'stockLocatorReport',
+    'STOCK_LOCATOR_REPORT',
+    '/inventory/reports/stock-locators-report/report'
 );

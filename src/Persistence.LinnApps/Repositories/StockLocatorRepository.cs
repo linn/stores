@@ -31,7 +31,8 @@
 
         public IQueryable<StockLocator> FilterBy(Expression<Func<StockLocator, bool>> expression)
         {
-            return this.serviceDbContext.StockLocators.Where(expression).Include(l => l.StorageLocation)
+            return this.serviceDbContext.StockLocators.Where(expression)
+                .Include(l => l.StorageLocation)
                 .Include(l => l.Part);
         }
 

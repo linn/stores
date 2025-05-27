@@ -14,6 +14,7 @@
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
 
@@ -25,18 +26,16 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IPartsFacadeService PartsFacadeService
-        {
-            get; private set;
-        }
+        protected IPartsFacadeService PartsFacadeService { get; private set; }
 
-        protected IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource> 
+        protected IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>
             AssemblyTechnologyService
         {
-            get; private set;
+            get; 
+            private set;
         }
 
-        protected IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> 
+        protected IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>
             DecrementRuleService
         {
             get; private set;
@@ -60,11 +59,12 @@
 
         protected IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> PartTemplateService
         {
-            get; private set;
+            get;
+            private set;
         }
 
-        protected IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
-            MechPartSourceService
+        protected IFacadeFilterService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource,
+            MechPartSourceSearchResource> MechPartSourceService
         {
             get; private set;
         }
@@ -73,19 +73,18 @@
 
         protected IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> ManufacturerService
         {
-            get; private set;
+            get;
+            private set;
         }
 
-        protected IRepository<Manufacturer, string> ManufacturerRepository
-        {
-            get; private set;
-        }
+        protected IRepository<Manufacturer, string> ManufacturerRepository { get; private set; }
 
         protected IPartDataSheetValuesService DataSheetValuesService { get; private set; }
 
         protected IPartPack PartPack { get; private set; }
 
-        protected IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource> TqmsCategoriesService
+        protected IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource>
+            TqmsCategoriesService
         {
             get; private set;
         }
@@ -97,6 +96,14 @@
         }
 
         protected IAuthorisationService AuthorisationService { get; set; }
+
+        protected IFacadeService<LibraryRef, string, LibraryRefResource, LibraryRefResource> LibraryRefService
+        {
+            get;
+            private set;
+        }
+
+        protected IFootprintRefOptionsService FootprintRefOptionsService { get; private set; }
 
         [SetUp]
         public void EstablishContext()
@@ -121,7 +128,7 @@
             this.PartTemplateService = Substitute
                 .For<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             this.MechPartSourceService = Substitute
-                .For<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
+                .For<IFacadeFilterService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource, MechPartSourceSearchResource>>();
             this.ManufacturerService = Substitute
                 .For<IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>>();
             this.ManufacturerRepository = Substitute.For<IRepository<Manufacturer, string>>();
@@ -130,7 +137,9 @@
             this.TqmsCategoriesService = Substitute
                 .For<IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource>>();
             this.AuthorisationService = Substitute.For<IAuthorisationService>();
-
+            this.LibraryRefService =
+                Substitute.For<IFacadeService<LibraryRef, string, LibraryRefResource, LibraryRefResource>>();
+            this.FootprintRefOptionsService = Substitute.For<IFootprintRefOptionsService>();
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
@@ -153,6 +162,9 @@
                         with.Dependency(this.PartPack);
                         with.Dependency(this.TqmsCategoriesService);
                         with.Dependency(this.PartLibrariesService);
+                        with.Dependency(this.LibraryRefService);
+                        with.Dependency(this.FootprintRefOptionsService);
+
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
                         with.Dependency<IResourceBuilder<ResponseModel<PartTemplate>>>(new PartTemplateResourceBuilder(this.AuthorisationService));
@@ -167,6 +179,7 @@
                         with.Dependency<IResourceBuilder<IEnumerable<AssemblyTechnology>>>(
                             new AssemblyTechnologiesResourceBuilder());
                         with.Dependency<IResourceBuilder<DecrementRule>>(new DecrementRuleResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<MechPartSource>>>(new MechPartSourcesResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<DecrementRule>>>(
                             new DecrementRulesResourceBuilder());
                         with.Dependency<IResourceBuilder<PartLiveTest>>(
@@ -182,6 +195,10 @@
                         with.Dependency<IResourceBuilder<PartLibrary>>(new PartLibraryResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<PartLibrary>>>(
                             new PartLibrariesResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<LibraryRef>>>(
+                            new LibraryRefsResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<FootprintRefOption>>>(
+                            new FootprintRefsOptionResourceBuilder());
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();
@@ -196,6 +213,10 @@
                         with.ResponseProcessor<PartTqmsOverridesResponseProcessor>();
                         with.ResponseProcessor<PartLibraryResponseProcessor>();
                         with.ResponseProcessor<PartLibrariesResponseProcessor>();
+                        with.ResponseProcessor<MechPartSourcesResponseProcessor>();
+                        with.ResponseProcessor<LibraryRefsResponseProcessor>();
+                        with.ResponseProcessor<FootprintRefOptionsResponseProcessor>();
+
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {

@@ -40,15 +40,12 @@ function App() {
                 <ListItem component={Link} to="/logistics/consignments" button>
                     <Typography color="primary">Consignment Utility</Typography>
                 </ListItem>
-                <ListItem component={Link} to="/logistics/bk" button>
-                    <Typography color="primary">Enter WCS Job (Bahnhofkoenig)</Typography>
+                <ListItem component={Link} to="/logistics/labels-reprint" button>
+                    <Typography color="primary">Despatch Label Reprint</Typography>
                 </ListItem>
             </List>
             <Typography variant="h6">Reports</Typography>
             <List>
-                <ListItem component={Link} to="/inventory/reports/storage-place-audit" button>
-                    <Typography color="primary">Storage Place Audit Report</Typography>
-                </ListItem>
                 <ListItem component={Link} to="/inventory/reports/what-will-decrement" button>
                     <Typography color="primary">What Will Decrement Report</Typography>
                 </ListItem>
@@ -58,9 +55,6 @@ function App() {
                     button
                 >
                     <Typography color="primary">Despatch Picking Summary Report</Typography>
-                </ListItem>
-                <ListItem component={Link} to="/logistics/allocations/despatch-pallet-queue" button>
-                    <Typography color="primary">Despatch Pallet Queue Upper Report</Typography>
                 </ListItem>
                 <ListItem component={Link} to="/inventory/tqms-category-summary" button>
                     <Typography color="primary">TQMS Summary Report</Typography>
@@ -73,6 +67,9 @@ function App() {
                 </ListItem>
                 <ListItem component={Link} to="/inventory/reports/stores-move-log" button>
                     <Typography color="primary">Stores Move Log Report</Typography>
+                </ListItem>
+                <ListItem component={Link} to="/inventory/reports/stock-locators-report" button>
+                    <Typography color="primary">Stock Locator Report</Typography>
                 </ListItem>
             </List>
         </Page>

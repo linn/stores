@@ -229,5 +229,9 @@
         public string FootprintRef2 { get; set; }
 
         public string FootprintRef3 { get; set; }
+        
+        public string ProjectCode { get; set; }
+
+        public DepartmentResource Project { get; set; }
     }
 }

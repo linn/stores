@@ -41,21 +41,28 @@
 
         public string GetCapacitanceLetterAndNumeralCode(string unit, decimal value)
         {
-            var units = new Dictionary<string, decimal>
-                            {
-                                { "u", 0.000001m },
-                                { "n", 0.000000001m },
-                                { "p", 0.000000000001m },
-                            };
+            var divisor = 1m;
 
-            var result = (value / units[unit]).ToString("G29");
+            if (!string.IsNullOrEmpty(unit))
+            {
+                var units = new Dictionary<string, decimal>
+                                {
+                                    { "u", 0.000001m },
+                                    { "n", 0.000000001m },
+                                    { "p", 0.000000000001m },
+                                };
+                divisor = units[unit];
+            }
+           
+
+            var result = (value / divisor).ToString("G29");
 
             if (result.Contains("."))
             {
-                return result.Replace(".", unit) + "F";
+                return result.Replace(".", unit).ToUpper();
             }
 
-            return result + unit + "F";
+            return (result + unit).ToUpper();
         }
 
         public MechPartSource Create(MechPartSource candidate, IEnumerable<string> userPrivileges)
@@ -76,6 +83,22 @@
             if (candidate.Usages?.FirstOrDefault() == null)
             {
                 throw new CreatePartException("You must enter at least one Usage when creating a source sheet");
+            }
+
+            if (string.IsNullOrEmpty(candidate.ProjectCode))
+            {
+                throw new CreatePartException("You must enter a project code when creating a source sheet");
+            }
+
+            if (candidate.MechPartManufacturerAlts != null)
+            {
+                var seq = 1;
+
+                foreach (var m in candidate.MechPartManufacturerAlts)
+                {
+                    m.Sequence = seq;
+                    seq++;
+                }
             }
 
             return candidate;
@@ -115,7 +138,8 @@
             current.PartToBeReplaced = updated.PartToBeReplaced;
             current.ProductionDate = updated.ProductionDate;
             current.SafetyDataDirectory = updated.SafetyDataDirectory;
-            current.MechPartManufacturerAlts = this.GetUpdatedManufacturers(current.MechPartManufacturerAlts, updated.MechPartManufacturerAlts);
+            current.MechPartManufacturerAlts = this.GetUpdatedManufacturers(
+                current.MechPartManufacturerAlts, updated.MechPartManufacturerAlts);
             current.MechPartAlts = updated.MechPartAlts;
             current.ApprovedReferenceStandards = updated.ApprovedReferenceStandards;
             current.ApprovedReferencesAvailable = updated.ApprovedReferencesAvailable;
@@ -190,6 +214,7 @@
             current.Usages = updated.Usages;
             current.LifeExpectancyPart = updated.LifeExpectancyPart;
             current.Configuration = updated.Configuration;
+            current.ProjectCode = updated.ProjectCode;
         }
 
         private IEnumerable<PartDataSheet> GetUpdatedDataSheets(IEnumerable<PartDataSheet> from, IEnumerable<PartDataSheet> to)
@@ -205,7 +230,8 @@
             return updated;
         }
 
-        private IEnumerable<MechPartManufacturerAlt> GetUpdatedManufacturers(IEnumerable<MechPartManufacturerAlt> from, IEnumerable<MechPartManufacturerAlt> to)
+        private IEnumerable<MechPartManufacturerAlt> GetUpdatedManufacturers(
+            IEnumerable<MechPartManufacturerAlt> from, IEnumerable<MechPartManufacturerAlt> to)
          {
             if (to == null)
             {

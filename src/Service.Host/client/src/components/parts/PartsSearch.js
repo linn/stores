@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { Typeahead, LinkButton, Dropdown, InputField } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
@@ -69,6 +69,10 @@ function PartsSearch({
                 : item.href
         }));
     };
+
+    useEffect(() => {
+        document.title = 'Search Parts';
+    }, []);
 
     const canCreate = () => {
         if (!(privileges.length < 1)) {

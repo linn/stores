@@ -23,8 +23,6 @@
     {
         private StockLocatorWithStoragePlaceInfo stockLocator1;
 
-        private StockLocatorWithStoragePlaceInfo stockLocator2;
-
         [SetUp]
         public void SetUp()
         {

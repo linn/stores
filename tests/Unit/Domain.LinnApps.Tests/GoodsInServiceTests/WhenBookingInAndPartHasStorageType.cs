@@ -102,6 +102,7 @@
                             {
                                 ArticleNumber = "PART",
                                 DateCreated = DateTime.UnixEpoch,
+                                StoragePlace = "E-K2-SOMETHING",
                                 OrderLine = 1,
                                 OrderNumber = 1,
                                 Quantity = 1

@@ -33,7 +33,7 @@
                     multiPartStream.Add(new StringContent(landscapeString), "landscape");
                     
                     var request =
-                        new HttpRequestMessage(HttpMethod.Post, this.htmlToPdfConverterServiceUrl + "/convert/html")
+                        new HttpRequestMessage(HttpMethod.Post, this.htmlToPdfConverterServiceUrl + "/forms/chromium/convert/html")
                             {
                                 Content = multiPartStream
                             };

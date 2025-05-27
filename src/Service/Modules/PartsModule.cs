@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Linn.Common.Domain.Exceptions;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
@@ -42,7 +43,7 @@
 
         private readonly IPartLiveService partLiveService;
 
-        private readonly IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
+        private readonly IFacadeFilterService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource, MechPartSourceSearchResource>
             mechPartSourceService;
 
         private readonly IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>
@@ -56,6 +57,10 @@
         private readonly IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource>
             partLibrariesService;
 
+        private readonly IFacadeService<LibraryRef, string, LibraryRefResource, LibraryRefResource> libraryRefsService;
+
+        private readonly IFootprintRefOptionsService footprintRefOptionsService;
+
         public PartsModule(
             IPartsFacadeService partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -65,15 +70,20 @@
             IPartService partDomainService,
             IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
             IPartLiveService partLiveService,
-            IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService,
+            IFacadeFilterService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource, MechPartSourceSearchResource> mechPartSourceService,
             IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService,
             IPartDataSheetValuesService dataSheetsValuesService,
             IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource> tqmsOverridesService,
-            IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource> partLibrariesService)
+            IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource> partLibrariesService,
+            IFacadeService<LibraryRef, string, LibraryRefResource, LibraryRefResource> libraryRefsService,
+            IFootprintRefOptionsService footprintRefOptionsService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
+            this.mechPartSourceService = mechPartSourceService;
+            
             this.Get("/parts/sources", _ => this.GetApp());
+            this.Get("/parts/sources/report", _ => this.GetSources());
 
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
@@ -108,7 +118,6 @@
             this.partLiveService = partLiveService;
             this.Get("/parts/can-be-made-live/{id}", parameters => this.CheckCanBeMadeLive(parameters.id));
 
-            this.mechPartSourceService = mechPartSourceService;
             this.Get("/parts/sources/{id}", parameters => this.GetMechPartSource(parameters.id));
             this.Get("/parts/manufacturer-data/{id}", parameters => this.GetPartWithManufacturerData(parameters.id));
 
@@ -126,6 +135,12 @@
 
             this.partLibrariesService = partLibrariesService;
             this.Get("/parts/libraries", _ => this.GetPartLibraries());
+
+            this.libraryRefsService = libraryRefsService;
+            this.Get("/parts/library-refs", _ => this.GetPartLibraryRefs());
+
+            this.footprintRefOptionsService = footprintRefOptionsService;
+            this.Get("/parts/footprint-ref-options", _ => this.GetFootprintRefOptions());
         }
 
         public object GetApp()
@@ -212,15 +227,21 @@
             try
             {
                 var result = this.partsFacadeService.Add(resource);
+
                 if (!string.IsNullOrEmpty(resource.QcOnReceipt) && resource.QcOnReceipt.Equals("Y"))
                 {
-                    this.partDomainService.AddQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
+                    // bit of a hack, need to add QC_CONTROL after part is created and committed
+                    // but ideally this process would live in the domain
+                    // todo - could we refactor this to be in the domain?
+                    // e.g. just add a QcControl to the Parts ICollection<QcControl> QcControls
+                    // and let EFCore figure it out
+                    this.partDomainService.AddOnQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
                 }
 
                 return this.Negotiate.WithModel(result)
                     .WithMediaRangeModel("text/html", ApplicationSettings.Get);
             }
-            catch (CreatePartException e)
+            catch (DomainException e)
             {
                 var res = new BadRequestResult<Part>(e.Message);
                 return this.Negotiate.WithModel(res)
@@ -388,6 +409,31 @@
             return this.Negotiate.WithModel(
                     this.partLibrariesService.GetAll())
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetPartLibraryRefs()
+        {
+            return this.Negotiate.WithModel(
+                    this.libraryRefsService.GetAll())
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetFootprintRefOptions()
+        {
+            return this.Negotiate.WithModel(
+                    this.footprintRefOptionsService.GetOptions())
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetSources()
+        {
+            var resource = this.Bind<MechPartSourceSearchResource>();
+            var results = this.mechPartSourceService.FilterBy(resource);
+
+            return this.Negotiate
+                .WithModel(results)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
     }
 }

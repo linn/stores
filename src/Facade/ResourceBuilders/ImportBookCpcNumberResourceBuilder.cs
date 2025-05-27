@@ -8,7 +8,12 @@
     {
         public ImportBookCpcNumberResource Build(ImportBookCpcNumber model)
         {
-            return new ImportBookCpcNumberResource { CpcNumber = model.CpcNumber, Description = model.Description };
+            return new ImportBookCpcNumberResource
+                       {
+                           CpcNumber = model.CpcNumber, 
+                           Description = model.Description,
+                           DateInvalid = model.DateInvalid?.ToString("o")
+                       };
         }
 
         object IResourceBuilder<ImportBookCpcNumber>.Build(ImportBookCpcNumber model) => this.Build(model);

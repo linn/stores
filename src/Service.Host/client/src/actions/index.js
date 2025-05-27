@@ -75,10 +75,6 @@ export const auditLocationActionTypes = makeActionTypes(itemTypes.auditLocation.
 
 export const auditLocationsActionTypes = makeActionTypes(itemTypes.auditLocations.actionType);
 
-export const storagePlaceAuditReportActionTypes = makeReportActionTypes(
-    reportTypes.storagePlaceAuditReport.actionType
-);
-
 export const createAuditReqsActionTypes = makeProcessActionTypes(
     processTypes.createAuditReqs.actionType
 );
@@ -397,3 +393,19 @@ export const stockTriggerLevelsActionTypes = makeActionTypes(
 );
 
 export const partLibrariesActionTypes = makeActionTypes(itemTypes.partLibraries.actionType);
+
+export const storesTransactionDefinitionsActionTypes = makeActionTypes(
+    itemTypes.storesTransactionDefinitions.actionType
+);
+
+export const partSourcesActionTypes = makeActionTypes(itemTypes.partSources.actionType);
+
+export const stockLocatorReportActionTypes = makeReportActionTypes(
+    reportTypes.stockLocatorReport.actionType
+);
+
+export const partLibraryRefsActionTypes = makeActionTypes(itemTypes.partLibraryRefs.actionType);
+
+export const footprintRefOptionsActionTypes = makeActionTypes(
+    itemTypes.footprintRefOptions.actionType
+);

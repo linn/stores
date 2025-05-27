@@ -94,6 +94,12 @@
             var formattedDate = impbook.DateCreated.ToString("MMMyyyy").ToUpper();
             impbook.PeriodNumber = this.ledgerPeriodRepository.FindBy(x => x.MonthName == formattedDate).PeriodNumber;
 
+            if (impbook.OrderDetails != null && impbook.OrderDetails.Any(
+                    d => d.RsnNumber.HasValue && d.OrderNumber.HasValue))
+            {
+                throw new ImportBookException("Detail lines cannot specify both an order and an rsn.");
+            }
+
             return impbook;
         }
 

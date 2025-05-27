@@ -102,6 +102,7 @@
                             var claims = new List<Claim>
                                                  {
                                                          new Claim(ClaimTypes.Role, "employee"),
+                                                         new Claim("employee", "/employees/12345"),
                                                          new Claim(ClaimTypes.NameIdentifier, "test-user")
                                                  };
 

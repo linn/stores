@@ -60,6 +60,7 @@
             this.Get("/logistics/carton-types", _ => this.GetCartonTypes());
             this.Get("/logistics/carton-types/{id*}", p => this.GetCartonTypeById(p.id));
             this.Post("/logistics/labels", _ => this.PrintLabels());
+            this.Post("/logistics/labels-reprint", _ => this.GetApp());
             this.Post("/logistics/print-consignment-documents", _ => this.PrintDocuments());
             this.Post("/logistics/save-consignment-documents", _ => this.SaveDocuments());
         }
@@ -192,10 +193,20 @@
         {
             var resource = this.Bind<ConsignmentsRequestResource>();
 
+            if (resource.InvoiceNumber != null)
+            {
+                return this.Negotiate.WithModel(this.consignmentFacadeService.GetByInvoiceNumber(resource.InvoiceNumber.Value));
+            }
+
             return this.Negotiate
                 .WithModel(this.consignmentFacadeService.GetByRequestResource(resource))
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
+        }
+
+        private object GetApp()
+        {
+            return this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index");
         }
     }
 }

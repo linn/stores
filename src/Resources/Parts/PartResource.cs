@@ -174,8 +174,6 @@
 
         public int? SourceId { get; set; }
 
-        public int SourceCreatedBy { get; set; }
-
         public IEnumerable<MechPartManufacturerAltResource> Manufacturers { get; set; }
 
         public string SalesArticleNumber { get; set; }
@@ -193,5 +191,45 @@
         public string FootprintRef2 { get; set; }
 
         public string FootprintRef3 { get; set; }
+
+        public string TheirPartNumber { get; set; }
+
+        public string DatasheetPath { get; set; }
+
+        public string AltiumType { get; set; }
+
+        public int? TemperatureCoefficient { get; set; }
+
+        public string Device { get; set; }
+
+        public string AltiumValueRkm { get; set; }
+
+        public string Dielectric { get; set; }
+
+        public string Construction { get; set; }
+
+        public int? CapNegativeTolerance { get; set; }
+
+        public int? CapPositiveTolerance { get; set; }
+
+        public decimal? CapVoltageRating { get; set; }
+
+        public string Frequency { get; set; }
+
+        public string FrequencyLabel { get; set; }
+
+        public string SimKind { get; set; }
+
+        public string SimSubKind { get; set; }
+
+        public string SimModelName { get; set; }
+
+        public string AltiumValue { get; set; }
+
+        public decimal? ResistorTolerance { get; set; }
+
+        public string WhoLastChangedQcFlag { get; set; }
+
+        public string DateQcFlagLastChanged { get; set; }
     }
 }

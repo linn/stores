@@ -39,7 +39,7 @@
         [Test]
         public void ShouldSetReportTitle()
         {
-            this.result.ReportTitle.DisplayValue.Should().Be("01Mar23 - 01Mar23 CAP 003 ");
+            this.result.ReportTitle.DisplayValue.Should().Be("01Mar23 - 01Mar23 CAP 003");
         }
 
         [Test]
@@ -51,7 +51,7 @@
         [Test]
         public void ShouldSetColumns()
         {
-            this.result.Columns.Should().HaveCount(9);
+            this.result.Columns.Should().HaveCount(12);
         }
     }
 }

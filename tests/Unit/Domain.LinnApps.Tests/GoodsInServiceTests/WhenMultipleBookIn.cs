@@ -111,6 +111,7 @@
                             {
                                 ArticleNumber = "PART",
                                 DateCreated = DateTime.UnixEpoch,
+                                StoragePlace = "P1234",
                                 OrderLine = 1,
                                 OrderNumber = 1000
                             }

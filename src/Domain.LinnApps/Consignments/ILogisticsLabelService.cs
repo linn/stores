@@ -17,5 +17,21 @@
             int? lastPallet,
             int userNumber,
             int numberOfCopies = 1);
+
+        ProcessResult PrintAddressLabel(
+            int addressId,
+            string line1,
+            string line2,
+            int userNumber,
+            int numberOfCopies = 1);
+
+        ProcessResult PrintGeneralLabel(
+            string line1,
+            string line2,
+            string line3,
+            string line4,
+            string line5,
+            int userNumber,
+            int numberOfCopies = 1);
     }
 }

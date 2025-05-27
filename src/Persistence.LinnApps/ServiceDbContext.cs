@@ -12,6 +12,7 @@
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Requisitions;
+    using Linn.Stores.Domain.LinnApps.Scs;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
@@ -19,6 +20,7 @@
     using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
+    using Linn.Stores.Domain.LinnApps.Wcs;
     using Linn.Stores.Domain.LinnApps.Workstation;
 
     using Microsoft.EntityFrameworkCore;
@@ -263,6 +265,18 @@
 
         public DbSet<PartLibrary> PartLibraries { get; set; }
 
+        public DbSet<WarehouseLocation> WarehouseLocations { get; set; }
+
+        public DbQuery<DespatchPalletQueueScsDetail> DespatchPalletQueueScsDetails { get; set; }
+
+        public DbSet<ScsStorePallet> ScsPallets { get; set; }
+
+        public DbSet<StoresBudgetPosting> StoresBudgetPostings { get; set; }
+
+        public DbSet<LibraryRef> LibraryRefs { get; set; }
+
+        public DbQuery<FootprintRefOption> FootRefOptions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -388,6 +402,13 @@
             this.QueryProductUpgradeRules(builder);
             this.QueryStoresMoveLogs(builder);
             this.BuildPartLibraries(builder);
+            this.BuildWarehouseLocations(builder);
+            this.BuildWarehousePallets(builder);
+            this.QueryDespatchPalletQueueScsDetails(builder);
+            this.BuildScsStorePallets(builder);
+            this.BuildStoresBudgetPostings(builder);
+            this.BuildLibraryRefs(builder);
+            this.BuildFootPrintRefOptions(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -402,10 +423,27 @@
 
            var connectionString = $"Data Source={dataSource};User Id={userId};Password={password};";
 
-           optionsBuilder.UseOracle(connectionString, options => options.UseOracleSQLCompatibility("11"));
+            optionsBuilder.UseOracle(connectionString, options => options.UseOracleSQLCompatibility("11"));
             optionsBuilder.UseLoggerFactory(MyLoggerFactory);
             optionsBuilder.EnableSensitiveDataLogging(true);
             base.OnConfiguring(optionsBuilder);
+        }
+
+        private void BuildLibraryRefs(ModelBuilder builder)
+        {
+            var q = builder.Entity<LibraryRef>().ToTable("ECIT_LIBRARY_REFS");
+            q.HasKey(c => c.Ref);
+            q.Property(c => c.LibraryName).HasColumnName("LIBRARY_NAME").HasMaxLength(100);
+            q.Property(c => c.Ref).HasColumnName("LIBRARY_REF").HasMaxLength(100);
+        }
+
+        private void BuildFootPrintRefOptions(ModelBuilder builder)
+        {
+            var q = builder.Query<FootprintRefOption>().ToView("ECIT_FOOTPRINT_REFS");
+            q.Property(c => c.LibraryName).HasColumnName("LIBRARY_NAME");
+            q.Property(c => c.Ref1).HasColumnName("REF1");
+            q.Property(c => c.Ref2).HasColumnName("REF2");
+            q.Property(c => c.Ref3).HasColumnName("REF3");
         }
 
         private void BuildAccountingCompanies(ModelBuilder builder)
@@ -535,6 +573,25 @@
             e.Property(p => p.FootprintRef1).HasColumnName("FOOTPRINT_REF").HasMaxLength(100);
             e.Property(p => p.FootprintRef2).HasColumnName("FOOTPRINT_REF_2").HasMaxLength(100);
             e.Property(p => p.FootprintRef3).HasColumnName("FOOTPRINT_REF_3").HasMaxLength(100);
+            e.Property(p => p.DataSheetPdfPath).HasColumnName("ALTIUM_DATASHEET_PATH").HasMaxLength(500);
+            e.Property(p => p.AltiumType).HasColumnName("ALTIUM_TYPE").HasMaxLength(100);
+            e.Property(p => p.ManufacturersPartNumber).HasColumnName("ALTIUM_THEIR_PART_NUMBER").HasMaxLength(100);
+            e.Property(p => p.TemperatureCoefficient).HasColumnName("TEMP_COEFF");
+            e.Property(p => p.Device).HasColumnName("ALTIUM_DEVICE").HasMaxLength(100);
+            e.Property(p => p.AltiumValueRkm).HasColumnName("ALTIUM_VALUE_RKM").HasMaxLength(100);
+            e.Property(p => p.AltiumValueRkm).HasColumnName("ALTIUM_VALUE_RKM").HasMaxLength(100);
+            e.Property(p => p.Dielectric).HasColumnName("CAP_DIELECTRIC").HasMaxLength(40);
+            e.Property(p => p.Construction).HasColumnName("CONSTRUCTION").HasMaxLength(14);
+            e.Property(p => p.CapNegativeTolerance).HasColumnName("CAP_NEGATIVE_TOLERANCE");
+            e.Property(p => p.CapPositiveTolerance).HasColumnName("CAP_POSITIVE_TOLERANCE");
+            e.Property(p => p.CapVoltageRating).HasColumnName("CAP_VOLTAGE_RATING");
+            e.Property(p => p.Frequency).HasColumnName("ALTIUM_FREQUENCY").HasMaxLength(100);
+            e.Property(p => p.FrequencyLabel).HasColumnName("ALTIUM_FREQUENCY_LABEL").HasMaxLength(100);
+            e.Property(p => p.SimKind).HasColumnName("SIM_KIND").HasMaxLength(100);
+            e.Property(p => p.SimSubKind).HasColumnName("SIM_SUBKIND").HasMaxLength(100);
+            e.Property(p => p.SimModelName).HasColumnName("SIM_MODEL_NAME").HasMaxLength(100);
+            e.Property(p => p.AltiumValue).HasColumnName("ALTIUM_VALUE").HasMaxLength(100);
+            e.Property(p => p.ResistorTolerance).HasColumnName("RES_TOLERANCE");
         }
 
         private void BuildPartDataSheets(ModelBuilder builder)
@@ -660,6 +717,8 @@
             e.Property(s => s.LibraryName).HasColumnName("LIBRARY_NAME").HasMaxLength(200);
             e.Property(s => s.FootprintRef2).HasColumnName("FOOTPRINT_REF_2").HasMaxLength(100);
             e.Property(s => s.FootprintRef3).HasColumnName("FOOTPRINT_REF_3").HasMaxLength(100);
+            e.Property(s => s.ProjectCode).HasColumnName("PROJECT_CODE").HasMaxLength(10);
+            e.HasOne(s => s.Project).WithMany().HasForeignKey(s => s.ProjectCode);
         }
 
         private void BuildMechPartAlts(ModelBuilder builder)
@@ -771,7 +830,8 @@
             e.Property(d => d.DepartmentCode).HasColumnName("DEPARTMENT_CODE").HasMaxLength(10);
             e.Property(d => d.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(d => d.DateClosed).HasColumnName("DATE_CLOSED");
-            e.Property(d => d.ObseleteInStores).HasColumnName("OBSOLETE_IN_STORES");
+            e.Property(d => d.ObsoleteInStores).HasColumnName("OBSOLETE_IN_STORES");
+            e.Property(d => d.ProjectDepartment).HasColumnName("PROJECT_DEPARTMENT").HasMaxLength(1);
             e.HasMany(n => n.NominalAccounts).WithOne(a => a.Department).HasForeignKey("DEPARTMENT");
         }
 
@@ -922,6 +982,7 @@
             q.Property(e => e.BatchRef).HasColumnName("BATCH_REF");
             q.Property(e => e.State).HasColumnName("STATE").HasMaxLength(6).IsRequired();
             q.Property(e => e.Category).HasColumnName("CATEGORY").HasMaxLength(6).IsRequired();
+            q.Property(e => e.CurrentStock).HasColumnName("CURRENT_STOCK").HasMaxLength(1);
             q.Ignore(e => e.TriggerLevel);
         }
 
@@ -948,6 +1009,21 @@
             var q = builder.Query<AuditLocation>();
             q.ToView("V_AUDIT_LOCATIONS");
             q.Property(e => e.StoragePlace).HasColumnName("STORAGE_PLACE");
+        }
+
+        private void BuildStoresBudgetPostings(ModelBuilder builder)
+        {
+            var table = builder.Entity<StoresBudgetPosting>().ToTable("STORES_BUDGET_POSTINGS");
+            table.HasKey(s => new { s.BudgetId, s.Sequence });
+            table.Property(s => s.BudgetId).HasColumnName("BUDGET_ID");
+            table.Property(s => s.Sequence).HasColumnName("SEQ");
+            table.Property(s => s.Quantity).HasColumnName("QTY");
+            table.Property(s => s.DebitOrCredit).HasColumnName("DEBIT_OR_CREDIT").HasMaxLength(1);
+            table.Property(s => s.Person).HasColumnName("PERSON");
+            table.Property(s => s.Product).HasColumnName("PRODUCT").HasMaxLength(10);
+            table.Property(s => s.Building).HasColumnName("BUILDING").HasMaxLength(10);
+            table.Property(s => s.Vehicle).HasColumnName("VEHICLE").HasMaxLength(10);
+            table.HasOne(s => s.NominalAccount).WithMany().HasForeignKey("NOMACC_ID");
         }
 
         private void BuildSosAllocHeads(ModelBuilder builder)
@@ -1119,6 +1195,7 @@
             q.Property(e => e.DeliveryTermCode).HasColumnName("DELIVERY_TERM_CODE").HasMaxLength(6);
             q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(60);
             q.Property(e => e.Comments).HasColumnName("COMMENTS").HasMaxLength(1000);
+            q.Property(e => e.SortOrder).HasColumnName("SORT_ORDER");
         }
 
         private void BuildImportBookPostEntries(ModelBuilder builder)
@@ -1141,6 +1218,7 @@
             q.HasKey(e => e.CpcNumber);
             q.Property(e => e.CpcNumber).HasColumnName("CPC_NUMBER");
             q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(30);
+            q.Property(e => e.DateInvalid).HasColumnName("DATE_INVALID");
         }
 
         private void BuildImportBookExchangeRates(ModelBuilder builder)
@@ -1183,6 +1261,7 @@
             q.HasKey(e => e.PortCode);
             q.Property(e => e.PortCode).HasColumnName("PORT_CODE").HasMaxLength(3);
             q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(30);
+            q.Property(e => e.SortOrder).HasColumnName("SORT_ORDER");
         }
 
         private void BuildPartParamDataSheets(ModelBuilder builder)
@@ -1319,7 +1398,8 @@
             e.Property(l => l.LocationCode).HasColumnName("LOCATION_CODE").HasMaxLength(16);
             e.Property(l => l.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(l => l.DateInvalid).HasColumnName("DATE_INVALID");
-            e.Property(l => l.StorageType).HasColumnName("STORAGE_TYPE");
+            e.Property(l => l.StorageType).HasColumnName("STORAGE_TYPE").HasMaxLength(4);
+            e.Property(l => l.SiteCode).HasColumnName("SITE_CODE").HasMaxLength(16);
             e.Property(l => l.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);
             e.Property(l => l.DefaultStockPool).HasColumnName("DEFAULT_STOCK_POOL").HasMaxLength(10);
         }
@@ -1462,7 +1542,12 @@
             e.Property(r => r.Qty).HasColumnName("QTY");
             e.Property(r => r.ToLocationId).HasColumnName("TO_LOCATION_ID");
             e.Property(r => r.Document1Name).HasColumnName("DOC1_NAME");
-            e.Property(r => r.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            e.Property(r => r.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14); 
+            e.Property(r => r.Cancelled).HasColumnName("CANCELLED").HasMaxLength(1);
+            e.Property(r => r.FunctionCode).HasColumnName("FUNCTION_CODE").HasMaxLength(10);
+            e.Property(r => r.DateCancelled).HasColumnName("DATE_CANCELLED");
+            e.Property(r => r.CancelledReason).HasColumnName("CANCELLED_REASON").HasMaxLength(2000);
+            e.Property(r => r.CancelledBy).HasColumnName("CANCELLED_BY").HasMaxLength(6);
             e.HasOne(r => r.Part).WithMany().HasForeignKey(r => r.PartNumber);
             e.HasMany(r => r.Lines).WithOne().HasForeignKey(r => r.ReqNumber);
             e.HasMany(r => r.Moves).WithOne(m => m.Header).HasForeignKey(r => r.ReqNumber);
@@ -1475,9 +1560,12 @@
             r.HasKey(l => new { l.ReqNumber, l.LineNumber });
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
-           
             r.Property(l => l.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
             r.Property(l => l.TransactionCode).HasColumnName("TRANSACTION_CODE").HasMaxLength(10);
+            r.Property(l => l.DateCancelled).HasColumnName("DATE_CANCELLED");
+            r.Property(l => l.CancelledReason).HasColumnName("CANCELLED_REASON").HasMaxLength(2000);
+            r.Property(l => l.CancelledBy).HasColumnName("CANCELLED_BY").HasMaxLength(6);
+            r.Property(l => l.Document1Line).HasColumnName("DOCUMENT_1_LINE").HasMaxLength(4);
             r.HasMany(t => t.Moves).WithOne().HasForeignKey(reqMove => new { reqMove.ReqNumber, reqMove.LineNumber });
         }
 
@@ -2033,6 +2121,7 @@
             var q = builder.Entity<StoresTransactionDefinition>().ToTable("STORES_TRANS_DEFS");
             q.HasKey(d => d.TransactionCode);
             q.Property(d => d.TransactionCode).HasColumnName("TRANSACTION_CODE");
+            q.Property(d => d.Description).HasColumnName("DESCRIPTION");
             q.Property(d => d.QcType).HasColumnName("QC_TYPE");
             q.Property(d => d.DocType).HasColumnName("DOC1_TYPE");
             q.HasMany(d => d.RequisitionLines).WithOne(l => l.TransactionDefinition)
@@ -2219,6 +2308,7 @@
         {
             var q = builder.Query<ProductUpgradeRule>().ToView("PRODUCT_UPGRADE_RULES");
             q.Property(r => r.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
+            q.Property(r => r.RenewProduct).HasColumnName("RENEW_PRODUCT");
         }
 
         private void QueryStoresMoveLogs(ModelBuilder builder)
@@ -2257,6 +2347,60 @@
             var q = builder.Entity<PartLibrary>().ToTable("ECIT_LIBRARIES");
             q.HasKey(a => a.LibraryName);
             q.Property(a => a.LibraryName).HasColumnName("LIBRARY_NAME").HasMaxLength(100);
+        }
+
+        private void BuildWarehouseLocations(ModelBuilder builder)
+        {
+            var q = builder.Entity<WarehouseLocation>().ToTable("WAREHOUSE_LOCATIONS");
+            q.HasKey(a => a.Location);
+            q.Property(a => a.Location).HasColumnName("LOC_REF");
+            q.Property(a => a.PalletId).HasColumnName("PALLET_ID");
+            q.Property(a => a.Aisle).HasColumnName("AISLE");
+            q.Property(a => a.AreaCode).HasColumnName("AREA_CODE");
+            q.Property(a => a.XCoord).HasColumnName("X_COORD");
+            q.Property(a => a.YCoord).HasColumnName("Y_COORD");
+
+            q.HasOne(p => p.Pallet).WithOne(a => a.Location).HasForeignKey<WarehouseLocation>(x => x.PalletId);
+        }
+
+        private void BuildWarehousePallets(ModelBuilder builder)
+        {
+            var q = builder.Entity<WarehousePallet>().ToTable("WAREHOUSE_PALLETS");
+
+            q.HasKey(a => a.PalletId);
+            q.Property(a => a.PalletId).HasColumnName("PALLET_ID");
+            q.Property(a => a.SizeCode).HasColumnName("SIZE_CODE");
+            q.Property(a => a.SpeedFactor).HasColumnName("SPEED_FACTOR");
+            q.Property(a => a.RotationAverage).HasColumnName("ROTATION_AVERAGE");
+            q.Property(a => a.Heat).HasColumnName("HEAT");
+        }
+
+        private void QueryDespatchPalletQueueScsDetails(ModelBuilder builder)
+        {
+            var q = builder.Query<DespatchPalletQueueScsDetail>().ToView("V_DPQ_SUMMARY_FOR_SCS");
+            q.Property(v => v.KittedFromTime).HasColumnName("KITTED_FROM");
+            q.Property(v => v.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(v => v.PickingSequence).HasColumnName("PICKING_SEQUENCE");
+        }
+
+        private void BuildScsStorePallets(ModelBuilder builder)
+        {
+            var q = builder.Entity<ScsStorePallet>().ToTable("SCS_PALLETS");
+
+            q.HasKey(a => a.PalletNumber);
+            q.Property(a => a.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(a => a.SizeCode).HasColumnName("SIZE_CODE").HasMaxLength(1);
+            q.Property(a => a.UserFriendlyName).HasColumnName("USER_FRIENDLY_NAME").HasMaxLength(255);
+            q.Property(a => a.RotationAverage).HasColumnName("ROTATION_AVERAGE");
+            q.Property(a => a.HeatValue).HasColumnName("HEAT_VALUE");
+            q.Property(a => a.Height).HasColumnName("HEIGHT");
+            q.Property(a => a.Allocated).HasColumnName("ALLOCATED").HasMaxLength(1);
+            q.Property(a => a.Disabled).HasColumnName("DISABLED").HasMaxLength(1);
+            q.Property(a => a.Area).HasColumnName("AREA");
+            q.Property(a => a.Column).HasColumnName("COL");
+            q.Property(a => a.Level).HasColumnName("LVL");
+            q.Property(a => a.Side).HasColumnName("SIDE");
+            q.Property(a => a.LastUpdated).HasColumnName("LAST_UPDATED");
         }
     }
 }

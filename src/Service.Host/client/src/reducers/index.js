@@ -28,7 +28,6 @@ import * as processTypes from '../processTypes';
 import stockPools from './stockPools';
 import despatchLocations from './despatchLocations';
 import countries from './countries';
-import storagePlaceAuditReport from './storagePlaceAuditReport';
 import storagePlace from './storagePlace';
 import storagePlaces from './storagePlaces';
 import auditLocation from './auditLocation';
@@ -144,6 +143,11 @@ import storesMoveLogReport from './storesMoveLogReport';
 import stockTriggerLevel from './stockTriggerLevel';
 import stockTriggerLevels from './stockTriggerLevels';
 import partLibraries from './parts/partLibraries';
+import storesTransactionDefinitions from './storesTransactionDefinitions';
+import partSources from './parts/partSources';
+import stockLocatorReport from './stockLocatorReport';
+import partLibraryRefs from './parts/partLibraryRefs';
+import footprintRefOptions from './parts/footprintRefOptions';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -187,6 +191,7 @@ const rootReducer = history =>
         exportReturn,
         exportRsns,
         finishAllocation,
+        footprintRefOptions,
         hub,
         hubs,
         impbookCpcNumbers,
@@ -213,8 +218,10 @@ const rootReducer = history =>
         parcels,
         part,
         partDataSheetValues,
+        partLibraryRefs,
         partLiveTest,
         parts,
+        partSources,
         partLibraries,
         partStorageTypes,
         partTemplate,
@@ -255,13 +262,14 @@ const rootReducer = history =>
         stockMoves,
         stockPools,
         stockQuantities,
+        stockLocatorReport,
         stockTriggerLevel,
         stockTriggerLevels,
         storageLocations,
         storagePlace,
         storagePlaces,
-        storagePlaceAuditReport,
         storesMoveLogReport,
+        storesTransactionDefinitions,
         suppliers,
         suppliersApprovedCarrier,
         tpkTransferStock,

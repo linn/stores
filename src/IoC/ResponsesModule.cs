@@ -6,6 +6,7 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Reporting.Models;
+    using Linn.Stores.Domain;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
@@ -240,6 +241,16 @@
             builder.RegisterType<StockTriggerLevelsResourceBuilder>().As<IResourceBuilder<IEnumerable<StockTriggerLevel>>>();
             builder.RegisterType<PartLibraryResourceBuilder>().As<IResourceBuilder<PartLibrary>>();
             builder.RegisterType<PartLibrariesResourceBuilder>().As<IResourceBuilder<IEnumerable<PartLibrary>>>();
+            builder.RegisterType<ScsPalletsResourceBuilder>().As<IResourceBuilder<IEnumerable<ScsPallet>>>();
+            builder.RegisterType<DespatchPalletQueueScsDetailResourceBuilder>().As<IResourceBuilder<DespatchPalletQueueScsDetail>>();
+            builder.RegisterType<DespatchPalletQueueScsDetailsResourceBuilder>().As<IResourceBuilder<IEnumerable<DespatchPalletQueueScsDetail>>>();
+            builder.RegisterType<StoresBudgetPostingResourceBuilder>().As<IResourceBuilder<StoresBudgetPosting>>();
+            builder.RegisterType<StoresBudgetPostingsResourceBuilder>().As<IResourceBuilder<IEnumerable<StoresBudgetPosting>>>();
+            builder.RegisterType<StoresTransactionDefinitionResourceBuilder>().As<IResourceBuilder<StoresTransactionDefinition>>();
+            builder.RegisterType<StoresTransactionDefinitionsResourceBuilder>().As<IResourceBuilder<IEnumerable<StoresTransactionDefinition>>>();
+            builder.RegisterType<MechPartSourcesResourceBuilder>().As<IResourceBuilder<IEnumerable<MechPartSource>>>();
+            builder.RegisterType<LibraryRefsResourceBuilder>().As<IResourceBuilder<IEnumerable<LibraryRef>>>();
+            builder.RegisterType<FootprintRefsOptionResourceBuilder>().As<IResourceBuilder<IEnumerable<FootprintRefOption>>>();
         }
     }
 }

@@ -1,31 +1,18 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
-import {
-    Typeahead,
-    LinkButton,
-    DatePicker,
-    InputField
-} from '@linn-it/linn-form-components-library';
+import { LinkButton, DatePicker, InputField, Loading } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import makeStyles from '@material-ui/styles/makeStyles';
 import Page from '../../containers/Page';
 
-function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, privileges }) {
-    const searchItems = () => {
-        return items?.map(item => ({
-            ...item,
-            name: item.id.toString(),
-            description: `created ${new Date(item.dateCreated).toLocaleDateString(
-                'en-GB'
-            )}. Customs entry: ${item.customsEntryCodePrefix} ${
-                item.customsEntryCode
-            }, entry date ${new Date(item.customsEntryCodeDate).toLocaleDateString('en-GB')}`,
-            href: item.href
-        }));
-    };
-    const [options, setOptions] = useState({ poNumber: null, rsnNumber: null });
+function ImportBooksSearch({ items, fetchItems, loading, privileges }) {
+    const [options, setOptions] = useState({ poNumber: null, rsnNumber: null, impbookId: null });
 
     const useStyles = makeStyles(theme => ({
         button: {
@@ -38,9 +25,9 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
     }));
     const classes = useStyles();
 
-    const doSearch = searchTerm => {
+    const doSearch = () => {
         fetchItems(
-            searchTerm,
+            options.impbookId.toString(),
             `&rsnNumber=${options.rsnNumber ?? ''}&poNumber=${options.poNumber ?? ''}&fromDate=${
                 options.fromDate ? options.fromDate.toISOString() : ''
             }&toDate=${
@@ -142,7 +129,17 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
                         }}
                     />
                 </Grid>
-                <Grid item xs={8} />
+                <Grid item xs={4} />
+                <Grid item xs={8}>
+                    <InputField
+                        label="Impbook Id"
+                        value={options.impbookId}
+                        onChange={handleFieldChange}
+                        propertyName="impbookId"
+                        fullwidth
+                        type="number"
+                    />
+                </Grid>
                 <Grid item xs={4}>
                     <Button
                         className={classes.button}
@@ -150,19 +147,35 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
                         onClick={() => doSearch('')}
                         color="primary"
                     >
-                        Go
+                        Search
                     </Button>
                 </Grid>
                 <Grid item xs={12}>
-                    <Typeahead
-                        items={searchItems()}
-                        fetchItems={doSearch}
-                        clearSearch={clearSearch}
-                        loading={loading}
-                        title=""
-                        history={history}
-                        debounce={1000}
-                    />
+                    {loading ? (
+                        <Loading />
+                    ) : (
+                        <>
+                            {items && (
+                                <List dense>
+                                    {' '}
+                                    {items.map(item => (
+                                        <>
+                                            <ListItem component={Link} to={item.href}>
+                                                {`${item.id} created ${new Date(
+                                                    item.dateCreated
+                                                ).toLocaleDateString('en-GB')}. Customs entry: ${
+                                                    item.customsEntryCodePrefix
+                                                } ${item.customsEntryCode}, entry date ${new Date(
+                                                    item.customsEntryCodeDate
+                                                ).toLocaleDateString('en-GB')}`}
+                                            </ListItem>
+                                            <Divider />
+                                        </>
+                                    ))}
+                                </List>
+                            )}
+                        </>
+                    )}
                 </Grid>
             </Grid>
         </Page>
@@ -178,8 +191,6 @@ ImportBooksSearch.propTypes = {
     ).isRequired,
     loading: PropTypes.bool,
     fetchItems: PropTypes.func.isRequired,
-    clearSearch: PropTypes.func.isRequired,
-    history: PropTypes.shape({}).isRequired,
     privileges: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 

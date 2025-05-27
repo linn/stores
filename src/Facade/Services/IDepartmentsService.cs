@@ -8,5 +8,7 @@
     public interface IDepartmentsService
     {
         IResult<IEnumerable<Department>> GetOpenDepartments(string searchTerm = null);
+
+        IResult<IEnumerable<Department>> GetProjectDepartments();
     }
 }

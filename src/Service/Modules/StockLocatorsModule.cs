@@ -71,6 +71,14 @@
         {
             var resource = this.Bind<StockLocatorQueryResource>();
             var result = this.service.GetStockLocations(resource);
+
+            var loggedIn = this.Context?.CurrentUser?.GetEmployeeUri();
+            if (string.IsNullOrEmpty(loggedIn))
+            {
+                return new BadRequestResult<IEnumerable<StockLocatorPrices>>(
+                    "You are not logged in. Refresh the page to re-authenticate");
+            }
+
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");

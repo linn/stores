@@ -23,6 +23,7 @@
     using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
+    using Linn.Stores.Domain.LinnApps.Wcs;
     using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Persistence.LinnApps;
     using Linn.Stores.Persistence.LinnApps.Repositories;
@@ -154,6 +155,15 @@
             builder.RegisterType<ProductUpgradeRulesRepository>().As<IQueryRepository<ProductUpgradeRule>>();
             builder.RegisterType<StoresMoveLogRepository>().As<IQueryRepository<StoresMoveLog>>();
             builder.RegisterType<PartLibraryRepository>().As<IRepository<PartLibrary, string>>();
+            builder.RegisterType<WarehouseLocationRepository>().As<IQueryRepository<WarehouseLocation>>();
+            builder.RegisterType<DespatchPalletQueueScsDetailsRepository>().As<IQueryRepository<DespatchPalletQueueScsDetail>>();
+            builder.RegisterType<ScsPalletFastRepository>().As<IScsPalletsRepository>();
+            builder.RegisterType<StoresBudgetPostingRepository>().As<IRepository<StoresBudgetPosting, StoresBudgetPostingKey>>();
+            builder.RegisterType<StoresTransactionDefinitionRepository>().As<IRepository<StoresTransactionDefinition, string>>();
+            builder.RegisterType<AddressesRepository>().As<IRepository<Address, int>>();
+            builder.RegisterType<InvoiceRepository>().As<IRepository<Invoice, int>>();
+            builder.RegisterType<LibraryRefsRepository>().As<IRepository<LibraryRef, string>>();
+            builder.RegisterType<FootprintRefOptionsRepository>().As<IQueryRepository<FootprintRefOption>>();
         }
     }
 }

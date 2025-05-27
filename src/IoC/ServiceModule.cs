@@ -51,7 +51,6 @@
             builder.RegisterType<AllocationReportsService>().As<IAllocationReportsService>();
             builder.RegisterType<PartService>().As<IPartService>();
             builder.RegisterType<WhatWillDecrementReportService>().As<IWhatWillDecrementReportService>();
-            builder.RegisterType<StoragePlaceAuditReportService>().As<IStoragePlaceAuditReportService>();
             builder.RegisterType<MechPartSourceService>().As<IMechPartSourceService>();
             builder.RegisterType<WorkstationService>().As<IWorkstationService>();
             builder.RegisterType<StockLocatorService>().As<IStockLocatorService>();
@@ -60,6 +59,7 @@
             builder.RegisterType<RequisitionService>().As<IRequisitionService>();
             builder.RegisterType<TpkService>().As<ITpkService>();
             builder.RegisterType<MoveStockService>().As<IMoveStockService>();
+            builder.RegisterType<StockReportService>().As<IStockReportService>();
             builder.RegisterType<TqmsReportsService>().As<ITqmsReportsService>();
             builder.RegisterType<ConsignmentShipfileService>().As<IConsignmentShipfileService>();
             builder.RegisterType<EmailService>().As<IEmailService>();
@@ -88,6 +88,7 @@
             builder.RegisterType<RootProductsService>().As<IRootProductService>();
             builder.RegisterType<DepartmentService>().As<IDepartmentsService>();
             builder.RegisterType<AllocationFacadeService>().As<IAllocationFacadeService>();
+            builder.RegisterType<StockReportFacadeService>().As<IStockReportFacadeService>();
             builder.RegisterType<SernosSequencesService>().As<ISernosSequencesService>();
             builder.RegisterType<UnitsOfMeasureService>().As<IUnitsOfMeasureService>();
             builder.RegisterType<SuppliersService>().As<ISuppliersService>();
@@ -108,14 +109,13 @@
             builder.RegisterType<PartTemplateService>()
                 .As<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             builder.RegisterType<PartLiveService>().As<IPartLiveService>();
-            builder.RegisterType<StoragePlaceAuditReportFacadeService>().As<IStoragePlaceAuditReportFacadeService>();
             builder.RegisterType<AuditLocationService>().As<IAuditLocationService>();
             builder.RegisterType<StoragePlaceService>().As<IStoragePlaceService>();
             builder.RegisterType<SosAllocHeadFacadeService>().As<ISosAllocHeadFacadeService>();
             builder.RegisterType<SosAllocDetailFacadeService>()
                 .As<IFacadeFilterService<SosAllocDetail, int, SosAllocDetailResource, SosAllocDetailResource, JobIdRequestResource>>();
             builder.RegisterType<MechPartSourceFacadeService>()
-                .As<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
+                .As<IFacadeFilterService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource, MechPartSourceSearchResource>>();
             builder.RegisterType<ParcelFacadeService>()
                 .As<IFacadeFilterService<Parcel, int, ParcelResource, ParcelResource, ParcelSearchRequestResource>>();
             builder.RegisterType<ManufacturerService>()
@@ -171,6 +171,7 @@
             builder.RegisterType<CarrierFacadeService>().As<IFacadeService<Carrier, string, CarrierResource, CarrierResource>>();
             builder.RegisterType<ShippingTermFacadeService>().As<IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource>>();
             builder.RegisterType<GoodsInFacadeService>().As<IGoodsInFacadeService>();
+            builder.RegisterType<StoresBudgetPostingFacadeService>().As<IFacadeFilterService<StoresBudgetPosting, StoresBudgetPostingKey, StoresBudgetPostingResource, StoresBudgetPostingResource, StoresBudgetPostingResource>>();
             builder.RegisterType<SalesArticleService>().As<ISalesArticleService>();
             builder.RegisterType<CartonTypeFacadeService>().As<IFacadeService<CartonType, string, CartonTypeResource, CartonTypeResource>>();
             builder.RegisterType<PortFacadeService>().As<IFacadeService<Port, string, PortResource, PortResource>>();
@@ -191,13 +192,18 @@
             builder.RegisterType<StockTriggerLevelsFacadeService>().As<IStockTriggerLevelsFacadeService>();
             builder.RegisterType<PartLibraryService>()
                 .As<IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource>>();
+            builder.RegisterType<StoresTransactionDefinitionFacadeService>()
+                .As<IFacadeService<StoresTransactionDefinition, string, StoresTransactionDefinitionResource, StoresTransactionDefinitionResource>>();
+            builder.RegisterType<LibraryRefsFacadeService>()
+                .As<IFacadeService<LibraryRef, string, LibraryRefResource, LibraryRefResource>>();
+            builder.RegisterType<FootprintRefOptionsService>()
+                .As<IFootprintRefOptionsService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
             builder.RegisterType<PartPack>().As<IPartPack>();
             builder.RegisterType<DatabaseService>().As<IDatabaseService>();
             builder.RegisterType<WwdPack>().As<IWwdPack>();
-            builder.RegisterType<StoragePlaceAuditPack>().As<IStoragePlaceAuditPack>();
             builder.RegisterType<AllocPack>().As<IAllocPack>();
             builder.RegisterType<WorkstationPackProxy>().As<IWorkstationPack>();
             builder.RegisterType<WcsPack>().As<IWcsPack>();
@@ -221,6 +227,7 @@
             builder.RegisterType<LogisticsLabelService>().As<ILogisticsLabelService>();
             builder.RegisterType<DeptStockPartsService>().As<IDeptStockPartsService>();
             builder.RegisterType<PurchaseLedgerPack>().As<IPurchaseLedgerPack>();
+            builder.RegisterType<ProductUpgradePack>().As<IProductUpgradePack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

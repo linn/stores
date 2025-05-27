@@ -138,6 +138,12 @@ export const auditLocations = new ItemType(
 
 export const mechPartSource = new ItemType('mechPartSource', 'MECH_PART_SOURCE', '/parts/sources');
 
+export const partSources = new ItemType(
+    'partSources',
+    'MECH_PART_SOURCES',
+    '/parts/sources/report'
+);
+
 export const manufacturers = new ItemType(
     'manufacturers',
     'MANUFACTURERS',
@@ -495,3 +501,21 @@ export const stockTriggerLevels = new ItemType(
 );
 
 export const partLibraries = new ItemType('partLibraries', 'PART_LIBRARIES', '/parts/libraries');
+
+export const storesTransactionDefinitions = new ItemType(
+    'storesTransactionDefinitions',
+    'STORES_TRANSACTION_DEFINITIONS',
+    '/inventory/stores-transaction-definitions'
+);
+
+export const partLibraryRefs = new ItemType(
+    'partLibraryRefs',
+    'PART_LIBRARY_REFS',
+    '/parts/library-refs'
+);
+
+export const footprintRefOptions = new ItemType(
+    'footprintRefOptions',
+    'FOOTPRINT_REF_OPTIONS',
+    '/parts/footprint-ref-options'
+);

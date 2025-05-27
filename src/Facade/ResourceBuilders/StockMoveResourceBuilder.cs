@@ -14,7 +14,7 @@
             return new StockMoveResource
                        {
                             PartNumber = move.StockLocator?.PartNumber,
-                            QtyAllocated = move.StockLocator?.QuantityAllocated,
+                            QtyAllocated = move.Quantity,
                             TransactionCode = move.Header?.Lines
                                 .FirstOrDefault(l => l.LineNumber == move.LineNumber)
                                 ?.TransactionCode,

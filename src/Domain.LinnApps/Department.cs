@@ -11,7 +11,9 @@
 
         public DateTime? DateClosed { get; set; }
 
-        public string ObseleteInStores { get; set; }
+        public string ObsoleteInStores { get; set; }
+
+        public string ProjectDepartment { get; set; }
 
         public IEnumerable<NominalAccount> NominalAccounts { get; set; }
     }

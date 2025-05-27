@@ -16,14 +16,18 @@
 
         private readonly IRepository<PrinterMapping, int> printerMappingRepository;
 
+        private readonly IRepository<Address, int> addressRepository;
+
         public LogisticsLabelService(
             IBartenderLabelPack bartenderLabelPack,
             IRepository<Consignment, int> consignmentRepository,
-            IRepository<PrinterMapping, int> printerMappingRepository)
+            IRepository<PrinterMapping, int> printerMappingRepository,
+            IRepository<Address, int> addressRepository)
         {
             this.bartenderLabelPack = bartenderLabelPack;
             this.consignmentRepository = consignmentRepository;
             this.printerMappingRepository = printerMappingRepository;
+            this.addressRepository = addressRepository;
         }
 
         public ProcessResult PrintCartonLabel(
@@ -114,6 +118,64 @@
             return new ProcessResult(true, $"{labelCount} pallet label(s) printed");
         }
 
+        public ProcessResult PrintAddressLabel(int addressId, string line1, string line2, int userNumber, int numberOfCopies = 1)
+        {
+            var address = this.addressRepository.FindById(addressId);
+            if (address == null)
+            {
+                return new ProcessResult(false, $"no address found for {addressId}");
+            }
+
+            string labelData = null;
+            try
+            {
+                labelData = $"\"{this.GetPrintAddress(address)}\", \"{this.GetGeneralText(line1, line2, string.Empty, string.Empty, string.Empty)}\"";
+            }
+            catch (ProcessException exception)
+            {
+                return new ProcessResult(false, exception.Message);
+            }
+
+            var printerName = this.GetPrinter(userNumber);
+            var labelMessage = string.Empty;
+
+            this.bartenderLabelPack.PrintLabels(
+                $"AddressLabel{addressId}",
+                printerName,
+                numberOfCopies,
+                "dispatchaddress.btw",
+                labelData,
+                ref labelMessage);
+
+            return new ProcessResult(true, $"{numberOfCopies} address label(s) printed");
+        }
+
+        public ProcessResult PrintGeneralLabel(
+            string line1,
+            string line2,
+            string line3,
+            string line4,
+            string line5,
+            int userNumber,
+            int numberOfCopies = 1)
+        {
+            string labelData = null;
+            labelData = $"\"{this.GetGeneralText(line1,line2,line3,line4,line5)}\"";
+
+            var printerName = this.GetPrinter(userNumber);
+            var labelMessage = string.Empty;
+
+            this.bartenderLabelPack.PrintLabels(
+                $"GeneralLabel{labelData.Length}",
+                printerName,
+                numberOfCopies,
+                "dispatchgeneral.btw",
+                labelData,
+                ref labelMessage);
+
+            return new ProcessResult(true, $"{numberOfCopies} general label(s) printed");
+        }
+
         private string GetPalletLabelInfo(Consignment consignment, int palletNumber)
         {
             var pallet = consignment.Pallets.FirstOrDefault(a => a.PalletNumber == palletNumber);
@@ -135,6 +197,12 @@
 
         private string GetLabelInformation(Consignment consignment, int cartonNumber)
         {
+            if (consignment == null)
+            {
+                return
+                    $"Carton: {Environment.NewLine}Article:{Environment.NewLine}Serial No: {Environment.NewLine}Order: {Environment.NewLine}Consignment: ";
+            }
+
             var item = consignment.Items.FirstOrDefault(a =>
                 a.ContainerNumber == cartonNumber && (a.ItemType == "C" || a.ItemType == "S"));
 
@@ -176,6 +244,17 @@
             printAddress += string.IsNullOrEmpty(address.Country.DisplayName) ? null : $"{address.Country.DisplayName}";
 
             return printAddress;
+        }
+
+        private string GetGeneralText(string line1, string line2, string line3, string line4, string line5)
+        {
+            var generalText = $"{line1}{Environment.NewLine}";
+            generalText += string.IsNullOrEmpty(line2) ? null : $"{line2}{Environment.NewLine}";
+            generalText += string.IsNullOrEmpty(line3) ? null : $"{line3}{Environment.NewLine}";
+            generalText += string.IsNullOrEmpty(line4) ? null : $"{line4}{Environment.NewLine}";
+            generalText += string.IsNullOrEmpty(line5) ? null : line5;
+
+            return generalText;
         }
     }
 }

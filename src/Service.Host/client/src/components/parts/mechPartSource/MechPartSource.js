@@ -89,8 +89,8 @@ function MechPartSource({
         if (item !== prevMechPartSource && editStatus !== 'create') {
             setMechPartSource({
                 ...item,
-                resistanceUnits: 'KΩ',
-                capacitanceUnits: 'uF',
+                resistanceUnits: item?.rkmCode?.replace(/[^a-zA-Z]/g, '').concat('Ω'),
+                capacitanceUnits: item?.capacitanceLetterAndNumeralCode?.replace(/[^a-zA-Z]/g, ''),
                 mechPartManufacturerAlts: item?.mechPartManufacturerAlts?.map(m => ({
                     ...m,
                     id: m.sequence
@@ -166,8 +166,8 @@ function MechPartSource({
         clearErrors();
         body.resistanceUnits = rkmLetters[mechPartSource.resistanceUnits];
         body.capacitanceUnit = capacitanceUnits[mechPartSource.capacitanceUnits];
-        body.mechPartAlts = suppliersData;
-        body.mechPartManufacturerAlts = manufacturersData;
+        body.mechPartAlts = suppliersData?.map(m => ({ ...m, id: Number(m.supplierId) }));
+        body.mechPartManufacturerAlts = manufacturersData?.map(m => ({ ...m, id: m.preference }));
         body.capacitance =
             typeof mechPartSource.capacitance === 'string'
                 ? mechPartSource.capacitance
@@ -243,6 +243,17 @@ function MechPartSource({
         });
     };
 
+    const handleProjectChange = newValue => {
+        if (viewing()) {
+            setEditStatus('edit');
+        }
+        setMechPartSource({
+            ...mechPartSource,
+            projectCode: newValue.name,
+            project: { department: newValue.name, description: newValue.description }
+        });
+    };
+
     const resetRow = (current, collectionName, idFieldName) => {
         setMechPartSource(m => ({
             ...m,
@@ -282,9 +293,9 @@ function MechPartSource({
         );
     };
 
-    const handleManufacturerChange = (sequence, newValue) => {
+    const handleManufacturerChange = (id, newValue) => {
         setManufacturersData(m =>
-            m.map(x => (x.sequence === sequence ? { ...x, manufacturerCode: newValue.name } : x))
+            m.map(x => (x.id === id ? { ...x, manufacturerCode: newValue.name } : x))
         );
     };
 
@@ -395,12 +406,18 @@ function MechPartSource({
                                 />
                                 <Tab label="Quality Requirements" />
                                 <Tab label="Suppliers" />
-                                <Tab label="Manufacturers" />
+                                <Tab
+                                    label="Manufacturers"
+                                    disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
+                                />
                                 <Tab
                                     label="Param Data"
                                     disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
                                 />
-                                <Tab label="Cad Data" />
+                                <Tab
+                                    label="Cad Data"
+                                    disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
+                                />
                                 <Tab label="Quotes" />
                                 <Tab label="Usages" />
                                 <Tab label="Verification" />
@@ -420,7 +437,6 @@ function MechPartSource({
                                     emcCritical={mechPartSource.emcCritical}
                                     singleSource={mechPartSource.singleSource}
                                     safetyDataDirectory={mechPartSource.safetyDataDirectory}
-                                    productionDate={mechPartSource.productionDate}
                                     estimatedVolume={mechPartSource.estimatedVolume}
                                     samplesRequired={mechPartSource.samplesRequired}
                                     sampleQuantity={mechPartSource.sampleQuantity}
@@ -429,7 +445,10 @@ function MechPartSource({
                                     linnPartNumber={mechPartSource.linnPartNumber}
                                     linnPartDescription={mechPartSource.linnPartDescription}
                                     assemblyType={mechPartSource.assemblyType}
+                                    projectCode={mechPartSource.projectCode}
+                                    projectName={mechPartSource.project?.description}
                                     handleLinnPartChange={handleLinnPartChange}
+                                    handleProjectChange={handleProjectChange}
                                 />
                             )}
                             {tab === 1 && mechPartSource.part && (
@@ -508,24 +527,11 @@ function MechPartSource({
                                 <ParamDataTab
                                     partType={mechPartSource.partType}
                                     resistance={mechPartSource.resistance}
-                                    resistanceUnits={
-                                        creating()
-                                            ? mechPartSource.resistanceUnits
-                                            : mechPartSource?.rkmCode
-                                                  ?.replace(/[^a-zA-Z]/g, '')
-                                                  .concat('Ω')
-                                    }
+                                    resistanceUnits={mechPartSource.resistanceUnits}
                                     handleFieldChange={handleFieldChange}
                                     capacitorRippleCurrent={mechPartSource.capacitorRippleCurrent}
                                     capacitance={mechPartSource.capacitance}
-                                    capacitanceUnits={
-                                        creating()
-                                            ? mechPartSource.capacitanceUnits
-                                            : mechPartSource?.capacitanceLetterAndNumeralCode?.replace(
-                                                  /[^a-zA-Z]/g,
-                                                  ''
-                                              )
-                                    }
+                                    capacitanceUnits={mechPartSource.capacitanceUnits}
                                     capacitorVoltageRating={mechPartSource.capacitorVoltageRating}
                                     capacitorPositiveTolerance={
                                         mechPartSource.capacitorPositiveTolerance
@@ -533,7 +539,6 @@ function MechPartSource({
                                     capacitorNegativeTolerance={
                                         mechPartSource.capacitorNegativeTolerance
                                     }
-                                    creating={creating}
                                     capacitorDielectric={mechPartSource.capacitorDielectric}
                                     packageName={mechPartSource.packageName}
                                     capacitorPitch={mechPartSource.capacitorPitch}
@@ -645,7 +650,9 @@ function MechPartSource({
 MechPartSource.propTypes = {
     item: PropTypes.shape({
         mechPartManufacturerAlts: PropTypes.arrayOf(PropTypes.shape({})),
-        mechPartAlts: PropTypes.arrayOf(PropTypes.shape({}))
+        mechPartAlts: PropTypes.arrayOf(PropTypes.shape({})),
+        capacitanceLetterAndNumeralCode: PropTypes.string,
+        rkmCode: PropTypes.string
     }),
     history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
     editStatus: PropTypes.string.isRequired,

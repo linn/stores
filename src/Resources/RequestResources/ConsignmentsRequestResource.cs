@@ -6,6 +6,8 @@
 
         public int? ConsignmentId { get; set; }
 
+        public int? InvoiceNumber { get; set; }
+
         public int? HubId { get; set; }
     }
 }

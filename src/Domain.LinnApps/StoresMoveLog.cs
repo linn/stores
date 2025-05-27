@@ -57,5 +57,26 @@
         public decimal? QtyInQC { get; set; }
 
         public decimal? QtyAtSupplier { get; set;  }
+
+        public bool MatchesLocation(string location)
+        {
+            if (string.IsNullOrWhiteSpace(location))
+            {
+                // null location matches everything
+                return true;
+            }
+
+            if ((this.FromLocation == null) && (this.ToLocation == null))
+            {
+                return false;
+            }
+
+            if (location.StartsWith("P"))
+            {
+                // a pallet want a direct match so P12 doesn't bring back P121 and P122
+                return (this.FromLocation == location) || (this.ToLocation == location);
+            }
+            return $"{this.FromLocation}#{this.ToLocation}".Contains(location.ToUpper());
+        }
     }
 }

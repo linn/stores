@@ -10,14 +10,25 @@ export default function StoresMoveLogReportOptions({
     searchParts,
     clearPartsSearch,
     partsSearchLoading,
-    partsSearchResults
+    partsSearchResults,
+    stockPools,
+    stockPoolsLoading,
+    searchStockPools,
+    clearStockPoolsSearch,
+    storesTransactionDefinitions,
+    storesTransactionDefinitionsLoading,
+    searchStoresTransactionDefinitions,
+    clearStoresTransactionDefinitions
 }) {
     const defaultDate = new Date();
 
     const [reportOptions, setReportOptions] = useState({
         partNumber: '',
         from: defaultDate,
-        to: defaultDate
+        to: defaultDate,
+        location: '',
+        transType: '',
+        stockPool: ''
     });
 
     const handleFieldChange = (propertyName, newValue) => {
@@ -40,12 +51,25 @@ export default function StoresMoveLogReportOptions({
         });
     };
 
-    const validateReportOptions = () => !!reportOptions.partNumber;
+    const validateReportOptions = () =>
+        reportOptions.partNumber || reportOptions.location || reportOptions.transType;
 
     const handleRunClick = () => {
-        const searchString = `?partNumber=${
+        let searchString = `?partNumber=${
             reportOptions.partNumber
         }&from=${reportOptions.from.toISOString()}&to=${reportOptions.to.toISOString()}`;
+
+        if (reportOptions.location) {
+            searchString += `&location=${reportOptions.location}`;
+        }
+
+        if (reportOptions.transType) {
+            searchString += `&transType=${reportOptions.transType}`;
+        }
+
+        if (reportOptions.stockPool) {
+            searchString += `&stockPool=${reportOptions.stockPool}`;
+        }
 
         history.push({
             pathname: '/inventory/reports/stores-move-log/report',
@@ -101,14 +125,14 @@ export default function StoresMoveLogReportOptions({
                         label="Description"
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={6}>
                     <DatePicker
                         label="From Date"
                         value={reportOptions.from.toString()}
                         onChange={setFromDate}
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={6}>
                     <DatePicker
                         label="To Date"
                         value={reportOptions.to.toString()}
@@ -116,8 +140,80 @@ export default function StoresMoveLogReportOptions({
                         onChange={setToDate}
                     />
                 </Grid>
-                <Grid item xs={6} />
-                <Grid item xs={12}>
+                <Grid item xs={3}>
+                    <InputField
+                        fullWidth
+                        propertyName="location"
+                        value={reportOptions.location}
+                        label="Location"
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
+                <Grid item xs={2}>
+                    <InputField
+                        fullWidth
+                        propertyName="transType"
+                        value={reportOptions.transType}
+                        label="Trans Type"
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
+                <Grid item xs={1}>
+                    <Typeahead
+                        items={storesTransactionDefinitions}
+                        fetchItems={searchStoresTransactionDefinitions}
+                        modal
+                        searchButtonOnly
+                        links={false}
+                        clearSearch={clearStoresTransactionDefinitions}
+                        loading={storesTransactionDefinitionsLoading}
+                        label="Trans Type"
+                        title="Search Trans Type"
+                        value={reportOptions.transType}
+                        onSelect={newValue =>
+                            setReportOptions({
+                                ...reportOptions,
+                                transType: newValue.transactionCode
+                            })
+                        }
+                        history={history}
+                        debounce={1000}
+                        minimumSearchTermLength={2}
+                    />
+                </Grid>
+                <Grid item xs={2}>
+                    <InputField
+                        fullWidth
+                        propertyName="stockPool"
+                        value={reportOptions.stockPool}
+                        label="Stock Pool"
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
+                <Grid item xs={1}>
+                    <Typeahead
+                        items={stockPools}
+                        fetchItems={searchStockPools}
+                        modal
+                        searchButtonOnly
+                        links={false}
+                        clearSearch={clearStockPoolsSearch}
+                        loading={stockPoolsLoading}
+                        label="Stock Pool"
+                        title="Search Stock Pools"
+                        value={reportOptions.stockPool}
+                        onSelect={newValue =>
+                            setReportOptions({
+                                ...reportOptions,
+                                stockPool: newValue.stockPoolCode
+                            })
+                        }
+                        history={history}
+                        debounce={1000}
+                        minimumSearchTermLength={2}
+                    />
+                </Grid>
+                <Grid item xs={3}>
                     <Button
                         color="primary"
                         variant="contained"
@@ -138,10 +234,33 @@ StoresMoveLogReportOptions.propTypes = {
     searchParts: PropTypes.func.isRequired,
     clearPartsSearch: PropTypes.func.isRequired,
     partsSearchLoading: PropTypes.bool,
-    partsSearchResults: PropTypes.arrayOf(PropTypes.shape({}))
+    partsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    stockPools: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+            name: PropTypes.string,
+            description: PropTypes.string
+        })
+    ),
+    stockPoolsLoading: PropTypes.bool,
+    searchStockPools: PropTypes.func.isRequired,
+    clearStockPoolsSearch: PropTypes.func.isRequired,
+    storesTransactionDefinitions: PropTypes.arrayOf(
+        PropTypes.shape({
+            transactionCode: PropTypes.string,
+            description: PropTypes.string
+        })
+    ),
+    storesTransactionDefinitionsLoading: PropTypes.bool,
+    searchStoresTransactionDefinitions: PropTypes.func.isRequired,
+    clearStoresTransactionDefinitions: PropTypes.func.isRequired
 };
 
 StoresMoveLogReportOptions.defaultProps = {
     partsSearchLoading: false,
-    partsSearchResults: []
+    partsSearchResults: [],
+    stockPools: [],
+    stockPoolsLoading: false,
+    storesTransactionDefinitions: [],
+    storesTransactionDefinitionsLoading: false
 };

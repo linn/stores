@@ -16,4 +16,8 @@
     <PackageReference Include="Linn.Common.Reporting" Version="1.6.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
 </Project>

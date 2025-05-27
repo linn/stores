@@ -21,8 +21,8 @@
         protected IFacadeFilterService<Parcel, int, ParcelResource, ParcelResource, ParcelSearchRequestResource> ParcelsFacadeService { get; private set; }
 
         protected IRepository<Parcel, int> ParcelRepository { get; private set; }
-        protected IAuthorisationService AuthorisationService { get; set; }
 
+        protected IAuthorisationService AuthorisationService { get; set; }
 
         [SetUp]
         public void EstablishContext()

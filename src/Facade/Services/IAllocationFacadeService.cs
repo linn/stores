@@ -22,5 +22,7 @@
         IResult<ResultsModel> DespatchPickingSummaryReport();
 
         IResult<DespatchPalletQueueResult> DespatchPalletQueueReport();
+
+        IResult<IEnumerable<DespatchPalletQueueScsDetail>> DespatchPalletQueueForScs();
     }
 }

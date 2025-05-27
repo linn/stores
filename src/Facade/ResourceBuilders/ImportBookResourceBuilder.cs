@@ -51,7 +51,7 @@
                 CreatedBy = model.CreatedBy,
                 CustomsEntryCodePrefix = model.CustomsEntryCodePrefix,
                 Pva = model.Pva,
-                ExchangeRate = model.ExchangeRate,
+                ExchangeRate = model.ExchangeRate.GetValueOrDefault(),
                 ImportBookPostEntries = model.PostEntries != null ? this.postEntriesResourceBuilder.Build(model.PostEntries) : new List<ImportBookPostEntryResource>(),
                 ImportBookOrderDetails = model.OrderDetails != null ? this.orderDetailsResourceBuilder.Build(model.OrderDetails) : new List<ImportBookOrderDetailResource>(),
                 ImportBookInvoiceDetails = model.InvoiceDetails != null ? this.invoiceDetailsResourceBuilder.Build(model.InvoiceDetails) : new List<ImportBookInvoiceDetailResource>(),

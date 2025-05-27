@@ -14,7 +14,7 @@
 
         public PartResource Build(Part part)
         {
-            return new PartResource
+            var resource = new PartResource
                        {
                            Id = part.Id,
                            PartNumber = part.PartNumber,
@@ -112,8 +112,34 @@
                            LibraryRef = part.LibraryRef,
                            FootprintRef1 = part.FootprintRef1,
                            FootprintRef2 = part.FootprintRef2,
-                           FootprintRef3 = part.FootprintRef3
+                           FootprintRef3 = part.FootprintRef3,
+                           AltiumType = part.AltiumType,
+                           DatasheetPath = part.DataSheetPdfPath,
+                           TheirPartNumber = part.ManufacturersPartNumber,
+                           TemperatureCoefficient = part.TemperatureCoefficient,
+                           Device = part.Device,
+                           AltiumValueRkm = part.AltiumValueRkm,
+                           Dielectric = part.Dielectric,
+                           Construction = part.Construction,
+                           CapNegativeTolerance = part.CapNegativeTolerance,
+                           CapPositiveTolerance = part.CapPositiveTolerance,
+                           CapVoltageRating = part.CapVoltageRating,
+                           Frequency = part.Frequency,
+                           FrequencyLabel = part.FrequencyLabel,
+                           SimKind = part.SimKind,
+                           SimSubKind = part.SimSubKind,
+                           SimModelName = part.SimModelName,
+                           AltiumValue = part.AltiumValue,
+                           ResistorTolerance = part.ResistorTolerance
                        };
+
+            if (part.QcControls != null && part.QcControls.Any())
+            {
+                resource.DateQcFlagLastChanged = part.GetDateQcFlagLastChanged()?.ToString("o");
+                resource.WhoLastChangedQcFlag = part.GetQcFlagLastChangedBy()?.FullName;
+            }
+
+            return resource;
         }
 
         public string GetLocation(Part part)

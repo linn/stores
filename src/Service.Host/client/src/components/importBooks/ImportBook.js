@@ -102,10 +102,12 @@ function ImportBook({
     };
 
     useEffect(() => {
-        if (state.impbook?.dateCreated) {
+        if (state.impbook?.customsEntryCodeDate) {
+            getExchangeRatesForDate(dateToDdMmmYyyy(state.impbook.customsEntryCodeDate));
+        } else if (state.impbook?.dateCreated) {
             getExchangeRatesForDate(dateToDdMmmYyyy(state.impbook.dateCreated));
         }
-    }, [state.impbook.dateCreated, getExchangeRatesForDate]);
+    }, [state.impbook.dateCreated, state.impbook.customsEntryCodeDate, getExchangeRatesForDate]);
 
     const viewing = () => editStatus === 'view';
 

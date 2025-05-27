@@ -79,6 +79,10 @@ function Part({
     });
 
     useEffect(() => {
+        document.title = 'Parts Utility';
+    }, []);
+
+    useEffect(() => {
         if (copy) {
             dispatch({
                 type: 'initialiseCopy',
@@ -135,7 +139,8 @@ function Part({
                     stockControlled: template.stockControlled,
                     cccCriticalPart: 'N',
                     safetyCriticalPart: 'N',
-                    psuPart: 'N'
+                    psuPart: 'N',
+                    ourUnitOfMeasure: 'ONES'
                 }
             });
         }
@@ -466,6 +471,8 @@ function Part({
                                     tqmsCategoryOverride={state.part.tqmsCategoryOverride}
                                     stockNotes={state.part.stockNotes}
                                     plannerStory={state.part.plannerStory}
+                                    dateQcFlagLastChanged={state.part.dateQcFlagLastChanged}
+                                    whoLastChangedQcFlag={state.part.whoLastChangedQcFlag}
                                 />
                             )}
                             {tab === 4 && (
@@ -501,6 +508,21 @@ function Part({
                                     footprintRef1={state.part.footprintRef1}
                                     footprintRef2={state.part.footprintRef2}
                                     footprintRef3={state.part.footprintRef3}
+                                    theirPartNumber={state.part.theirPartNumber}
+                                    datasheetPath={state.part.datasheetPath}
+                                    altiumType={state.part.altiumType}
+                                    altiumValue={state.part.altiumValue}
+                                    altiumValueRkm={state.part.altiumValueRkm}
+                                    construction={state.part.construction}
+                                    temperatureCoefficient={state.part.temperatureCoefficient}
+                                    resistorTolerance={state.part.resistorTolerance}
+                                    device={state.part.device}
+                                    dielectric={state.part.dielectric}
+                                    capVoltageRating={state.part.capVoltageRating}
+                                    capNegativeTolerance={state.part.capNegativeTolerance}
+                                    capPositiveTolerance={state.part.capPositiveTolerance}
+                                    frequency={state.part.frequency}
+                                    frequencyLabel={state.part.frequencyLabel}
                                 />
                             )}
                             <Grid item xs={12}>
