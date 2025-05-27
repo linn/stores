@@ -73,7 +73,8 @@
                                           {
                                               ConsignmentId = inv.ConsignmentId,
                                               DocumentType = inv.DocumentType,
-                                              DocumentNumber = inv.DocumentNumber
+                                              DocumentNumber = inv.DocumentNumber,
+                                              Links = new LinkResource[] { new LinkResource("self", $"/sales/invoices/{inv.DocumentNumber}") }
                                           }),
                            ExportBooks = consignment.ExportBooks?.Select(
                                exportBook => new ExportBookResource

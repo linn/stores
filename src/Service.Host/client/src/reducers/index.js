@@ -28,7 +28,6 @@ import * as processTypes from '../processTypes';
 import stockPools from './stockPools';
 import despatchLocations from './despatchLocations';
 import countries from './countries';
-import storagePlaceAuditReport from './storagePlaceAuditReport';
 import storagePlace from './storagePlace';
 import storagePlaces from './storagePlaces';
 import auditLocation from './auditLocation';
@@ -148,6 +147,7 @@ import storesTransactionDefinitions from './storesTransactionDefinitions';
 import partSources from './parts/partSources';
 import stockLocatorReport from './stockLocatorReport';
 import partLibraryRefs from './parts/partLibraryRefs';
+import footprintRefOptions from './parts/footprintRefOptions';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -191,6 +191,7 @@ const rootReducer = history =>
         exportReturn,
         exportRsns,
         finishAllocation,
+        footprintRefOptions,
         hub,
         hubs,
         impbookCpcNumbers,
@@ -267,7 +268,6 @@ const rootReducer = history =>
         storageLocations,
         storagePlace,
         storagePlaces,
-        storagePlaceAuditReport,
         storesMoveLogReport,
         storesTransactionDefinitions,
         suppliers,

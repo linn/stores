@@ -250,6 +250,7 @@
             builder.RegisterType<StoresTransactionDefinitionsResourceBuilder>().As<IResourceBuilder<IEnumerable<StoresTransactionDefinition>>>();
             builder.RegisterType<MechPartSourcesResourceBuilder>().As<IResourceBuilder<IEnumerable<MechPartSource>>>();
             builder.RegisterType<LibraryRefsResourceBuilder>().As<IResourceBuilder<IEnumerable<LibraryRef>>>();
+            builder.RegisterType<FootprintRefsOptionResourceBuilder>().As<IResourceBuilder<IEnumerable<FootprintRefOption>>>();
         }
     }
 }

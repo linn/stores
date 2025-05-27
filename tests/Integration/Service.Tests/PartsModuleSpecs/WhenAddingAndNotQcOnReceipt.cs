@@ -59,7 +59,7 @@
         public void ShouldNotAddQcInfo()
         {
             this.PartsDomainService.DidNotReceive()
-                .AddQcControl(Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<string>());
+                .AddOnQcControl(Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<string>());
         }
 
         [Test]

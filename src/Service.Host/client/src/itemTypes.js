@@ -513,3 +513,9 @@ export const partLibraryRefs = new ItemType(
     'PART_LIBRARY_REFS',
     '/parts/library-refs'
 );
+
+export const footprintRefOptions = new ItemType(
+    'footprintRefOptions',
+    'FOOTPRINT_REF_OPTIONS',
+    '/parts/footprint-ref-options'
+);

@@ -471,6 +471,8 @@ function Part({
                                     tqmsCategoryOverride={state.part.tqmsCategoryOverride}
                                     stockNotes={state.part.stockNotes}
                                     plannerStory={state.part.plannerStory}
+                                    dateQcFlagLastChanged={state.part.dateQcFlagLastChanged}
+                                    whoLastChangedQcFlag={state.part.whoLastChangedQcFlag}
                                 />
                             )}
                             {tab === 4 && (
@@ -516,9 +518,11 @@ function Part({
                                     resistorTolerance={state.part.resistorTolerance}
                                     device={state.part.device}
                                     dielectric={state.part.dielectric}
-                                    CapVoltageRating={state.part.CapVoltageRating}
-                                    CapNegativeTolerance={state.part.CapNegativeTolerance}
-                                    CapPositiveTolerance={state.part.CapPositiveTolerance}
+                                    capVoltageRating={state.part.capVoltageRating}
+                                    capNegativeTolerance={state.part.capNegativeTolerance}
+                                    capPositiveTolerance={state.part.capPositiveTolerance}
+                                    frequency={state.part.frequency}
+                                    frequencyLabel={state.part.frequencyLabel}
                                 />
                             )}
                             <Grid item xs={12}>

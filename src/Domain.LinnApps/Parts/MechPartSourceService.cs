@@ -90,6 +90,17 @@
                 throw new CreatePartException("You must enter a project code when creating a source sheet");
             }
 
+            if (candidate.MechPartManufacturerAlts != null)
+            {
+                var seq = 1;
+
+                foreach (var m in candidate.MechPartManufacturerAlts)
+                {
+                    m.Sequence = seq;
+                    seq++;
+                }
+            }
+
             return candidate;
         }
 
@@ -127,7 +138,8 @@
             current.PartToBeReplaced = updated.PartToBeReplaced;
             current.ProductionDate = updated.ProductionDate;
             current.SafetyDataDirectory = updated.SafetyDataDirectory;
-            current.MechPartManufacturerAlts = this.GetUpdatedManufacturers(current.MechPartManufacturerAlts, updated.MechPartManufacturerAlts);
+            current.MechPartManufacturerAlts = this.GetUpdatedManufacturers(
+                current.MechPartManufacturerAlts, updated.MechPartManufacturerAlts);
             current.MechPartAlts = updated.MechPartAlts;
             current.ApprovedReferenceStandards = updated.ApprovedReferenceStandards;
             current.ApprovedReferencesAvailable = updated.ApprovedReferencesAvailable;
@@ -218,7 +230,8 @@
             return updated;
         }
 
-        private IEnumerable<MechPartManufacturerAlt> GetUpdatedManufacturers(IEnumerable<MechPartManufacturerAlt> from, IEnumerable<MechPartManufacturerAlt> to)
+        private IEnumerable<MechPartManufacturerAlt> GetUpdatedManufacturers(
+            IEnumerable<MechPartManufacturerAlt> from, IEnumerable<MechPartManufacturerAlt> to)
          {
             if (to == null)
             {

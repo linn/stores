@@ -20,8 +20,6 @@
 
     public abstract class ContextBase : NancyContextBase
     {
-        protected IStoragePlaceAuditReportFacadeService StoragePlaceAuditReportFacadeService { get; private set; }
-
         protected IAuditLocationService AuditLocationService { get; private set; }
 
         protected IStoragePlaceService StoragePlaceService { get; private set; }
@@ -31,7 +29,6 @@
         [SetUp]
         public void EstablishContext()
         {
-            this.StoragePlaceAuditReportFacadeService = Substitute.For<IStoragePlaceAuditReportFacadeService>();
             this.TriggerLevelReportService = Substitute.For<IStockTriggerLevelsForAStoragePlaceFacadeService>();
             this.AuditLocationService = Substitute.For<IAuditLocationService>();
             this.StoragePlaceService = Substitute.For<IStoragePlaceService>();
@@ -39,7 +36,6 @@
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
-                        with.Dependency(this.StoragePlaceAuditReportFacadeService);
                         with.Dependency(this.AuditLocationService);
                         with.Dependency(this.StoragePlaceService);
                         with.Dependency(this.TriggerLevelReportService);

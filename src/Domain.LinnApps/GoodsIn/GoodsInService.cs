@@ -8,7 +8,6 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
-    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Requisitions;
 
     public class GoodsInService : IGoodsInService
@@ -98,34 +97,57 @@
                 return new BookInResult(false, "Onto location/pallet must be entered");
             }
 
-            var linesArray = lines as GoodsInLogEntry[] ?? lines.ToArray();
+            var linesArray = lines?.ToArray() ?? Array.Empty<GoodsInLogEntry>();
 
             if (linesArray.Any(l => this.storagePlaceRepository.FindBy(x => l.StoragePlace == x.Name) == null))
             {
                 return new BookInResult(false, "Invalid location entered");
             }
 
-            if (ontoLocation.StartsWith("P") 
-                && !string.IsNullOrEmpty(partNumber) && transactionType.Equals("O"))
+            if (!string.IsNullOrEmpty(partNumber) && transactionType.Equals("O"))
             {
-                foreach (var entry in linesArray)
+                var firstOnto = ontoLocation.ToUpper().Trim();
+
+                if (!string.IsNullOrEmpty(partNumber) && transactionType.Equals("O")
+                                                      && firstOnto.StartsWith("P"))
                 {
-                    if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, entry.StoragePlace.ToUpper().TrimStart('P')))
+                    if (!this.palletAnalysisPack.CanPutPartOnPallet(
+                            partNumber,
+                            firstOnto.TrimStart('P')))
                     {
-                        return new BookInResult(false, $"Can't put {partNumber} on {entry.StoragePlace}");
+                        return new BookInResult(false, $"Can't put {partNumber} on {firstOnto}");
+                    }
+                }
+
+                if (linesArray.Any())
+                {
+                    foreach (var entry in linesArray)
+                    {
+                        var lineOnto = entry.StoragePlace.ToUpper().Trim();
+
+                        if (!lineOnto.StartsWith("P"))
+                        {
+                            continue;
+                        }
+
+                        if (!this.palletAnalysisPack.CanPutPartOnPallet(
+                                partNumber,
+                                lineOnto.TrimStart('P')))
+                        {
+                            return new BookInResult(false, $"Can't put {partNumber} on {entry.StoragePlace}");
+                        }
                     }
                 }
             }
 
-            var goodsInLogEntries = lines as GoodsInLogEntry[] ?? linesArray.ToArray();
             var bookinRef = this.goodsInPack.GetNextBookInRef();
 
-            if (!goodsInLogEntries.Any())
+            if (!linesArray.Any())
             {
                 return new BookInResult(false, "Nothing to book in");
             }
 
-            foreach (var goodsInLogEntry in goodsInLogEntries)
+            foreach (var goodsInLogEntry in linesArray)
             {
                 goodsInLogEntry.Id = this.goodsInPack.GetNextLogId();
                 goodsInLogEntry.BookInRef = bookinRef;
@@ -197,7 +219,7 @@
                                       loanNumber,
                                       out var supplierId) && (multipleBookIn == null || !multipleBookIn.Value);
 
-            result.Lines = goodsInLogEntries;
+            result.Lines = linesArray;
 
             result.CreatedBy = createdBy;
 
@@ -249,7 +271,7 @@
 
             if (transactionType.Equals("L"))
             {
-                var article = this.partsRepository.FindBy(x => x.PartNumber.Equals(lines.First().ArticleNumber));
+                var article = this.partsRepository.FindBy(x => x.PartNumber.Equals(linesArray.First().ArticleNumber));
                 result.DocType = "L";
                 result.TransactionCode = "L";
                 result.QtyReceived = qty;
