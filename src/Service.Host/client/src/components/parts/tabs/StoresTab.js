@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
 import { InputField, Dropdown } from '@linn-it/linn-form-components-library';
 
@@ -57,7 +58,7 @@ function StoresTab({
                     fullWidth
                     value={
                         dateQcFlagLastChanged
-                            ? new Date(dateQcFlagLastChanged).toLocaleDateString()
+                            ? moment(dateQcFlagLastChanged).format('DD/MM/YYYY')
                             : ''
                     }
                     label="Changed On"
