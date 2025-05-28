@@ -6,16 +6,20 @@ import partLibrariesActions from '../../../../actions/partLibrariesActions';
 import CadDataTab from '../../../../components/parts/mechPartSource/tabs/CadDataTab';
 import partLibraryRefsSelectors from '../../../../selectors/partLibraryRefsSelectors';
 import partLibraryRefsActions from '../../../../actions/partLibraryRefsActions';
+import footprintRefOptionsSelectors from '../../../../selectors/footprintRefOptionsSelectors';
+import footprintRefOptionsActions from '../../../../actions/footprintRefOptionsActions';
 
 const mapStateToProps = state => ({
     partLibraries: partLibrariesSelectors.getItems(state),
-    partLibraryRefs: partLibraryRefsSelectors.getItems(state)
+    partLibraryRefs: partLibraryRefsSelectors.getItems(state),
+    footprintRefOptions: footprintRefOptionsSelectors.getItems(state)
 });
 
 const initialise = () => dispatch => {
     dispatch(partLibrariesActions.fetch());
     dispatch(decrementRulesActions.fetch());
     dispatch(partLibraryRefsActions.fetch());
+    dispatch(footprintRefOptionsActions.fetch());
 };
 
 const mapDispatchToProps = {

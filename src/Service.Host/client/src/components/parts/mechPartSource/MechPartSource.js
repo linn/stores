@@ -203,7 +203,7 @@ function MechPartSource({
         if (viewing()) {
             setEditStatus('edit');
         }
-        setMechPartSource({ ...mechPartSource, [propertyName]: newValue });
+        setMechPartSource(m => ({ ...m, [propertyName]: newValue }));
     };
 
     const handleVerificationFieldChange = (propertyName, newValue) => {
@@ -416,7 +416,9 @@ function MechPartSource({
                                 />
                                 <Tab
                                     label="Cad Data"
-                                    disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
+                                    disabled={
+                                        mechPartSource.mechanicalOrElectrical !== 'E' || !creating()
+                                    }
                                 />
                                 <Tab label="Quotes" />
                                 <Tab label="Usages" />
