@@ -76,6 +76,7 @@ function CadInfoTab({
                             .map(l => l.libraryRef)}
                         fullWidth
                         allowNoValue
+                        helperText="enter a new value, or pick one from the dropdown to the right"
                         value={libraryRefOption}
                         onChange={(_, newValue) => {
                             handleFieldChange('libraryRef', newValue);
@@ -104,7 +105,6 @@ function CadInfoTab({
                             .map(l => `${l.ref1},${l.ref2},${l.ref3}`)}
                         fullWidth
                         allowNoValue
-                        helperText="You can enter your own values for footprint refs, or just pick a default from the list"
                         value={footprintRefOption}
                         onChange={(_, newValue) => {
                             const parts = newValue.split(',');
