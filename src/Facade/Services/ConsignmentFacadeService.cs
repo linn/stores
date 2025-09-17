@@ -169,7 +169,7 @@
                                 PalletNumber = itemResource.PalletNumber,
                                 ContainerNumber = itemResource.ContainerNumber,
                                 ContainerType = itemResource.ContainerType,
-                                ItemDescription = itemResource.ItemDescription,
+                                ItemDescription = itemResource.ItemDescription?.Trim(),
                                 ItemType = itemResource.ItemType,
                                 MaybeHalfAPair = itemResource.MaybeHalfAPair,
                                 OrderLine = itemResource.OrderLine,
@@ -192,7 +192,7 @@
                     existingItem.PalletNumber = itemResource.PalletNumber;
                     existingItem.ContainerNumber = itemResource.ContainerNumber;
                     existingItem.ContainerType = itemResource.ContainerType;
-                    existingItem.ItemDescription = itemResource.ItemDescription;
+                    existingItem.ItemDescription = itemResource.ItemDescription?.Trim();
                     existingItem.ItemType = itemResource.ItemType;
                     existingItem.MaybeHalfAPair = itemResource.MaybeHalfAPair;
                     existingItem.OrderLine = itemResource.OrderLine;
