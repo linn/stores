@@ -13,5 +13,7 @@
         public string PrinterType { get; set; }
 
         public string DefaultForGroup { get; set; }
+
+        public string PrinterUri { get; set; }
     }
 }
