@@ -28,6 +28,8 @@
 
         protected IConsignmentProxyService ConsignmentProxyService { get; private set; }
 
+        protected IPrintService PrintService { get; private set; }
+
         protected IInvoicingPack InvoicingPack { get; private set; }
 
         protected IExportBookPack ExportBookPack { get; private set; }
@@ -46,6 +48,8 @@
             this.ConsignmentRepository = Substitute.For<IRepository<Consignment, int>>();
             this.ExportBookRepository = Substitute.For<IRepository<ExportBook, int>>();
             this.ConsignmentProxyService = Substitute.For<IConsignmentProxyService>();
+            this.PrintInvoiceDispatcher = Substitute.For<IPrintInvoiceDispatcher>();
+            this.PrintService = Substitute.For<IPrintService>();
             this.InvoicingPack = Substitute.For<IInvoicingPack>();
             this.ExportBookPack = Substitute.For<IExportBookPack>();
             this.PrintInvoiceDispatcher = Substitute.For<IPrintInvoiceDispatcher>();
@@ -144,6 +148,7 @@
                 this.ConsignmentRepository,
                 this.ExportBookRepository,
                 this.ConsignmentProxyService,
+                this.PrintService,
                 this.InvoicingPack,
                 this.ExportBookPack,
                 this.PrintInvoiceDispatcher,

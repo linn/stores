@@ -23,6 +23,8 @@
 
         private readonly IPrintConsignmentNoteDispatcher printConsignmentNoteDispatcher;
 
+        private readonly IPrintService printService;
+
         private readonly IRepository<PrinterMapping, int> printerMappingRepository;
 
         private readonly IRepository<Consignment, int> consignmentRepository;
@@ -35,6 +37,7 @@
             IRepository<Consignment, int> consignmentRepository,
             IRepository<ExportBook, int> exportBookRepository,
             IConsignmentProxyService consignmentProxyService,
+            IPrintService printService,
             IInvoicingPack invoicingPack,
             IExportBookPack exportBookPack,
             IPrintInvoiceDispatcher printInvoiceDispatcher,
@@ -47,6 +50,7 @@
             this.exportBookPack = exportBookPack;
             this.printInvoiceDispatcher = printInvoiceDispatcher;
             this.printConsignmentNoteDispatcher = printConsignmentNoteDispatcher;
+            this.printService = printService;
             this.printerMappingRepository = printerMappingRepository;
             this.consignmentRepository = consignmentRepository;
             this.exportBookRepository = exportBookRepository;
@@ -93,20 +97,20 @@
 
         public ProcessResult PrintConsignmentDocuments(int consignmentId, int userNumber)
         {
-            var printerName = this.GetPrinter(userNumber);
+            var printerUri = this.GetPrinterUri(userNumber);
             var consignment = this.consignmentRepository.FindById(consignmentId);
 
             foreach (var consignmentInvoice in consignment.Invoices)
             {
-                this.printInvoiceDispatcher.PrintInvoice(
-                    consignmentInvoice.DocumentNumber,
+                this.printService.PrintDocument(
+                    printerUri,
                     consignmentInvoice.DocumentType,
-                    "CUSTOMER MASTER",
-                    "Y",
-                    printerName);
+                    consignmentInvoice.DocumentNumber,
+                    true,
+                    true);
             }
 
-            this.MaybePrintExportBook(consignment, printerName);
+            this.MaybePrintExportBook(consignment, printerUri);
 
             return new ProcessResult(true, $"Documents printed for consignment {consignmentId}");
         }
@@ -251,6 +255,7 @@
 
         private void PrintDocuments(Consignment consignment, int userNumber)
         {
+            var printerUri = this.GetPrinterUri(userNumber);
             var printerName = this.GetPrinter(userNumber);
 
             var updatedConsignment = this.consignmentRepository.FindById(consignment.ConsignmentId);
@@ -265,16 +270,16 @@
                 updatedConsignment,
                 consignment.Address.Country.CountryCode,
                 numberOfCopies,
-                printerName);
+                printerUri);
 
-            this.MaybePrintExportBook(consignment, printerName);
+            this.MaybePrintExportBook(consignment, printerUri);
         }
 
         private void PrintInvoices(
             Consignment updatedConsignment,
             string countryCode,
             int numberOfCopies,
-            string printerName)
+            string printerUri)
         {
             foreach (var consignmentInvoice in updatedConsignment.Invoices)
             {
@@ -282,20 +287,20 @@
                 {
                     if (countryCode != "GB")
                     {
-                        this.printInvoiceDispatcher.PrintInvoice(
-                            consignmentInvoice.DocumentNumber,
+                        this.printService.PrintDocument(
+                            printerUri,
                             consignmentInvoice.DocumentType,
-                            "CUSTOMER MASTER",
-                            "Y",
-                            printerName);
+                            consignmentInvoice.DocumentNumber,
+                            true,
+                            true);
                     }
 
-                    this.printInvoiceDispatcher.PrintInvoice(
-                        consignmentInvoice.DocumentNumber,
+                    this.printService.PrintDocument(
+                        printerUri,
                         consignmentInvoice.DocumentType,
-                        "DELIVERY NOTE",
-                        "N",
-                        printerName);
+                        consignmentInvoice.DocumentNumber,
+                        false,
+                        false);
                 }
             }
         }
@@ -308,18 +313,18 @@
             }
         }
 
-        private void MaybePrintExportBook(Consignment consignment, string printerName)
+        private void MaybePrintExportBook(Consignment consignment, string printerUri)
         {
             var exportBooks =
                 this.exportBookRepository.FilterBy(a => a.ConsignmentId == consignment.ConsignmentId);
             foreach (var exportBook in exportBooks)
             {
-                this.printInvoiceDispatcher.PrintInvoice(
-                    exportBook.ExportId,
+                this.printService.PrintDocument(
+                    printerUri,
                     "E",
-                    "CUSTOMER MASTER",
-                    "Y",
-                    printerName);
+                    exportBook.ExportId,
+                    true,
+                    true);
             }
         }
 
@@ -337,6 +342,22 @@
                 a => a.DefaultForGroup == "Y" && a.PrinterGroup == "DISPATCH-INVOICE");
 
             return printer?.PrinterName;
+        }
+
+        private string GetPrinterUri(int userNumber)
+        {
+            var printer = this.printerMappingRepository.FindBy(
+                a => a.UserNumber == userNumber && a.PrinterGroup == "DISPATCH-INVOICE");
+
+            if (!string.IsNullOrEmpty(printer?.PrinterUri))
+            {
+                return printer.PrinterUri;
+            }
+
+            printer = this.printerMappingRepository.FindBy(
+                a => a.DefaultForGroup == "Y" && a.PrinterGroup == "DISPATCH-INVOICE");
+
+            return printer?.PrinterUri;
         }
     }
 }
