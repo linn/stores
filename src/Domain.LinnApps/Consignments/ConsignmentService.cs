@@ -97,11 +97,21 @@
 
         public ProcessResult PrintConsignmentDocuments(int consignmentId, int userNumber)
         {
+            var printerName = this.GetPrinter(userNumber);
             var printerUri = this.GetPrinterUri(userNumber);
             var consignment = this.consignmentRepository.FindById(consignmentId);
 
             foreach (var consignmentInvoice in consignment.Invoices)
             {
+                // previous method
+                this.printInvoiceDispatcher.PrintInvoice(
+                    consignmentInvoice.DocumentNumber,
+                    consignmentInvoice.DocumentType,
+                    "CUSTOMER MASTER",
+                    "Y",
+                    printerName);
+
+                // new temporary proxy print service
                 this.printService.PrintDocument(
                     printerUri,
                     consignmentInvoice.DocumentType,
@@ -110,7 +120,7 @@
                     true);
             }
 
-            this.MaybePrintExportBook(consignment, printerUri);
+            this.MaybePrintExportBook(consignment, printerName, printerUri);
 
             return new ProcessResult(true, $"Documents printed for consignment {consignmentId}");
         }
@@ -270,15 +280,17 @@
                 updatedConsignment,
                 consignment.Address.Country.CountryCode,
                 numberOfCopies,
+                printerName,
                 printerUri);
 
-            this.MaybePrintExportBook(consignment, printerUri);
+            this.MaybePrintExportBook(consignment, printerName, printerUri);
         }
 
         private void PrintInvoices(
             Consignment updatedConsignment,
             string countryCode,
             int numberOfCopies,
+            string printerName,
             string printerUri)
         {
             foreach (var consignmentInvoice in updatedConsignment.Invoices)
@@ -287,6 +299,15 @@
                 {
                     if (countryCode != "GB")
                     {
+                        // previous method
+                        this.printInvoiceDispatcher.PrintInvoice(
+                            consignmentInvoice.DocumentNumber,
+                            consignmentInvoice.DocumentType,
+                            "CUSTOMER MASTER",
+                            "Y",
+                            printerName);
+
+                        // new temporary proxy print service
                         this.printService.PrintDocument(
                             printerUri,
                             consignmentInvoice.DocumentType,
@@ -295,6 +316,15 @@
                             true);
                     }
 
+                    // previous method
+                    this.printInvoiceDispatcher.PrintInvoice(
+                        consignmentInvoice.DocumentNumber,
+                        consignmentInvoice.DocumentType,
+                        "DELIVERY NOTE",
+                        "N",
+                        printerName);
+
+                    // new temporary proxy print service
                     this.printService.PrintDocument(
                         printerUri,
                         consignmentInvoice.DocumentType,
@@ -313,12 +343,21 @@
             }
         }
 
-        private void MaybePrintExportBook(Consignment consignment, string printerUri)
+        private void MaybePrintExportBook(Consignment consignment, string printerName, string printerUri)
         {
             var exportBooks =
                 this.exportBookRepository.FilterBy(a => a.ConsignmentId == consignment.ConsignmentId);
             foreach (var exportBook in exportBooks)
             {
+                // previous method
+                this.printInvoiceDispatcher.PrintInvoice(
+                    exportBook.ExportId,
+                    "E",
+                    "CUSTOMER MASTER",
+                    "Y",
+                    printerName);
+
+                // new temporary proxy print service
                 this.printService.PrintDocument(
                     printerUri,
                     "E",

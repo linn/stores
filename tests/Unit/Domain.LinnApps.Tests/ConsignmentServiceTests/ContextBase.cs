@@ -142,7 +142,7 @@
                                    };
             this.ConsignmentRepository.FindById(this.ConsignmentId).Returns(this.Consignment);
             this.PrinterMappingRepository.FindBy(Arg.Any<Expression<Func<PrinterMapping, bool>>>())
-                .Returns(new PrinterMapping { PrinterName = "Invoice" });
+                .Returns(new PrinterMapping { PrinterName = "Invoice", PrinterUri = "http://test:printer" });
 
             this.Sut = new ConsignmentService(
                 this.ConsignmentRepository,
