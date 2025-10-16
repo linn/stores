@@ -45,7 +45,6 @@
                                new Dictionary<string, string>(), // no query params
                                new Dictionary<string, string[]>
                                    {
-                                       { "Content-Type", new[] { "application/json" } },
                                        { "Accept", new[] { "application/json" } }
                                    },
                                requestBody,

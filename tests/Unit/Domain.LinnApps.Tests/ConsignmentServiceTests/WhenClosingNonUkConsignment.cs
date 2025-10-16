@@ -59,6 +59,7 @@
         [Test]
         public void ShouldPrintExportBookViaPrintProxyService()
         {
+            // some temporary proxy tests before we move to a message solution
             this.PrintService.Received().PrintDocument("http://test:printer", "E", 1, true, true);
         }
 
