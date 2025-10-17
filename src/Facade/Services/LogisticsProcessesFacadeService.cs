@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
+    using System.Threading.Tasks;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Exceptions;
@@ -107,13 +109,13 @@
             return new SuccessResult<ProcessResult>(labelServiceResult);
         }
 
-        public IResult<ProcessResult> PrintConsignmentDocuments(ConsignmentRequestResource resource)
+        public async Task<IResult<ProcessResult>> PrintConsignmentDocuments(ConsignmentRequestResource resource)
         {
             ProcessResult result;
 
             try
             {
-                result = this.consignmentService.PrintConsignmentDocuments(resource.ConsignmentId, resource.UserNumber);
+                result = await this.consignmentService.PrintConsignmentDocuments(resource.ConsignmentId, resource.UserNumber);
             }
             catch (ProcessException exception)
             {

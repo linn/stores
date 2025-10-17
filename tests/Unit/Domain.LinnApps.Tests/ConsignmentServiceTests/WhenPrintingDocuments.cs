@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.ConsignmentServiceTests
 {
+    using System.Threading.Tasks;
+
     using Linn.Stores.Domain.LinnApps.Models;
 
     using NSubstitute;
@@ -13,10 +15,10 @@
         private ProcessResult result;
 
         [SetUp]
-        public void SetUp()
+        public async Task SetUp()
         {
             this.userNumber = 12345;
-            this.result = this.Sut.PrintConsignmentDocuments(this.ConsignmentId, this.userNumber);
+            this.result = await this.Sut.PrintConsignmentDocuments(this.ConsignmentId, this.userNumber);
         }
 
         [Test]

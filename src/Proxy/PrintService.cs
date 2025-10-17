@@ -2,11 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
 
     using Linn.Common.Proxy;
-    using Linn.Common.Serialization.Json;
     using Linn.Stores.Domain.LinnApps;
 
     public class PrintService : IPrintService
@@ -27,42 +27,39 @@
             bool showTermsAndConditions,
             bool showPrices)
         {
-            var json = new JsonSerializer();
             var uri = new Uri($"{this.rootUri}/sales/documents/print", UriKind.RelativeOrAbsolute);
 
-            var requestBody = json.Serialize(new
+            var resource = new
             {
                 PrinterUri = printerUri,
                 DocumentType = documentType,
                 DocumentNumber = documentNumber,
                 ShowTermsAndConditions = showTermsAndConditions,
                 ShowPrices = showPrices
-            });
+            };
 
-            var response = await this.restClient.Post(
-                               CancellationToken.None,
-                               uri,
-                               new Dictionary<string, string>(), // no query params
-                               new Dictionary<string, string[]>
-                                   {
-                                       { "Accept", new[] { "application/json" } }
-                                   },
-                               requestBody,
-                               "application/json");
+            var response = await this.restClient.Post<PrintResult>(
+                CancellationToken.None,
+                uri,
+                new Dictionary<string, string>(),
+                new Dictionary<string, string[]>
+                {
+                    { "Accept", new[] { "application/json" } }
+                },
+                resource);
 
-            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            if (response == null || response.Value == null)
+            {
+                throw new PrintServiceException("Print proxy returned no data.");
+            }
+
+            if (response.StatusCode != HttpStatusCode.OK)
             {
                 throw new PrintServiceException(
                     $"Print proxy failed: HTTP {(int)response.StatusCode}");
             }
 
-            var result = json.Deserialize<PrintResult>(response.Value);
-            if (result == null)
-            {
-                throw new PrintServiceException("Print proxy returned no data.");
-            }
-
-            return result;
+            return response.Value;
         }
     }
 }

@@ -68,7 +68,7 @@
         {
             // some temporary proxy tests before we move to a message solution
             this.PrintService.Received().PrintDocument("http://test:printer", "I", 123, false, false);
-            this.PrintService.Received().PrintDocument("http://test:printer", "I", 123, true, true);
+            this.PrintService.Received().PrintDocument("http://test:printer", "I", 123, false, true);
         }
     }
 }

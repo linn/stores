@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Tests.LogisticsProcessesFacadeServiceTests
 {
+    using System.Threading.Tasks;
+
     using FluentAssertions;
 
     using Linn.Common.Facade;
@@ -19,18 +21,21 @@
         private IResult<ProcessResult> result;
 
         [SetUp]
-        public void SetUp()
+        public async Task SetUp()
         {
             this.resource = new ConsignmentRequestResource
                                 {
                                     ConsignmentId = 880,
                                     UserNumber = 123
                                 };
-            this.serviceResult = new ProcessResult(true, "ok");
-            this.ConsignmentService.PrintConsignmentDocuments(this.resource.ConsignmentId, this.resource.UserNumber)
-                .Returns(this.serviceResult);
 
-            this.result = this.Sut.PrintConsignmentDocuments(this.resource);
+            this.serviceResult = new ProcessResult(true, "ok");
+
+            this.ConsignmentService
+                .PrintConsignmentDocuments(this.resource.ConsignmentId, this.resource.UserNumber)
+                .Returns(Task.FromResult(this.serviceResult));
+
+            this.result = await this.Sut.PrintConsignmentDocuments(this.resource);
         }
 
         [Test]
