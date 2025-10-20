@@ -6,6 +6,7 @@
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Proxy;
     using Linn.Stores.Resources.RequestResources;
 
     public class LogisticsProcessesFacadeService : ILogisticsProcessesFacadeService
@@ -118,6 +119,10 @@
                 result = await this.consignmentService.PrintConsignmentDocuments(resource.ConsignmentId, resource.UserNumber);
             }
             catch (ProcessException exception)
+            {
+                return new BadRequestResult<ProcessResult>(exception.Message);
+            }
+            catch (PrintServiceException exception)
             {
                 return new BadRequestResult<ProcessResult>(exception.Message);
             }
