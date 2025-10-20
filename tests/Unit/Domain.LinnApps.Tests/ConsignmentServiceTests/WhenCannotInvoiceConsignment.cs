@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.ConsignmentServiceTests
 {
     using System;
+    using System.Threading.Tasks;
 
     using FluentAssertions;
 
@@ -13,7 +14,7 @@
 
     public class WhenCannotInvoiceConsignment : ContextBase
     {
-        private Action action;
+        private Func<Task> action;
 
         [SetUp]
         public void SetUp()
@@ -22,13 +23,14 @@
                 .Returns(new ProcessResult(true, "ok"));
             this.InvoicingPack.InvoiceConsignment(this.ConsignmentId, 123)
                 .Returns(new ProcessResult(false, "failed"));
-            this.action = () => this.Sut.CloseConsignment(this.Consignment, 123);
+
+            this.action = async () => await this.Sut.CloseConsignment(this.Consignment, 123);
         }
 
         [Test]
-        public void ShouldThrowException()
+        public async Task ShouldThrowException()
         {
-            this.action.Should().Throw<ConsignmentCloseException>();
+            await this.action.Should().ThrowAsync<ConsignmentCloseException>();
         }
     }
 }

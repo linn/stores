@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Consignments;
@@ -81,10 +82,11 @@
             return this.Negotiate.WithModel(this.logisticsReportsFacadeService.GetPackingList(id));
         }
 
-        private object PrintDocuments()
+        private async Task<object> PrintDocuments()
         {
             var resource = this.Bind<ConsignmentRequestResource>();
-            return this.Negotiate.WithModel(this.logisticsProcessesFacadeService.PrintConsignmentDocuments(resource));
+            var result = await this.logisticsProcessesFacadeService.PrintConsignmentDocuments(resource);
+            return this.Negotiate.WithModel(result);
         }
 
         private object SaveDocuments()

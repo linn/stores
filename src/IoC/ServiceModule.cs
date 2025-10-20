@@ -237,6 +237,9 @@
             builder.RegisterType<ProductsService>().As<IProductsService>().WithParameter(
                 "rootUri",
                 ConfigurationManager.Configuration["PROXY_ROOT"]);
+            builder.RegisterType<PrintService>().As<IPrintService>().WithParameter(
+                "rootUri",
+                ConfigurationManager.Configuration["PROXY_ROOT"]);
 
             // ses
             builder.Register<AmazonSimpleEmailServiceClient>(x =>

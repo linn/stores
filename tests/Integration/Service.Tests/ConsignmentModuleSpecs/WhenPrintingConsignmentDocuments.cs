@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Service.Tests.ConsignmentModuleSpecs
 {
+    using System.Threading.Tasks;
+
     using FluentAssertions;
 
     using Linn.Common.Facade;
@@ -18,25 +20,25 @@
         private ConsignmentRequestResource requestResource;
 
         [SetUp]
-        public void SetUp()
+        public async Task SetUp()
         {
             this.requestResource = new ConsignmentRequestResource
             {
-                                           ConsignmentId = 1,
-                                           UserNumber = 32198
-                                       };
+                ConsignmentId = 1,
+                UserNumber = 32198
+            };
 
             this.LogisticsProcessesFacadeService.PrintConsignmentDocuments(Arg.Any<ConsignmentRequestResource>())
-                .Returns(new SuccessResult<ProcessResult>(new ProcessResult(true, "ok")));
+                .Returns(Task.FromResult<IResult<ProcessResult>>(new SuccessResult<ProcessResult>(new ProcessResult(true, "ok"))));
 
-            this.Response = this.Browser.Post(
+            this.Response = await this.Browser.Post(
                 "/logistics/print-consignment-documents",
                 with =>
-                    {
-                        with.Header("Accept", "application/json");
-                        with.Header("Content-Type", "application/json");
-                        with.JsonBody(this.requestResource);
-                    }).Result;
+                {
+                    with.Header("Accept", "application/json");
+                    with.Header("Content-Type", "application/json");
+                    with.JsonBody(this.requestResource);
+                });
         }
 
         [Test]

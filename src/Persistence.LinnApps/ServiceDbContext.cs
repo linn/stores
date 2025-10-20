@@ -2011,6 +2011,7 @@
             e.Property(a => a.PrinterType).HasColumnName("PRINTER_TYPE").HasMaxLength(50);
             e.Property(a => a.PrinterGroup).HasColumnName("PRINTER_GROUP").HasMaxLength(50);
             e.Property(a => a.DefaultForGroup).HasColumnName("DEFAULT_FOR_GROUP").HasMaxLength(50);
+            e.Property(a => a.PrinterUri).HasColumnName("PRINTER_URI").HasMaxLength(500);
         }
 
         private void BuildCurrencies(ModelBuilder builder)

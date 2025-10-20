@@ -1,9 +1,12 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
+    using System.Threading.Tasks;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Proxy;
     using Linn.Stores.Resources.RequestResources;
 
     public class LogisticsProcessesFacadeService : ILogisticsProcessesFacadeService
@@ -107,15 +110,19 @@
             return new SuccessResult<ProcessResult>(labelServiceResult);
         }
 
-        public IResult<ProcessResult> PrintConsignmentDocuments(ConsignmentRequestResource resource)
+        public async Task<IResult<ProcessResult>> PrintConsignmentDocuments(ConsignmentRequestResource resource)
         {
             ProcessResult result;
 
             try
             {
-                result = this.consignmentService.PrintConsignmentDocuments(resource.ConsignmentId, resource.UserNumber);
+                result = await this.consignmentService.PrintConsignmentDocuments(resource.ConsignmentId, resource.UserNumber);
             }
             catch (ProcessException exception)
+            {
+                return new BadRequestResult<ProcessResult>(exception.Message);
+            }
+            catch (PrintServiceException exception)
             {
                 return new BadRequestResult<ProcessResult>(exception.Message);
             }

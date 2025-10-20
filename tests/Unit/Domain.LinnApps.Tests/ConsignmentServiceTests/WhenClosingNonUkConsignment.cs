@@ -55,5 +55,20 @@
             this.PrintInvoiceDispatcher.Received().PrintInvoice(123, "I", "CUSTOMER MASTER", "Y", Arg.Any<string>());
             this.PrintInvoiceDispatcher.Received().PrintInvoice(123, "I", "DELIVERY NOTE", "N", Arg.Any<string>());
         }
+
+        [Test]
+        public void ShouldPrintExportBookViaPrintProxyService()
+        {
+            // some temporary proxy tests before we move to a message solution
+            this.PrintService.Received().PrintDocument("http://test:printer", "E", 1, true, true);
+        }
+
+        [Test]
+        public void ShouldPrintTwoInvoicesViaPrintProxyService()
+        {
+            // some temporary proxy tests before we move to a message solution
+            this.PrintService.Received().PrintDocument("http://test:printer", "I", 123, false, false);
+            this.PrintService.Received().PrintDocument("http://test:printer", "I", 123, false, true);
+        }
     }
 }
