@@ -49,13 +49,6 @@
         }
 
         [Test]
-        public void ShouldPrintOneInvoice()
-        {
-            this.PrintInvoiceDispatcher.DidNotReceive().PrintInvoice(123, "I", "CUSTOMER MASTER", "Y", Arg.Any<string>());
-            this.PrintInvoiceDispatcher.Received().PrintInvoice(123, "I", "DELIVERY NOTE", "N", Arg.Any<string>());
-        }
-
-        [Test]
         public void ShouldPrintOneInvoiceViaPrintProxy()
         {
             // some temporary proxy tests before we move to a message solution

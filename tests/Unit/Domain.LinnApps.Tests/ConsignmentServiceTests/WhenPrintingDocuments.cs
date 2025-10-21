@@ -21,13 +21,11 @@
             this.result = await this.Sut.PrintConsignmentDocuments(this.ConsignmentId, this.userNumber);
         }
 
-        /*
         [Test]
         public void ShouldPrintInvoices()
         {
-            this.PrintInvoiceDispatcher.Received().PrintInvoice(123, "I", "CUSTOMER MASTER", "Y", "Invoice");
-            this.PrintInvoiceDispatcher.Received().PrintInvoice(456, "I", "CUSTOMER MASTER", "Y", "Invoice");
+            this.PrintService.Received().PrintDocument("http://test:printer", "I", 123, false, false);
+            this.PrintService.Received().PrintDocument("http://test:printer", "I", 456, false, false);
         }
-        */
     }
 }

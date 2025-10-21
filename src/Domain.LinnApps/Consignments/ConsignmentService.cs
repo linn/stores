@@ -1,9 +1,11 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Consignments
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Linn.Common.Domain.Exceptions;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Consignments.Models;
     using Linn.Stores.Domain.LinnApps.Dispatchers;
@@ -93,8 +95,7 @@
                 this.exportBookPack.MakeExportBookFromConsignment(consignment.ConsignmentId);
             }
 
-            await this.
-                PrintDocuments(consignment, closedById);
+            await this.PrintDocuments(consignment, closedById);
         }
 
         public async Task<ProcessResult> PrintConsignmentDocuments(int consignmentId, int userNumber)
@@ -103,31 +104,7 @@
             var printerUri = this.GetPrinterUri(userNumber);
             var consignment = this.consignmentRepository.FindById(consignmentId);
 
-            await this.
-                PrintDocuments(consignment, userNumber);
-
-            /* previous reprint method
-            foreach (var consignmentInvoice in consignment.Invoices)
-            {
-                // previous method
-                this.printInvoiceDispatcher.PrintInvoice(
-                    consignmentInvoice.DocumentNumber,
-                    consignmentInvoice.DocumentType,
-                    "CUSTOMER MASTER",
-                    "Y",
-                    printerName);
-
-                // new temporary proxy print service
-                await this.printService.PrintDocument(
-                    printerUri,
-                    consignmentInvoice.DocumentType,
-                    consignmentInvoice.DocumentNumber,
-                    true,
-                    true);
-            }
-
-            this.MaybePrintExportBook(consignment, printerName, printerUri);
-            */
+            await this.PrintDocuments(consignment, userNumber);
 
             return new ProcessResult(true, $"Documents printed for consignment {consignmentId}");
         }
@@ -306,38 +283,36 @@
                 {
                     if (countryCode != "GB")
                     {
-                        // previous method
-                        this.printInvoiceDispatcher.PrintInvoice(
-                            consignmentInvoice.DocumentNumber,
-                            consignmentInvoice.DocumentType,
-                            "CUSTOMER MASTER",
-                            "Y",
-                            printerName);
+                        try
+                        {
+                            // new temporary proxy print service
+                            await this.printService.PrintDocument(
+                                printerUri,
+                                consignmentInvoice.DocumentType,
+                                consignmentInvoice.DocumentNumber,
+                                false,
+                                true);
+                        }
+                        catch (DomainException exception)
+                        {
+                            // todo log and continue
+                        }
+                    }
 
+                    try
+                    {
                         // new temporary proxy print service
                         await this.printService.PrintDocument(
                             printerUri,
                             consignmentInvoice.DocumentType,
                             consignmentInvoice.DocumentNumber,
                             false,
-                            true);
+                            false);
                     }
-
-                    // previous method
-                    this.printInvoiceDispatcher.PrintInvoice(
-                        consignmentInvoice.DocumentNumber,
-                        consignmentInvoice.DocumentType,
-                        "DELIVERY NOTE",
-                        "N",
-                        printerName);
-
-                    // new temporary proxy print service
-                    await this.printService.PrintDocument(
-                        printerUri,
-                        consignmentInvoice.DocumentType,
-                        consignmentInvoice.DocumentNumber,
-                        false,
-                        false);
+                    catch (DomainException exception)
+                    {
+                        // todo log and continue
+                    }
                 }
             }
         }
@@ -354,23 +329,18 @@
         {
             var exportBooks =
                 this.exportBookRepository.FilterBy(a => a.ConsignmentId == consignment.ConsignmentId);
+
             foreach (var exportBook in exportBooks)
             {
-                // previous method
-                this.printInvoiceDispatcher.PrintInvoice(
-                    exportBook.ExportId,
-                    "E",
-                    "CUSTOMER MASTER",
-                    "Y",
-                    printerName);
-
-                // new temporary proxy print service
-                this.printService.PrintDocument(
-                    printerUri,
-                    "E",
-                    exportBook.ExportId,
-                    true,
-                    true);
+                try
+                {
+                    // new temporary proxy print service
+                    this.printService.PrintDocument(printerUri, "E", exportBook.ExportId, true, true);
+                }
+                catch (DomainException exception)
+                {
+                    // todo log and continue
+                }
             }
         }
 
