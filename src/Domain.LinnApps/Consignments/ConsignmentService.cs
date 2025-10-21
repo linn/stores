@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
 
     using Linn.Common.Domain.Exceptions;
+    using Linn.Common.Logging;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Consignments.Models;
     using Linn.Stores.Domain.LinnApps.Dispatchers;
@@ -28,6 +29,8 @@
 
         private readonly IPrintService printService;
 
+        private readonly ILog log; 
+
         private readonly IRepository<PrinterMapping, int> printerMappingRepository;
 
         private readonly IRepository<Consignment, int> consignmentRepository;
@@ -41,6 +44,7 @@
             IRepository<ExportBook, int> exportBookRepository,
             IConsignmentProxyService consignmentProxyService,
             IPrintService printService,
+            ILog log,
             IInvoicingPack invoicingPack,
             IExportBookPack exportBookPack,
             IPrintInvoiceDispatcher printInvoiceDispatcher,
@@ -54,6 +58,7 @@
             this.printInvoiceDispatcher = printInvoiceDispatcher;
             this.printConsignmentNoteDispatcher = printConsignmentNoteDispatcher;
             this.printService = printService;
+            this.log = log;
             this.printerMappingRepository = printerMappingRepository;
             this.consignmentRepository = consignmentRepository;
             this.exportBookRepository = exportBookRepository;
@@ -285,6 +290,8 @@
                     {
                         try
                         {
+                            this.log.Info($"Document with {consignmentInvoice.DocumentType} {consignmentInvoice.DocumentNumber} {countryCode} sent to {printerUri}. Regular invoice.");
+
                             // new temporary proxy print service
                             await this.printService.PrintDocument(
                                 printerUri,
@@ -293,14 +300,18 @@
                                 false,
                                 true);
                         }
-                        catch (DomainException exception)
+                        catch (PrintServiceException exception)
                         {
-                            // todo log and continue
+                            this.log.Error($"Printing failed for document {consignmentInvoice.DocumentNumber} to {printerUri}");
                         }
                     }
 
                     try
                     {
+                        this.log.Info(
+                            $"Document with {consignmentInvoice.DocumentType} {consignmentInvoice.DocumentNumber} " +
+                            $"{countryCode} sent to {printerUri}. Delivery note with no prices.");
+
                         // new temporary proxy print service
                         await this.printService.PrintDocument(
                             printerUri,
@@ -309,9 +320,9 @@
                             false,
                             false);
                     }
-                    catch (DomainException exception)
+                    catch (PrintServiceException exception)
                     {
-                        // todo log and continue
+                        this.log.Error($"Printing failed for document {consignmentInvoice.DocumentNumber} to {printerUri}. Delivery note with no prices.");
                     }
                 }
             }
@@ -334,12 +345,16 @@
             {
                 try
                 {
+                    this.log.Info(
+                        $"Consignment with Id {exportBook.ConsignmentId} Export Id {exportBook.ExportId} " +
+                        $"sent to {printerUri}. Export Book.");
+
                     // new temporary proxy print service
                     this.printService.PrintDocument(printerUri, "E", exportBook.ExportId, true, true);
                 }
-                catch (DomainException exception)
+                catch (PrintServiceException exception)
                 {
-                    // todo log and continue
+                    this.log.Error($"Printing failed for document {consignment.ConsignmentId} Export Id {exportBook.ExportId} to {printerUri}. Export Book.");
                 }
             }
         }

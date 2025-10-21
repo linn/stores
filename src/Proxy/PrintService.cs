@@ -8,6 +8,7 @@
 
     using Linn.Common.Proxy;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
 
     public class PrintService : IPrintService
     {
