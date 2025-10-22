@@ -29,6 +29,7 @@
             pipelines.OnError += (ctx, ex) =>
             {
                 Log(ex, lifetimeScope.Resolve<ILog>());
+                Log(ex.InnerException, lifetimeScope.Resolve<ILog>());
                 return null;
             };
         }
