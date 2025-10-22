@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq.Expressions;
 
+    using Linn.Common.Logging;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Dispatchers;
@@ -30,6 +31,8 @@
 
         protected IPrintService PrintService { get; private set; }
 
+        protected ILog LoggingService { get; private set; }
+
         protected IInvoicingPack InvoicingPack { get; private set; }
 
         protected IExportBookPack ExportBookPack { get; private set; }
@@ -50,6 +53,8 @@
             this.ConsignmentProxyService = Substitute.For<IConsignmentProxyService>();
             this.PrintInvoiceDispatcher = Substitute.For<IPrintInvoiceDispatcher>();
             this.PrintService = Substitute.For<IPrintService>();
+            this.PrintService = Substitute.For<IPrintService>();
+            this.LoggingService = Substitute.For<ILog>();
             this.InvoicingPack = Substitute.For<IInvoicingPack>();
             this.ExportBookPack = Substitute.For<IExportBookPack>();
             this.PrintInvoiceDispatcher = Substitute.For<IPrintInvoiceDispatcher>();
@@ -149,6 +154,7 @@
                 this.ExportBookRepository,
                 this.ConsignmentProxyService,
                 this.PrintService,
+                this.LoggingService,
                 this.InvoicingPack,
                 this.ExportBookPack,
                 this.PrintInvoiceDispatcher,

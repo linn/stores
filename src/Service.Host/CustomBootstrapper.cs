@@ -57,7 +57,6 @@
                 builder =>
                 {
                     builder.RegisterModule<AmazonCredentialsModule>();
-                    builder.RegisterModule<AmazonSqsModule>();
                     builder.RegisterModule<LoggingModule>();
                     builder.RegisterModule<ServiceModule>();
                     builder.RegisterModule<ResponsesModule>();

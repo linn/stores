@@ -4,7 +4,7 @@
 
     public interface IPrintService
     {
-        Task<PrintResult> PrintDocument(
+        Task PrintDocument(
             string printerUri,
             string documentType,
             int documentNumber,

@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Proxy
+﻿namespace Linn.Stores.Domain.LinnApps.Exceptions
 {
     using System;
    
