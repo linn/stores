@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Consignments
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
     using Linn.Stores.Domain.LinnApps.Consignments.Models;
     using Linn.Stores.Domain.LinnApps.Models;
 

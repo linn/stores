@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
-    using System.Threading.Tasks;
-
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Exceptions;
