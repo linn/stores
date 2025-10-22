@@ -21,7 +21,7 @@
             this.rootUri = rootUri;
         }
 
-        public async Task<PrintResult> PrintDocument(
+        public async Task PrintDocument(
             string printerUri,
             string documentType,
             int documentNumber,
@@ -31,23 +31,23 @@
             var uri = new Uri($"{this.rootUri}/sales/documents/print", UriKind.RelativeOrAbsolute);
 
             var resource = new
-            {
-                PrinterUri = printerUri,
-                DocumentType = documentType,
-                DocumentNumber = documentNumber,
-                ShowTermsAndConditions = showTermsAndConditions,
-                ShowPrices = showPrices
-            };
+                               {
+                                   PrinterUri = printerUri,
+                                   DocumentType = documentType,
+                                   DocumentNumber = documentNumber,
+                                   ShowTermsAndConditions = showTermsAndConditions,
+                                   ShowPrices = showPrices
+                               };
 
-            var response = await this.restClient.Post<PrintResult>(
-                CancellationToken.None,
-                uri,
-                new Dictionary<string, string>(),
-                new Dictionary<string, string[]>
-                {
-                    { "Accept", new[] { "application/json" } }
-                },
-                resource);
+            var response = await this.restClient.Post<object>(
+                               CancellationToken.None,
+                               uri,
+                               new Dictionary<string, string>(),
+                               new Dictionary<string, string[]>
+                                   {
+                                       { "Accept", new[] { "application/json" } }
+                                   },
+                               resource);
 
             if (response == null || response.Value == null)
             {
@@ -59,8 +59,6 @@
                 throw new PrintServiceException(
                     $"Print proxy failed: HTTP {(int)response.StatusCode}");
             }
-
-            return response.Value;
         }
     }
 }

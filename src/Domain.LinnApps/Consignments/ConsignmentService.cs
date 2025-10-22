@@ -262,6 +262,8 @@
 
             if (consignment.Address.Country.CountryCode != "GB")
             {
+                this.log.Info($"Printing Consignment note via msg");
+
                 this.PrintConsignmentNote(consignment, numberOfCopies, printerName);
             }
 
