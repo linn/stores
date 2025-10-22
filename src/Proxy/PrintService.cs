@@ -24,7 +24,7 @@
             this.rootUri = rootUri;
         }
 
-        public async Task PrintDocument(
+        public void PrintDocument(
             string printerUri,
             string documentType,
             int documentNumber,
@@ -46,7 +46,7 @@
                           + $" with conditions prices {resource.ShowPrices} terms {resource.ShowTermsAndConditions}"
                           + $"sent to {resource.PrinterUri}.");
 
-            var response = await this.restClient.Post<object>(
+            var response = this.restClient.Post<object>(
                                CancellationToken.None,
                                uri,
                                new Dictionary<string, string>(),
@@ -54,7 +54,7 @@
                                    {
                                        { "Accept", new[] { "application/json" } }
                                    },
-                               resource);
+                               resource).Result;
 
             if (response == null || response.Value == null)
             {

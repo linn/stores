@@ -29,6 +29,7 @@
             pipelines.OnError += (ctx, ex) =>
             {
                 Log(ex, lifetimeScope.Resolve<ILog>());
+                Log(ex.InnerException, lifetimeScope.Resolve<ILog>());
                 return null;
             };
         }
@@ -57,6 +58,7 @@
                 builder =>
                 {
                     builder.RegisterModule<AmazonCredentialsModule>();
+                    builder.RegisterModule<AmazonSqsModule>();
                     builder.RegisterModule<LoggingModule>();
                     builder.RegisterModule<ServiceModule>();
                     builder.RegisterModule<ResponsesModule>();

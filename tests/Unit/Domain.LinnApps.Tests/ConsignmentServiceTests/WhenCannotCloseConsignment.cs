@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.ConsignmentServiceTests
 {
     using System;
-    using System.Threading.Tasks;
 
     using FluentAssertions;
 
@@ -14,7 +13,7 @@
 
     public class WhenCannotCloseConsignment : ContextBase
     {
-        private Func<Task> action;
+        private Action action;
 
         [SetUp]
         public void SetUp()
@@ -22,13 +21,13 @@
             this.ConsignmentProxyService.CanCloseAllocation(this.ConsignmentId)
                 .Returns(new ProcessResult(false, "not allowed"));
 
-            this.action = async () => await this.Sut.CloseConsignment(this.Consignment, 123);
+            this.action = () => this.Sut.CloseConsignment(this.Consignment, 123);
         }
 
         [Test]
-        public async Task ShouldThrowException()
-        {
-            await this.action.Should().ThrowAsync<ConsignmentCloseException>();
+        public void ShouldThrowException()
+        { 
+            this.action.Should().Throw<ConsignmentCloseException>();
         }
     }
 }
