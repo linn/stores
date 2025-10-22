@@ -66,8 +66,6 @@
                 throw new PrintServiceException(
                     $"Print proxy failed: HTTP {(int)response.StatusCode}");
             }
-
-            this.log.Info($"Proxy : response {response.StatusCode} {response.Value}");
         }
     }
 }
