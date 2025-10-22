@@ -82,10 +82,10 @@
             return this.Negotiate.WithModel(this.logisticsReportsFacadeService.GetPackingList(id));
         }
 
-        private async Task<object> PrintDocuments()
+        private object PrintDocuments()
         {
             var resource = this.Bind<ConsignmentRequestResource>();
-            var result = await this.logisticsProcessesFacadeService.PrintConsignmentDocuments(resource);
+            var result = this.logisticsProcessesFacadeService.PrintConsignmentDocuments(resource);
             return this.Negotiate.WithModel(result);
         }
 

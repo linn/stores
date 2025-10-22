@@ -15,10 +15,10 @@
         private ProcessResult result;
 
         [SetUp]
-        public async Task SetUp()
+        public void SetUp()
         {
             this.userNumber = 12345;
-            this.result = await this.Sut.PrintConsignmentDocuments(this.ConsignmentId, this.userNumber);
+            this.result = this.Sut.PrintConsignmentDocuments(this.ConsignmentId, this.userNumber);
         }
 
         [Test]

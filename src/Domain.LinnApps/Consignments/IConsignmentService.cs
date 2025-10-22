@@ -7,9 +7,9 @@
 
     public interface IConsignmentService
     {
-        Task CloseConsignment(Consignment consignment, int closedById);
+        void CloseConsignment(Consignment consignment, int closedById);
 
-        Task<ProcessResult> PrintConsignmentDocuments(int consignmentId, int userNumber);
+        ProcessResult PrintConsignmentDocuments(int consignmentId, int userNumber);
 
         PackingList GetPackingList(int consignmentId);
 

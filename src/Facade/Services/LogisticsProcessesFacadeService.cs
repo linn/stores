@@ -110,13 +110,13 @@
             return new SuccessResult<ProcessResult>(labelServiceResult);
         }
 
-        public async Task<IResult<ProcessResult>> PrintConsignmentDocuments(ConsignmentRequestResource resource)
+        public IResult<ProcessResult> PrintConsignmentDocuments(ConsignmentRequestResource resource)
         {
             ProcessResult result;
 
             try
             {
-                result = await this.consignmentService.PrintConsignmentDocuments(resource.ConsignmentId, resource.UserNumber);
+                result = this.consignmentService.PrintConsignmentDocuments(resource.ConsignmentId, resource.UserNumber);
             }
             catch (ProcessException exception)
             {

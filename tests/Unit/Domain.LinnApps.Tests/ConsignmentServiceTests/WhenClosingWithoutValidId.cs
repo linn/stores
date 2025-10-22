@@ -11,18 +11,18 @@
 
     public class WhenClosingWithoutValidId : ContextBase
     {
-        private Func<Task> action;
+        private Action action;
 
         [SetUp]
         public void SetUp()
         {
-            this.action = async () => await this.Sut.CloseConsignment(this.Consignment, 0);
+            this.action = () => this.Sut.CloseConsignment(this.Consignment, 0);
         }
 
         [Test]
-        public async Task ShouldThrowException()
+        public void ShouldThrowException()
         {
-            await this.action.Should().ThrowAsync<ConsignmentCloseException>();
+            this.action.Should().Throw<ConsignmentCloseException>();
         }
     }
 }

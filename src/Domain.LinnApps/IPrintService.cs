@@ -1,10 +1,8 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
-    using System.Threading.Tasks;
-
     public interface IPrintService
     {
-        Task PrintDocument(
+        void PrintDocument(
             string printerUri,
             string documentType,
             int documentNumber,

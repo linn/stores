@@ -64,7 +64,7 @@
             this.invoiceRepository = invoiceRepository;
         }
 
-        public async Task CloseConsignment(Consignment consignment, int closedById)
+        public void CloseConsignment(Consignment consignment, int closedById)
         {
             if (closedById <= 0)
             {
@@ -99,16 +99,16 @@
                 this.exportBookPack.MakeExportBookFromConsignment(consignment.ConsignmentId);
             }
 
-            await this.PrintDocuments(consignment, closedById);
+            this.PrintDocuments(consignment, closedById);
         }
 
-        public async Task<ProcessResult> PrintConsignmentDocuments(int consignmentId, int userNumber)
+        public ProcessResult PrintConsignmentDocuments(int consignmentId, int userNumber)
         {
             var printerName = this.GetPrinter(userNumber);
             var printerUri = this.GetPrinterUri(userNumber);
             var consignment = this.consignmentRepository.FindById(consignmentId);
-
-            await this.PrintDocuments(consignment, userNumber);
+            
+            this.PrintDocuments(consignment, userNumber);
 
             return new ProcessResult(true, $"Documents printed for consignment {consignmentId}");
         }
@@ -251,7 +251,7 @@
                    || consignmentItem.ItemType == "S" || consignmentItem.ItemType == "C";
         }
 
-        private async Task PrintDocuments(Consignment consignment, int userNumber)
+        private void PrintDocuments(Consignment consignment, int userNumber)
         {
             var printerUri = this.GetPrinterUri(userNumber);
             var printerName = this.GetPrinter(userNumber);
@@ -266,17 +266,17 @@
                 this.PrintConsignmentNote(consignment, numberOfCopies, printerName);
             }
 
-            await this.PrintInvoices(
+            this.PrintInvoices(
                 updatedConsignment,
                 consignment.Address.Country.CountryCode,
                 numberOfCopies,
                 printerName,
                 printerUri);
 
-            await this.MaybePrintExportBook(consignment, printerName, printerUri);
+            this.MaybePrintExportBook(consignment, printerName, printerUri);
         }
 
-        private async Task PrintInvoices(
+        private void PrintInvoices(
             Consignment updatedConsignment,
             string countryCode,
             int numberOfCopies,
@@ -294,7 +294,7 @@
                             this.log.Info($"Document with {consignmentInvoice.DocumentType} {consignmentInvoice.DocumentNumber} {countryCode} sent to {printerUri}. Regular invoice.");
 
                             // new temporary proxy print service
-                            await this.printService.PrintDocument(
+                            this.printService.PrintDocument(
                                 printerUri,
                                 consignmentInvoice.DocumentType,
                                 consignmentInvoice.DocumentNumber,
@@ -314,7 +314,7 @@
                             $"{countryCode} sent to {printerUri}. Delivery note with no prices.");
 
                         // new temporary proxy print service
-                        await this.printService.PrintDocument(
+                        this.printService.PrintDocument(
                             printerUri,
                             consignmentInvoice.DocumentType,
                             consignmentInvoice.DocumentNumber,
@@ -337,12 +337,14 @@
             }
         }
 
-        private async Task MaybePrintExportBook(Consignment consignment, string printerName, string printerUri)
+        private void MaybePrintExportBook(Consignment consignment, string printerName, string printerUri)
         {
-            this.log.Info("Search for Export Books.");
+            this.log.Info($"Search for Export Books. Consignment Id {consignment.ConsignmentId}");
 
             var exportBooks =
                 this.exportBookRepository.FilterBy(a => a.ConsignmentId == consignment.ConsignmentId);
+
+            this.log.Info($"Number of Export Books : {exportBooks.Count()}");
 
             foreach (var exportBook in exportBooks)
             {
@@ -353,7 +355,7 @@
                         $"sent to {printerUri}. Export Book.");
 
                     // new temporary proxy print service
-                    await this.printService.PrintDocument(printerUri, "E", exportBook.ExportId, true, true);
+                    this.printService.PrintDocument(printerUri, "E", exportBook.ExportId, true, true);
                 }
                 catch (PrintServiceException exception)
                 {
