@@ -6,6 +6,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
+    using Linn.Common.Logging;
     using Linn.Common.Proxy;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Exceptions;
@@ -13,11 +14,13 @@
     public class PrintService : IPrintService
     {
         private readonly IRestClient restClient;
+        private readonly ILog log;
         private readonly string rootUri;
 
-        public PrintService(IRestClient restClient, string rootUri)
+        public PrintService(IRestClient restClient, ILog log, string rootUri)
         {
             this.restClient = restClient;
+            this.log = log;
             this.rootUri = rootUri;
         }
 
@@ -39,6 +42,10 @@
                                    ShowPrices = showPrices
                                };
 
+            this.log.Info($"Proxy : {resource.DocumentType} {resource.DocumentNumber}"
+                          + $" with conditions prices {resource.ShowPrices} terms {resource.ShowTermsAndConditions}"
+                          + $"sent to {resource.PrinterUri}.");
+
             var response = await this.restClient.Post<object>(
                                CancellationToken.None,
                                uri,
@@ -59,6 +66,8 @@
                 throw new PrintServiceException(
                     $"Print proxy failed: HTTP {(int)response.StatusCode}");
             }
+
+            this.log.Info($"Proxy : response {response.StatusCode} {response.Value}");
         }
     }
 }

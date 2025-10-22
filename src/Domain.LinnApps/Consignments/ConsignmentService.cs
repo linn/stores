@@ -273,7 +273,7 @@
                 printerName,
                 printerUri);
 
-            this.MaybePrintExportBook(consignment, printerName, printerUri);
+            await this.MaybePrintExportBook(consignment, printerName, printerUri);
         }
 
         private async Task PrintInvoices(
@@ -337,8 +337,10 @@
             }
         }
 
-        private void MaybePrintExportBook(Consignment consignment, string printerName, string printerUri)
+        private async Task MaybePrintExportBook(Consignment consignment, string printerName, string printerUri)
         {
+            this.log.Info("Search for Export Books.");
+
             var exportBooks =
                 this.exportBookRepository.FilterBy(a => a.ConsignmentId == consignment.ConsignmentId);
 
@@ -351,7 +353,7 @@
                         $"sent to {printerUri}. Export Book.");
 
                     // new temporary proxy print service
-                    this.printService.PrintDocument(printerUri, "E", exportBook.ExportId, true, true);
+                    await this.printService.PrintDocument(printerUri, "E", exportBook.ExportId, true, true);
                 }
                 catch (PrintServiceException exception)
                 {
