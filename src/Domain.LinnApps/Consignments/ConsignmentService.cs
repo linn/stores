@@ -354,7 +354,7 @@
                         $"sent to {printerUri}. Export Book.");
 
                     // new temporary proxy print service
-                    this.printService.PrintDocument(printerUri, "E", exportBook.ExportId, true, true);
+                    this.printService.PrintDocument(printerUri, "E", exportBook.ExportId, false, true);
                 }
                 catch (PrintServiceException exception)
                 {
