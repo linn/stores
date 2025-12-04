@@ -139,6 +139,7 @@ function Part({
                     stockControlled: template.stockControlled,
                     cccCriticalPart: 'N',
                     safetyCriticalPart: 'N',
+                    railMethod: 'LEADTIME',
                     psuPart: 'N',
                     ourUnitOfMeasure: 'ONES'
                 }

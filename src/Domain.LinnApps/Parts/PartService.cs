@@ -257,7 +257,7 @@
 
             if (partToCreate.StockControlled == "Y" && partToCreate.RailMethod == null)
             {
-                partToCreate.RailMethod = "POLICY";
+                partToCreate.RailMethod = "LEADTIME";
             }
 
             partToCreate.OrderHold = "N";
