@@ -1,9 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.PartServiceTests
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
 
     using FluentAssertions;
 
@@ -38,9 +35,9 @@
         }
 
         [Test]
-        public void ShouldDefaultToPolicy()
+        public void ShouldDefaultToLeadTime()
         {
-            this.partToCreate.RailMethod.Should().Be("POLICY");
+            this.partToCreate.RailMethod.Should().Be("LEADTIME");
         }
     }
 }
