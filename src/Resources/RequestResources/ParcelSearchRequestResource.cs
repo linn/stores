@@ -15,5 +15,7 @@
         public string ConsignmentNoSearchTerm { get; set; }
 
         public string CommentsSearchTerm { get; set; }
+
+        public bool? NoImportBooksAttachedOnly { get; set; }
     }
 }

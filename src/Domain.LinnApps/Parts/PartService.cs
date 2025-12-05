@@ -266,15 +266,7 @@
 
             return partToCreate;
         }
-
-        private void CheckCanChangeQc(List<string> privileges)
-        {
-            if (!this.authService.HasPermissionFor(AuthorisedAction.PartQcController, privileges))
-            {
-                throw new UpdatePartException("You are not authorised to change parts QC status");
-            }
-        }
-
+        
         public void AddOnQcControl(string partNumber, int? createdBy, string qcInfo)
         {
             if (string.IsNullOrEmpty(qcInfo))
@@ -431,6 +423,14 @@
             }
 
             return template.NextNumber;
+        }
+
+        private void CheckCanChangeQc(List<string> privileges)
+        {
+            if (!this.authService.HasPermissionFor(AuthorisedAction.PartQcController, privileges))
+            {
+                throw new UpdatePartException("You are not authorised to change parts QC status");
+            }
         }
 
         private void Validate(Part to)
