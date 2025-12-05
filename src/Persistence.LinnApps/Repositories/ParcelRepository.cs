@@ -19,7 +19,9 @@
 
         public Parcel FindById(int key)
         {
-            return this.serviceDbContext.Parcels.Where(p => p.ParcelNumber == key).Include(p=>p.Impbooks)
+            return this.serviceDbContext.Parcels
+                .Where(p => p.ParcelNumber == key)
+                .Include(p => p.Impbooks)
                 .ToList().FirstOrDefault();
         }
 
@@ -47,7 +49,8 @@
         {
             return this.serviceDbContext
                 .Parcels
-                .Where(expression);
+                .Where(expression)
+                .Include(p => p.Impbooks);
         }
     }
 }

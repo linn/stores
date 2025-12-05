@@ -85,7 +85,9 @@
                     || x.Comments.Contains(searchTerms.CommentsSearchTerm))
                 && (string.IsNullOrWhiteSpace(searchTerms.DateCreatedSearchTerm)
                     || (DateTime.Parse(searchTerms.DateCreatedSearchTerm).AddDays(-1) < x.DateCreated
-                        && x.DateCreated < DateTime.Parse(searchTerms.DateCreatedSearchTerm).AddDays(1)));
+                        && x.DateCreated < DateTime.Parse(searchTerms.DateCreatedSearchTerm).AddDays(1)))
+                && (searchTerms.NoImportBooksAttachedOnly == null || searchTerms.NoImportBooksAttachedOnly == false
+                                                                  || x.Impbooks == null || x.Impbooks.Count == 0);
         }
     }
 }

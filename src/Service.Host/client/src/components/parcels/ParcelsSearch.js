@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useReducer, useCallback } from 'react';
+import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
 import {
     SearchInputField,
@@ -6,7 +7,8 @@ import {
     useSearch,
     PaginatedTable,
     Loading,
-    Typeahead
+    Typeahead,
+    OnOffSwitch
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
@@ -84,7 +86,8 @@ function ParcelsSearch({
             dateCreatedSearchTerm: '',
             supplierInvNoSearchTerm: '',
             consignmentNoSearchTerm: '',
-            commentsSearchTerm: ''
+            commentsSearchTerm: '',
+            noImportBooksAttachedOnly: false
         },
         supplierDisplayName: '',
         carrierDisplayName: ''
@@ -181,7 +184,7 @@ function ParcelsSearch({
                   parcelNumber: el.parcelNumber,
                   supplier: `${el.supplierId} - ${supplierNameValue(el.supplierId, 'supplier')}`,
                   carrier: `${el.carrierId} - ${supplierNameValue(el.carrierId, 'carrier')}`,
-                  dateCreated: el.dateCreated,
+                  dateCreated: el.dateCreated ? moment(el.dateCreated).format('DD-MMM-YYYY') : '',
                   supplierInvoiceNo: el.supplierInvoiceNo,
                   consignmentNo: el.consignmentNo,
                   comments: el.comments,
@@ -330,6 +333,14 @@ function ParcelsSearch({
                     />
                 </Grid>
 
+                <Grid item xs={2} style={{ marginTop: '20px' }}>
+                    <OnOffSwitch
+                        label="No Import Books Only"
+                        onChange={handleSearchTermChange}
+                        propertyName="noImportBooksAttachedOnly"
+                        value={state.searchTerms.noImportBooksAttachedOnly}
+                    />
+                </Grid>
                 <Grid item xs={12}>
                     {loading ? (
                         <Loading />
