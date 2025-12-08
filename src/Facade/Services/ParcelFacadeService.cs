@@ -71,8 +71,9 @@
         protected override Expression<Func<Parcel, bool>> FilterExpression(ParcelSearchRequestResource searchTerms)
         {
             return x =>
-                (string.IsNullOrWhiteSpace(searchTerms.ParcelNumberSearchTerm)
-                 || x.ParcelNumber.ToString().Contains(searchTerms.ParcelNumberSearchTerm))
+                x.DateCancelled == null 
+                && (string.IsNullOrWhiteSpace(searchTerms.ParcelNumberSearchTerm)
+                    || x.ParcelNumber.ToString().Contains(searchTerms.ParcelNumberSearchTerm))
                 && (string.IsNullOrWhiteSpace(searchTerms.SupplierIdSearchTerm)
                     || (x.SupplierId.HasValue && x.SupplierId.ToString().Contains(searchTerms.SupplierIdSearchTerm)))
                 && (string.IsNullOrWhiteSpace(searchTerms.CarrierIdSearchTerm)
