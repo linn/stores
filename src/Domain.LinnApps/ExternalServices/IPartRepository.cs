@@ -15,6 +15,7 @@
             string partNumberSearchTerm, 
             string descriptionSearchTerm,
             string productAnalysisCodeSearchTerm,
+            string manufacturersPartNumber,
             bool newestFirst = false,
             int? limit = null);
     }

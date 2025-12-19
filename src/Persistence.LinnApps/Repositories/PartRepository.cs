@@ -131,6 +131,7 @@
             string partNumberSearchTerm, 
             string descriptionSearchTerm,
             string productAnalysisCodeSearchTerm,
+            string manufacturersPartNumber,
             bool newestFirst = false,
             int? limit = null)
         {
@@ -141,7 +142,9 @@
                      && (string.IsNullOrEmpty(descriptionSearchTerm) || EF.Functions.Like(
                              x.Description,
                              $"{descriptionSearchTerm.Replace("*", "%")}"))
-                    
+                     && (string.IsNullOrEmpty(manufacturersPartNumber) || EF.Functions.Like(
+                             x.ManufacturersPartNumber,
+                             $"{manufacturersPartNumber.Replace("*", "%")}"))
                      && (string.IsNullOrEmpty(productAnalysisCodeSearchTerm)
                          || (x.ProductAnalysisCode != null  
                          && EF.Functions.Like(x.ProductAnalysisCode.ProductCode, $"{productAnalysisCodeSearchTerm.Replace("*", "%")}"))));

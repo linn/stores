@@ -37,7 +37,8 @@
                                 CreatedBy = new Employee { Id = 1 }
                             };
 
-            this.PartsFacadeService.SearchPartsWithWildcard("P*", "DESCRIPTION*", "KNEK*")
+            this.PartsFacadeService.SearchPartsWithWildcard(
+                    "P*", "DESCRIPTION*", "KNEK*", "*MANUF*")
                 .Returns(new SuccessResult<IEnumerable<Part>>(new List<Part> { partA, partB }));
 
             this.Response = this.Browser.Get(
@@ -48,6 +49,7 @@
                         with.Query("partNumberSearchTerm", "P*");
                         with.Query("descriptionSearchTerm", "DESCRIPTION*");
                         with.Query("productAnalysisCodeSearchTerm", "KNEK*");
+                        with.Query("manufacturersPartNumberSearchTerm", "*MANUF*");
                     }).Result;
         }
 
@@ -60,7 +62,11 @@
         [Test]
         public void ShouldCallService()
         {
-            this.PartsFacadeService.SearchPartsWithWildcard("P*", "DESCRIPTION*", "KNEK*");
+            this.PartsFacadeService.SearchPartsWithWildcard(
+                "P*", 
+                "DESCRIPTION*", 
+                "KNEK*",
+                "*MANUF*");
         }
 
         [Test]

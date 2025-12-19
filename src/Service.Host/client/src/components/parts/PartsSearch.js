@@ -43,7 +43,8 @@ function PartsSearch({
     const [options, setOptions] = useState({
         partNumber: '',
         description: '',
-        productAnalysisCode: ''
+        productAnalysisCode: '',
+        manufacturersPartNumber: ''
     });
 
     const handleOptionsChange = (propertyName, newValue) =>
@@ -130,7 +131,7 @@ function PartsSearch({
                                 <Typography>Advanced Search options</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Grid container spacing={3}>
+                                <Grid container spacing={2}>
                                     <Grid item xs={3}>
                                         <InputField
                                             fullWidth
@@ -147,6 +148,15 @@ function PartsSearch({
                                             value={options.description}
                                             label="Description"
                                             propertyName="description"
+                                            onChange={handleOptionsChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <InputField
+                                            fullWidth
+                                            value={options.manufacturersPartNumber}
+                                            label="Manuf Part Number"
+                                            propertyName="manufacturersPartNumber"
                                             onChange={handleOptionsChange}
                                         />
                                     </Grid>
@@ -179,15 +189,21 @@ function PartsSearch({
                                             minimumSearchTermLength={2}
                                         />
                                     </Grid>
-                                    <Grid item xs={2}>
+                                    <Grid item xs={12}>
                                         <Button
                                             variant="outlined"
                                             color="primary"
+                                            disabled={
+                                                !options.partNumber &&
+                                                !options.description &&
+                                                !options.productAnalysisCode &&
+                                                !options.manufacturersPartNumber
+                                            }
                                             className={classes.button}
                                             onClick={() =>
                                                 fetchItems(
                                                     '',
-                                                    `&partNumberSearchTerm=${options.partNumber}&descriptionSearchTerm=${options.description}&productAnalysisCodeSearchTerm=${options.productAnalysisCode}`
+                                                    `&partNumberSearchTerm=${options.partNumber}&descriptionSearchTerm=${options.description}&productAnalysisCodeSearchTerm=${options.productAnalysisCode}&manufacturersPartNumberSearchTerm=${options.manufacturersPartNumber}`
                                                 )
                                             }
                                         >

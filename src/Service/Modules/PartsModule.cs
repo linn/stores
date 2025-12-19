@@ -183,12 +183,14 @@
 
             if (!string.IsNullOrEmpty(resource.PartNumberSearchTerm)
                 || !string.IsNullOrEmpty(resource.DescriptionSearchTerm)
-                || !string.IsNullOrEmpty(resource.ProductAnalysisCodeSearchTerm))
+                || !string.IsNullOrEmpty(resource.ProductAnalysisCodeSearchTerm)
+                || !string.IsNullOrEmpty(resource.ManufacturersPartNumberSearchTerm))
             {
                 results = this.partsFacadeService.SearchPartsWithWildcard(
                     resource.PartNumberSearchTerm,
                     resource.DescriptionSearchTerm,
-                    resource.ProductAnalysisCodeSearchTerm);
+                    resource.ProductAnalysisCodeSearchTerm,
+                    resource.ManufacturersPartNumberSearchTerm);
             }
             else if (!string.IsNullOrEmpty(resource.SearchTerm))
             {
