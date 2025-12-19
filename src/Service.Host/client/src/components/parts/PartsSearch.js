@@ -60,11 +60,12 @@ function PartsSearch({
         const result = linkToSources
             ? items.filter(i => i.links.find(l => l.rel === 'mechanical-sourcing-sheet'))
             : items;
-
         return result?.map(item => ({
             ...item,
             name: item.partNumber.toString(),
-            description: item.description,
+            description: `${item.theirPartNumber ? `[ ${item.theirPartNumber} ] ` : ''}${
+                item.description
+            }`,
             href: linkToSources
                 ? item.links.find(l => l.rel === 'mechanical-sourcing-sheet')?.href
                 : item.href
