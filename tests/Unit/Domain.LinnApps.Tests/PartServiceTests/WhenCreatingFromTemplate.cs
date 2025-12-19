@@ -31,7 +31,12 @@
 
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
             this.PartRepository.SearchPartsWithWildcard(
-                    "CAP %", Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<int>())
+                    "CAP %", 
+                    Arg.Any<string>(), 
+                    Arg.Any<string>(), 
+                    Arg.Any<string>(), 
+                    Arg.Any<bool>(), 
+                    Arg.Any<int>())
                 .Returns(new List<Part>
                              {
                                  new Part
@@ -42,7 +47,8 @@
             this.PartRepository.FilterBy(Arg.Any<Expression<Func<Part, bool>>>())
                 .Returns(new List<Part>().AsQueryable());
 
-            this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate { HasNumberSequence = "Y", NextNumber = 1, PartRoot = "CAP" });
+            this.TemplateRepository.FindById(Arg.Any<string>()).Returns(
+                new PartTemplate { HasNumberSequence = "Y", NextNumber = 1, PartRoot = "CAP" });
             this.PartPack.PartRoot(Arg.Any<string>()).Returns("CAP");
             this.Sut.CreatePart(this.part, this.privileges, true);
         }
@@ -52,6 +58,7 @@
         {
             this.PartRepository.Received().SearchPartsWithWildcard(
                 "CAP %",
+                Arg.Any<string>(),
                 Arg.Any<string>(),
                 Arg.Any<string>(),
                 Arg.Any<bool>(),

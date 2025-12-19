@@ -235,7 +235,8 @@
                     throw new CreatePartException("The system no longer allows creation of " + partRoot + " parts.");
                 }
 
-                var newestPartOfThisType = this.partRepository.SearchPartsWithWildcard($"{partRoot} %", null, null, true, 100)
+                var newestPartOfThisType = this.partRepository.SearchPartsWithWildcard(
+                        $"{partRoot} %", null, string.Empty, null, true, 100)
                     .Where(p => p.DateCreated.HasValue && !p.PartNumber.Contains("/")).OrderByDescending(p => p.Id)
                     .FirstOrDefault()?.PartNumber;
                 

@@ -23,6 +23,7 @@
         IResult<IEnumerable<Part>> SearchPartsWithWildcard(
             string partNumberSearch, 
             string descriptionSearch, 
-            string productAnalysisCodeSearch);
+            string productAnalysisCodeSearch,
+            string manufacturersPartNumber);
     }
 }

@@ -7,5 +7,7 @@
         public string PartNumberSearchTerm { get; set; }
 
         public string ProductAnalysisCodeSearchTerm { get; set; }
+
+        public string ManufacturersPartNumberSearchTerm { get; set; }
     }
 }
