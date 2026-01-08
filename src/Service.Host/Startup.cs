@@ -4,8 +4,10 @@ namespace Linn.Stores.Service.Host
 
     using Linn.Common.Authentication.Host.Extensions;
     using Linn.Common.Configuration;
+    using Linn.Stores.Service.Models;
 
     using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authentication.OpenIdConnect;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -36,12 +38,54 @@ namespace Linn.Stores.Service.Host
                     builder.AddFilter("Linn", LogLevel.Information);
                 });
 
+            // 1) legacy (Linn OpenID Connect + Linn JWT)
             services.AddLinnAuthentication(
+            options =>
+            {
+                options.Authority = ConfigurationManager.Configuration["LEGACY_AUTHORITY_URI"];
+
+                options.CallbackPath = new PathString("/products/maint/signin-oidc");
+            });
+
+            // 2) new cognito JWT provider
+            var appSettings = ApplicationSettings.Get();
+            var cognitoIssuer = appSettings.CognitoHost;
+            var cognitoClientId = appSettings.CognitoClientId;
+
+            services.AddAuthentication().AddJwtBearer(
+                "cognito-provider",
                 options =>
+
+
+
+                {
+
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                     {
-                        options.Authority = ConfigurationManager.Configuration["AUTHORITY_URI"];
-                        options.CallbackPath = new PathString("/inventory/signin-oidc");
-                    });
+                        ValidateIssuer = true,
+                        ValidIssuer = cognitoIssuer,
+                        ValidateAudience = false,
+                        ValidAudience = cognitoClientId,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true
+                    };
+
+                    options.MetadataAddress = $"{cognitoIssuer}/.well-known/openid-configuration";
+                });
+
+            services.AddAuthentication(
+                options =>
+                {
+                    options.DefaultScheme = "MultiAuth";
+                    options.DefaultChallengeScheme = "MultiAuth";
+                }).AddScheme<MultiAuthOptions, MultiAuthHandler>(
+                "MultiAuth",
+                opts =>
+                {
+                    opts.CognitoIssuer = appSettings.CognitoHost;
+                    opts.CognitoScheme = "cognito-provider";
+                    opts.LegacyScheme = JwtBearerDefaults.AuthenticationScheme;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
