@@ -34,7 +34,6 @@
             AND ADDV.ADDRESS_ID = {addressId}";
             var rows = this.databaseService.ExecuteQuery(sql).Tables[0].Rows;
 
-
             var data = rows[0].ItemArray;
 
             var date = data[1].ToString();
