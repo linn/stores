@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Proxy
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -32,12 +33,16 @@
             AND CONS.CARRIER = CARR.CARRIER_CODE
             AND ADDV.ADDRESS_ID = {addressId}";
             var rows = this.databaseService.ExecuteQuery(sql).Tables[0].Rows;
-            
+
+
             var data = rows[0].ItemArray;
+
+            var date = data[1].ToString();
+            var parsed = DateTime.Parse(date);
             var result = new ConsignmentShipfilePdfModel
                              {
                                  ConsignmentNumber = data[0].ToString(),
-                                 DateDispatched = data[1].ToString(),
+                                 DateDispatched = parsed.ToString(format: "dd/MM/yyyy"),
                                  Address = data[2].ToString().Split("\n"),
                                  Carrier = data[3].ToString(),
                                  Reference = data[4].ToString(),
