@@ -29,7 +29,11 @@ const render = Component => {
     );
 };
 
-if ((!user || user.expired) && window.location.pathname !== '/inventory/signin-oidc-client') {
+if (
+    (!user || user.expired) &&
+    window.location.pathname !== '/inventory/auth/' &&
+    window.location.pathname !== '/inventory/auth/logged-out'
+) {
     userManager.signinRedirect({
         data: { redirect: window.location.pathname + window.location.search }
     });

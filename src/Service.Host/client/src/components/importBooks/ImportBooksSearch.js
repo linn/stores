@@ -27,7 +27,7 @@ function ImportBooksSearch({ items, fetchItems, loading, privileges }) {
 
     const doSearch = () => {
         fetchItems(
-            options.impbookId.toString(),
+            options.impbookId?.toString() ?? '',
             `&rsnNumber=${options.rsnNumber ?? ''}&poNumber=${options.poNumber ?? ''}&fromDate=${
                 options.fromDate ? options.fromDate.toISOString() : ''
             }&toDate=${

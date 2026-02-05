@@ -4,7 +4,6 @@ import { Route, Redirect, Switch } from 'react-router';
 import { OidcProvider } from 'redux-oidc';
 import { ConnectedRouter } from 'connected-react-router';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { Navigation } from '@linn-it/linn-form-components-library';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import PropTypes from 'prop-types';
@@ -35,6 +34,7 @@ import Wand from '../containers/Wand';
 import ExportRsns from '../containers/ExportRsns';
 import Tpk from '../containers/Tpk';
 import ExportReturn from '../containers/ExportReturn';
+import NavigationContainer from '../containers/NavigationContainer';
 import StockMove from '../containers/StockMove';
 import StockLocatorBatchView from '../containers/stockLocatorUtility/StockLocatorBatchView';
 import StockLocatorPricesView from '../containers/stockLocatorUtility/StockLocatorPricesView';
@@ -63,6 +63,7 @@ import StockTriggerLevelsUtility from '../containers/stockTriggerLevelsUtility/S
 import LabelReprint from '../containers/LabelReprint';
 import PartSources from '../containers/parts/PartSources';
 import StockLocatorReport from '../containers/reports/StockLocatorReport';
+import LoggedOut from './LoggedOut';
 
 const Root = ({ store }) => (
     <div>
@@ -72,7 +73,7 @@ const Root = ({ store }) => (
                     <MuiPickersUtilsProvider utils={MomentUtils}>
                         <ConnectedRouter history={history}>
                             <div>
-                                <Navigation />
+                                <NavigationContainer />
                                 <CssBaseline />
 
                                 <Route exact path="/" render={() => <Redirect to="/inventory" />} />
@@ -108,10 +109,12 @@ const Root = ({ store }) => (
 
                                 <Switch>
                                     <Route exact path="/inventory" component={App} />
+                                    <Route exact path="/inventory/auth/" component={Callback} />
+
                                     <Route
                                         exact
-                                        path="/inventory/signin-oidc-client"
-                                        component={Callback}
+                                        path="/inventory/auth/logged-out"
+                                        component={LoggedOut}
                                     />
                                     <Route exact path="/parts/sources" component={Parts} />
                                     <Route exact path="/parts" component={Parts} />
