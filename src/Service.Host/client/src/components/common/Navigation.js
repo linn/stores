@@ -23,7 +23,8 @@ import SearchPanel from './SearchPanel';
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
-        zIndex: 10
+        zIndex: 10,
+        overflowX: 'hidden'
     },
     tabLabel: {
         fontSize: theme.typography.fontSize,
@@ -60,7 +61,8 @@ const useStyles = makeStyles(theme => ({
     appBar: {
         backgroundColor: theme.palette.grey[800],
         width: '100% !important',
-        margin: 0
+        margin: 0,
+        overflowX: 'hidden'
     },
     icons: {
         cursor: 'pointer',
