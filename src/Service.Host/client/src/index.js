@@ -4,6 +4,7 @@ import { AppContainer } from 'react-hot-loader';
 import { SnackbarProvider } from 'notistack';
 import { linnTheme } from '@linn-it/linn-form-components-library';
 import { ThemeProvider } from '@material-ui/styles';
+import { loadUser } from 'redux-oidc';
 import configureStore from './configureStore';
 import Root from './components/Root';
 import userManager from './helpers/userManager';
@@ -14,7 +15,6 @@ const NextRoot = require('./components/Root').default;
 
 const initialState = {};
 const store = configureStore(initialState);
-const { user } = store.getState().oidc;
 
 const render = Component => {
     ReactDOM.render(
@@ -29,22 +29,32 @@ const render = Component => {
     );
 };
 
-if (
-    (!user || user.expired) &&
-    window.location.pathname !== '/inventory/auth/' &&
-    window.location.pathname !== '/inventory/auth/logged-out'
-) {
-    userManager.signinRedirect({
-        data: { redirect: window.location.pathname + window.location.search }
-    });
-} else {
-    render(Root);
+loadUser(store, userManager);
 
-    // Hot Module Replacement API
-    if (module.hot) {
-        //module.hot.accept('./reducers', () => store.replaceReducer(reducer));
-        module.hot.accept('./components/Root', () => {
-            render(NextRoot);
-        });
-    }
-}
+userManager
+    .getUser()
+    .then(user => {
+        if (
+            (!user || user.expired) &&
+            window.location.pathname !== '/inventory/auth/' &&
+            window.location.pathname !== '/inventory/auth/logged-out'
+        ) {
+            userManager.signinRedirect({
+                data: { redirect: window.location.pathname + window.location.search }
+            });
+        } else {
+            render(Root);
+
+            // Hot Module Replacement API
+            if (module.hot) {
+                //module.hot.accept('./reducers', () => store.replaceReducer(reducer));
+                module.hot.accept('./components/Root', () => {
+                    render(NextRoot);
+                });
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error loading user:', error);
+        render(Root);
+    });
