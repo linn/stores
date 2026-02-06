@@ -8,12 +8,15 @@
 <body>
     <div id="root"></div>
     <script type="text/javascript">
-        window.APPLICATION_SETTINGS = {
-            authorityUri: '@Model.AuthorityUri',
+           window.APPLICATION_SETTINGS = {
+            cognitoHost: '@Model.CognitoHost',
+            cognitoClientId: '@Model.CognitoClientId',
+            cognitoDomainPrefix: '@Model.CognitoDomainPrefix',
+            entraLogoutUri: '@Model.EntraLogoutUri',
             appRoot: '@Model.AppRoot',
             proxyRoot: '@Model.ProxyRoot'
         };
     </script>
-    <script src="/inventory/build/app.js?v=12"></script>
+    <script src="/inventory/build/app.js?v=13"></script>
 </body>
 </html>

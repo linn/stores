@@ -13,9 +13,8 @@
             this.Get("/inventory", _ => this.GetApp());
             this.Get("/inventory/(.*)/create", _ => this.GetApp());
 
-            this.Get("/inventory/signin-oidc-client", _ => this.GetApp());
-            this.Get("/inventory/signin-oidc-silent", _ => this.SilentRenew());
-
+            this.Get("/inventory/auth/", _ => this.GetApp());
+            this.Get("/inventory/auth/logged-out", _ => this.GetApp());
             this.Get(@"^(.*)$", _ => this.GetApp());
         }
 

@@ -1,4 +1,6 @@
-﻿namespace Linn.Stores.Service.Modules
+﻿using Nancy.Security;
+
+namespace Linn.Stores.Service.Modules
 {
     using System.Collections.Generic;
 
@@ -71,6 +73,7 @@
         {
             var resource = this.Bind<StockLocatorQueryResource>();
             var result = this.service.GetStockLocations(resource);
+            this.RequiresAuthentication();
 
             var loggedIn = this.Context?.CurrentUser?.GetEmployeeUri();
             if (string.IsNullOrEmpty(loggedIn))
