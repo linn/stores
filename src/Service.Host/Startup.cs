@@ -55,9 +55,6 @@ namespace Linn.Stores.Service.Host
             services.AddAuthentication().AddJwtBearer(
                 "cognito-provider",
                 options =>
-
-
-
                 {
 
                     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
@@ -86,6 +83,8 @@ namespace Linn.Stores.Service.Host
                     opts.CognitoScheme = "cognito-provider";
                     opts.LegacyScheme = JwtBearerDefaults.AuthenticationScheme;
                 });
+
+                services.AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
