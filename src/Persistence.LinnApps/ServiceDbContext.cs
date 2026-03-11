@@ -1130,6 +1130,7 @@
             q.Property(e => e.LinnDuty).HasColumnName("LINN_DUTY");
             q.Property(e => e.LinnVat).HasColumnName("LINN_VAT");
             q.Property(e => e.DateCancelled).HasColumnName("DATE_CANCELLED");
+            q.Property(e => e.DateReceived).HasColumnName("DATE_RECEIVED");
             q.Property(e => e.CancelledBy).HasColumnName("CANCELLED_BY");
             q.Property(e => e.CancelledReason).HasColumnName("CANCELLED_REASON").HasMaxLength(500);
             q.Property(e => e.NumCartons).HasColumnName("NUM_CARTONS");

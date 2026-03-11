@@ -33,6 +33,8 @@
 
         public DateTime? DateCancelled { get; set; }
 
+        public DateTime? DateReceived { get; set; }
+
         public DateTime DateCreated { get; set; }
 
         public string DeliveryTermCode { get; set; }
