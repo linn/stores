@@ -19,8 +19,12 @@ const useStyles = makeStyles(() => ({
     },
     paper: {
         backgroundColor: '#f5f5f5',
-        position: 'relative',
-        zIndex: -1
+        position: 'fixed',
+        zIndex: 1000,
+        paddingTop: '80px',
+        width: '100%',
+        overflow: 'auto',
+        height: '100vh'
     },
     menuItems: {
         fontSize: '12px',
