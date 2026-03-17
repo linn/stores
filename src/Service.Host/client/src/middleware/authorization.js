@@ -11,6 +11,5 @@ export default ({ getState }) => next => action => {
             };
         }
     }
-
     return next(action);
 };
