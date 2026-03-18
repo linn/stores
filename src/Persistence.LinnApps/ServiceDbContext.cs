@@ -568,6 +568,7 @@
             e.HasOne(p => p.MechPartSource).WithOne(m => m.Part);
             e.HasOne(p => p.SalesArticle).WithOne(a => a.Part).HasForeignKey<Part>(x => x.PartNumber);
             e.HasMany(p => p.QcControls).WithOne().HasForeignKey(q => q.PartNumber);
+            e.HasMany(p => p.StorageTypes).WithOne().HasForeignKey(q => q.PartNumber);
             e.Property(p => p.LibraryName).HasColumnName("LIBRARY_NAME").HasMaxLength(200);
             e.Property(p => p.LibraryRef).HasColumnName("LIBRARY_REF").HasMaxLength(100);
             e.Property(p => p.FootprintRef1).HasColumnName("FOOTPRINT_REF").HasMaxLength(100);

@@ -9,6 +9,7 @@
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Requisitions;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
 
     public class GoodsInService : IGoodsInService
     {
@@ -38,6 +39,8 @@
 
         private readonly IPrintRsnService printRsnService;
 
+        private readonly IRepository<StorageLocation, int> storageLocationRepository;
+
         public GoodsInService(
             IGoodsInPack goodsInPack,
             IStoresPack storesPack,
@@ -51,7 +54,8 @@
             IRepository<PurchaseOrder, int> purchaseOrderRepository,
             IQueryRepository<AuthUser> authUserRepository,
             IPrintRsnService printRsnService,
-            IQueryRepository<StoragePlace> storagePlaceRepository)
+            IQueryRepository<StoragePlace> storagePlaceRepository,
+            IRepository<StorageLocation, int> storageLocationRepository)
         {
             this.storesPack = storesPack;
             this.goodsInPack = goodsInPack;
@@ -66,6 +70,7 @@
             this.authUserRepository = authUserRepository;
             this.storagePlaceRepository = storagePlaceRepository;
             this.printRsnService = printRsnService;
+            this.storageLocationRepository = storageLocationRepository;
         }
 
         public BookInResult DoBookIn(
@@ -140,6 +145,18 @@
                 }
             }
 
+            var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
+
+            var location = this.storageLocationRepository.FindBy(x => x.LocationCode.Equals(ontoLocation.ToUpper()));
+
+            if (part.StorageTypes != null && part.StorageTypes.Any())
+            {
+                if (!part.StorageTypes.Select(t => t.StorageType).Contains(location.StorageType))
+                {
+                    return new BookInResult(false, $"Can't put {partNumber} on {location.StorageType}");
+                }
+            }
+
             var bookinRef = this.goodsInPack.GetNextBookInRef();
 
             if (!linesArray.Any())
@@ -173,7 +190,6 @@
 
             if (transactionType.Equals("O"))
             {
-                var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
 
                 if (!part.DateLive.HasValue)
                 {
@@ -227,8 +243,6 @@
 
             if (transactionType == "O")
             {
-                var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
-
                 result.QcInfo = part?.QcInformation;
                 this.goodsInPack.GetPurchaseOrderDetails(
                     orderNumber.Value,
