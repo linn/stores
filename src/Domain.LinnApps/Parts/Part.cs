@@ -204,6 +204,8 @@
 
         public decimal? ResistorTolerance { get; set; }
 
+        public IEnumerable<PartStorageType> StorageTypes { get; set; }
+
         public DateTime? GetDateQcFlagLastChanged()
         {
             return this.GetRelevantQcControl()?.TransactionDate;

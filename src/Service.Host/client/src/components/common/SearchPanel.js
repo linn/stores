@@ -19,8 +19,12 @@ const useStyles = makeStyles(() => ({
     },
     paper: {
         backgroundColor: '#f5f5f5',
-        position: 'relative',
-        zIndex: -1
+        position: 'fixed',
+        zIndex: 1000,
+        paddingTop: '80px',
+        width: '100%',
+        overflow: 'auto',
+        height: '100vh'
     },
     menuItems: {
         fontSize: '12px',
@@ -29,10 +33,9 @@ const useStyles = makeStyles(() => ({
     closeButton: {
         marginRight: '10px',
         marginTop: '10px',
-        position: 'absolute',
+        float: 'right',
         top: 0,
-        right: 0,
-        zIndex: 1
+        right: 0
     },
     searchInputField: {
         float: 'right'
