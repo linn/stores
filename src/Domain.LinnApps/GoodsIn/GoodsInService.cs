@@ -149,7 +149,7 @@
 
             var location = this.storageLocationRepository.FindBy(x => x.LocationCode.Equals(ontoLocation.ToUpper()));
 
-            if (part.StorageTypes != null && part.StorageTypes.Any())
+            if (part.QcOnReceipt != "Y" && part.StorageTypes != null && part.StorageTypes.Any())
             {
                 if (!part.StorageTypes.Select(t => t.StorageType).Contains(location.StorageType))
                 {
