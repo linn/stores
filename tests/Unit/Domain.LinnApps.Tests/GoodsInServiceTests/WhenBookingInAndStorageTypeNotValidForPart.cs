@@ -128,36 +128,36 @@
                     });
         }
 
-        //[Test]
-        //public void ShouldNotCallStoredProcedure()
-        //{
-        //    this.GoodsInPack.DidNotReceiveWithAnyArgs().DoBookIn(
-        //        1,
-        //        "O",
-        //        1,
-        //        "PART",
-        //        1,
-        //        1,
-        //        1,
-        //        null,
-        //        null,
-        //        null,
-        //        "P1234",
-        //        null,
-        //        null,
-        //        null,
-        //        null,
-        //        null,
-        //        null,
-        //        out var reqNumber,
-        //        out var success);
-        //}
+        [Test]
+        public void ShouldNotCallStoredProcedure()
+        {
+            this.GoodsInPack.DidNotReceiveWithAnyArgs().DoBookIn(
+                1,
+                "O",
+                1,
+                "PART",
+                1,
+                1,
+                1,
+                null,
+                null,
+                null,
+                "P1234",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                out var reqNumber,
+                out var success);
+        }
 
-        //[Test]
-        //public void ShouldReturnFailResult()
-        //{
-        //    this.result.Success.Should().BeFalse();
-        //    this.result.Message.Should().Be($"Can't put PART on K206");
-        //}
+        [Test]
+        public void ShouldReturnFailResult()
+        {
+            this.result.Success.Should().BeFalse();
+            this.result.Message.Should().Be($"Can't put PART on K206");
+        }
     }
 }
