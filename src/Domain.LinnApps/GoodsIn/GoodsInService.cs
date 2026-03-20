@@ -147,15 +147,18 @@
 
             var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
 
-            //var location = this.storageLocationRepository.FindBy(x => x.LocationCode.Equals(ontoLocation.ToUpper()));
+            var location = this.storageLocationRepository.FindBy(x => x.LocationCode.Equals(ontoLocation.ToUpper()));
 
-            //if (part.QcOnReceipt != "Y" && part.StorageTypes != null && part.StorageTypes.Any())
-            //{
-            //    if (!part.StorageTypes.Select(t => t.StorageType).Contains(location.StorageType))
-            //    {
-            //        return new BookInResult(false, $"Can't put {partNumber} on {location.StorageType}");
-            //    }
-            //}
+            if (location != null && !string.IsNullOrEmpty(location.StorageType))
+            {
+                if (part.QcOnReceipt != "Y" && part.StorageTypes != null && part.StorageTypes.Any())
+                {
+                    if (!part.StorageTypes.Select(t => t.StorageType).Contains(location.StorageType))
+                    {
+                        return new BookInResult(false, $"Can't put {partNumber} on {location.StorageType}");
+                    }
+                }
+            }
 
             var bookinRef = this.goodsInPack.GetNextBookInRef();
 
