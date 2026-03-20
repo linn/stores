@@ -153,7 +153,22 @@
             {
                 if (part.QcOnReceipt != "Y" && part.StorageTypes != null && part.StorageTypes.Any())
                 {
-                    if (!part.StorageTypes.Select(t => t.StorageType).Contains(location.StorageType))
+                    var locationStorageType = location.StorageType;
+                    var isValid = false;
+
+                    if (locationStorageType.StartsWith("K") && locationStorageType.Length >= 2)
+                    {
+                        var locationPrefix = locationStorageType.Substring(0, 2);
+                        isValid = part.StorageTypes
+                            .Where(t => t.StorageType.StartsWith("K") && t.StorageType.Length >= 2)
+                            .Any(t => t.StorageType.Substring(0, 2) == locationPrefix);
+                    }
+                    else
+                    {
+                        isValid = part.StorageTypes.Select(t => t.StorageType).Contains(locationStorageType);
+                    }
+
+                    if (!isValid)
                     {
                         return new BookInResult(false, $"Can't put {partNumber} on {location.StorageType}");
                     }
