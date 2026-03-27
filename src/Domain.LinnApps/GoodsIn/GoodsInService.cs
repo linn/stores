@@ -1,6 +1,4 @@
-﻿using Linn.Stores.Domain.LinnApps.Parts;
-
-namespace Linn.Stores.Domain.LinnApps.GoodsIn
+﻿namespace Linn.Stores.Domain.LinnApps.GoodsIn
 {
     using System;
     using System.Collections.Generic;
@@ -10,6 +8,8 @@ namespace Linn.Stores.Domain.LinnApps.GoodsIn
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Domain.LinnApps.Parts;
+
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
