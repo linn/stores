@@ -8,6 +8,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Domain.LinnApps.Parts;
+
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
@@ -97,6 +99,8 @@
             bool printRsnLabels,
             IEnumerable<GoodsInLogEntry> lines)
         {
+            Part part = null;
+
             if (string.IsNullOrEmpty(ontoLocation))
             {
                 return new BookInResult(false, "Onto location/pallet must be entered");
@@ -145,36 +149,47 @@
                 }
             }
 
-            var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
-
-            var location = this.storageLocationRepository.FindBy(x => x.LocationCode.Equals(ontoLocation.ToUpper()));
-
-            if (location != null && !string.IsNullOrEmpty(location.StorageType))
+            if (transactionType != "L" && transactionType != "R")
             {
-                if (part.QcOnReceipt != "Y" && part.StorageTypes != null && part.StorageTypes.Any())
+                part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
+
+                var location = this.storageLocationRepository.FindBy(x => x.LocationCode.Equals(ontoLocation.ToUpper()));
+
+                if (location != null && !string.IsNullOrEmpty(location.StorageType))
                 {
-                    var locationStorageType = location.StorageType;
-                    var isValid = false;
+                    if (part.QcOnReceipt != "Y" && part.StorageTypes != null && part.StorageTypes.Any())
+                    {
+                        var locationStorageType = location.StorageType;
+                        var isValid = false;
 
-                    if (locationStorageType.StartsWith("K") && locationStorageType.Length >= 2)
-                    {
-                        var locationPrefix = locationStorageType.Substring(0, 2);
-                        isValid = part.StorageTypes
-                            .Where(t => t.StorageType.StartsWith("K") && t.StorageType.Length >= 2)
-                            .Any(t => t.StorageType.Substring(0, 2) == locationPrefix);
-                    }
-                    else
-                    {
-                        isValid = part.StorageTypes.Select(t => t.StorageType).Contains(locationStorageType);
-                    }
+                        if (locationStorageType.StartsWith("K") && locationStorageType.Length >= 2)
+                        {
+                            var locationPrefix = locationStorageType.Substring(0, 2);
+                            isValid = part.StorageTypes
+                                .Where(t => t.StorageType.StartsWith("K") && t.StorageType.Length >= 2)
+                                .Any(t => t.StorageType.Substring(0, 2) == locationPrefix);
+                        }
+                        else
+                        {
+                            isValid = part.StorageTypes.Select(t => t.StorageType).Contains(locationStorageType);
+                        }
 
-                    if (!isValid)
+                        if (!isValid)
+                        {
+                            return new BookInResult(false, $"Can't put {partNumber} on {location.StorageType}");
+                        }
+                    }
+                }
+
+                if (transactionType.Equals("O"))
+                {
+                    if (!part.DateLive.HasValue)
                     {
-                        return new BookInResult(false, $"Can't put {partNumber} on {location.StorageType}");
+                        return new BookInResult(false, "PART NOT LIVE - SEE PURCHASING!");
                     }
                 }
             }
-
+            
             var bookinRef = this.goodsInPack.GetNextBookInRef();
 
             if (!linesArray.Any())
@@ -204,15 +219,6 @@
             {
                 var res = this.ValidatePurchaseOrder((int)orderNumber, (int)orderLine);
                 return new BookInResult(false, $"Overbook: PO was for {res.OrderQty} but you have tried to book in {total}");
-            }
-
-            if (transactionType.Equals("O"))
-            {
-
-                if (!part.DateLive.HasValue)
-                {
-                    return new BookInResult(false, "PART NOT LIVE - SEE PURCHASING!");
-                }
             }
 
             var message = this.goodsInPack.DoBookIn(
