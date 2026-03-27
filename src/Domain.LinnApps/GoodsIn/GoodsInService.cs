@@ -183,7 +183,6 @@
 
                 if (transactionType.Equals("O"))
                 {
-
                     if (!part.DateLive.HasValue)
                     {
                         return new BookInResult(false, "PART NOT LIVE - SEE PURCHASING!");
