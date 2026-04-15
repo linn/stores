@@ -293,7 +293,7 @@
 
                 try
                 {
-                    this.printRsnService.PrintRsn((int)rsnNumber, createdBy, "Service Copy");
+                    this.printRsnService.PrintRsn((int)rsnNumber, createdBy, "Service");
                 }
                 catch (Exception ex)
                 {
