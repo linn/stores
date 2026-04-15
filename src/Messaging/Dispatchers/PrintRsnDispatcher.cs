@@ -1,21 +1,18 @@
 ﻿namespace Linn.Stores.Messaging.Dispatchers
 {
+    using System.Collections.Generic;
     using System.Text;
 
     using Linn.Common.Messaging.RabbitMQ;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.GoodsIn;
-    using Linn.Stores.Resources.MessageDispatch;
-
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Serialization;
 
     public class PrintRsnDispatcher : IPrintRsnService
     {
         private readonly string contentType = "application/json";
 
-        private readonly string routingKey = "orawin.rsn.print";
+        private readonly string routingKey = "print.rsn.document";
 
         private readonly IMessageDispatcher messageDispatcher;
 
@@ -29,7 +26,7 @@
             this.printerRepository = printerRepository;
         }
 
-        public void PrintRsn(int rsnNumber, int userNumber, string copy)
+        public void PrintRsn(int rsnNumber, int userNumber, string copy, string facilityCode = null)
         {
             var printer = this.printerRepository
                 .FindBy(a => a.UserNumber == userNumber && a.PrinterGroup == "GOODS-IN")?.PrinterName;
@@ -40,23 +37,17 @@
                     a => a.DefaultForGroup == "Y" && a.PrinterGroup == "GOODS-IN").PrinterName;
             }
 
-            var resource = new PrintRsnMessageResource
-                               {
-                                   RsnNumber = rsnNumber,
-                                   Copy = copy,
-                                   Printer = printer
-                               };
+            var headers = new List<KeyValuePair<object, object>>
+                              {
+                                  new KeyValuePair<object, object>("rsnNumber", rsnNumber.ToString()),
+                                  new KeyValuePair<object, object>("copyType", copy),
+                                  new KeyValuePair<object, object>("facilityCode", facilityCode),
+                                  new KeyValuePair<object, object>("printerUri", printer)
+                              };
 
-            var json = JsonConvert.SerializeObject(
-                resource,
-                new JsonSerializerSettings
-                    {
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
-                    });
-            
-            var body = Encoding.UTF8.GetBytes(json);
-            
-            this.messageDispatcher.Dispatch(this.routingKey, body, this.contentType);
+            var body = Encoding.UTF8.GetBytes(string.Empty);
+
+            this.messageDispatcher.Dispatch(this.routingKey, body, this.contentType, headers);
         }
     }
 }
