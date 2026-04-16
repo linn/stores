@@ -13,7 +13,7 @@
     {
         private readonly string contentType = "application/json";
 
-        private readonly string routingKey = "orawin.consignment-note.print";
+        private readonly string routingKey = "print.packing-list.document";
 
         private readonly IMessageDispatcher messageDispatcher;
 
@@ -22,12 +22,12 @@
             this.messageDispatcher = messageDispatcher;
         }
 
-        public void PrintConsignmentNote(int consignmentId, string printer)
+        public void PrintConsignmentNote(int consignmentId, string printerUri)
         {
             var resource = new PrintConsignmentNoteMessageResource
                                {
                                    ConsignmentId = consignmentId,
-                                   Printer = printer
+                                   Printer = printerUri
                                };
 
             var json = JsonConvert.SerializeObject(

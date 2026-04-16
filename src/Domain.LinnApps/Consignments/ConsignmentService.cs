@@ -262,7 +262,7 @@
             {
                 this.log.Info($"Printing Consignment note via msg");
 
-                this.PrintConsignmentNote(consignment, numberOfCopies, printerName);
+                this.PrintConsignmentNote(consignment, numberOfCopies, printerUri);
             }
 
             this.PrintInvoices(
@@ -328,11 +328,11 @@
             }
         }
 
-        private void PrintConsignmentNote(Consignment consignment, int numberOfCopies, string printerName)
+        private void PrintConsignmentNote(Consignment consignment, int numberOfCopies, string printerUri)
         {
             for (var i = 1; i <= numberOfCopies; i++)
             {
-                this.printConsignmentNoteDispatcher.PrintConsignmentNote(consignment.ConsignmentId, printerName);
+                this.printConsignmentNoteDispatcher.PrintConsignmentNote(consignment.ConsignmentId, printerUri);
             }
         }
 

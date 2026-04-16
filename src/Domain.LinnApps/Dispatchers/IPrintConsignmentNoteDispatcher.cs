@@ -2,7 +2,7 @@
 {
     public interface IPrintConsignmentNoteDispatcher
     {
-        void PrintConsignmentNote(int consignmentId, string printer);
+        void PrintConsignmentNote(int consignmentId, string printerUri);
         
         void SaveConsignmentNote(int consignmentId, string fileName);
     }
