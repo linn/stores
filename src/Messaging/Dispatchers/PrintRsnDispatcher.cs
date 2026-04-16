@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Messaging.Dispatchers
+namespace Linn.Stores.Messaging.Dispatchers
 {
     using System.Collections.Generic;
     using System.Text;
@@ -29,20 +29,20 @@
         public void PrintRsn(int rsnNumber, int userNumber, string copy, string facilityCode = null)
         {
             var printer = this.printerRepository
-                .FindBy(a => a.UserNumber == userNumber && a.PrinterGroup == "GOODS-IN")?.PrinterName;
+                .FindBy(a => a.UserNumber == userNumber && a.PrinterGroup == "GOODS-IN")?.PrinterUri;
 
             if (string.IsNullOrEmpty(printer))
             {
                  printer = this.printerRepository.FindBy(
-                    a => a.DefaultForGroup == "Y" && a.PrinterGroup == "GOODS-IN").PrinterName;
+                    a => a.DefaultForGroup == "Y" && a.PrinterGroup == "GOODS-IN").PrinterUri;
             }
 
             var headers = new List<KeyValuePair<object, object>>
                               {
                                   new KeyValuePair<object, object>("rsnNumber", rsnNumber.ToString()),
                                   new KeyValuePair<object, object>("copyType", copy),
-                                  new KeyValuePair<object, object>("facilityCode", facilityCode),
-                                  new KeyValuePair<object, object>("printerUri", printer)
+                                  new KeyValuePair<object, object>("facilityCode", facilityCode ?? string.Empty),
+                                  new KeyValuePair<object, object>("printerUri", printer ?? string.Empty)
                               };
 
             var body = Encoding.UTF8.GetBytes(string.Empty);
