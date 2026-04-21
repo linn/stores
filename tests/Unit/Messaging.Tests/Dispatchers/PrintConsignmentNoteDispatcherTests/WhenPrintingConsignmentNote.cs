@@ -21,7 +21,8 @@
             this.MessageDispatcher.Received().Dispatch(
                 "print.packing-list.document",
                 Arg.Any<byte[]>(),
-                "application/json");
+                "application/json",
+                Arg.Any<System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object, object>>>());
         }
     }
 }

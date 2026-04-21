@@ -1,13 +1,10 @@
 ﻿namespace Linn.Stores.Messaging.Dispatchers
 {
+    using System.Collections.Generic;
     using System.Text;
 
     using Linn.Common.Messaging.RabbitMQ;
     using Linn.Stores.Domain.LinnApps.Dispatchers;
-    using Linn.Stores.Resources.MessageDispatch;
-
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Serialization;
 
     public class PrintInvoiceDispatcher : IPrintInvoiceDispatcher
     {
@@ -29,25 +26,18 @@
             bool showTermsAndConditions,
             bool showPrices)
         {
-            var resource = new PrintInvoiceMessageResource
-                               {
-                                   DocumentNumber = documentNumber,
-                                   DocumentType = documentType,
-                                   ShowTermsAndConditions = showTermsAndConditions, 
-                                   ShowPrices = showPrices,
-                                   Printer = printerUri
-                               };
+            var headers = new List<KeyValuePair<object, object>>
+                              {
+                                  new KeyValuePair<object, object>("documentNumber", documentNumber.ToString()),
+                                  new KeyValuePair<object, object>("documentType", documentType ?? string.Empty),
+                                  new KeyValuePair<object, object>("showTermsAndConditions", showTermsAndConditions.ToString()),
+                                  new KeyValuePair<object, object>("showPrices", showPrices.ToString()),
+                                  new KeyValuePair<object, object>("printerUri", printerUri ?? string.Empty)
+                              };
 
-            var json = JsonConvert.SerializeObject(
-                resource,
-                new JsonSerializerSettings
-                    {
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
-                    });
+            var body = Encoding.UTF8.GetBytes(string.Empty);
 
-            var body = Encoding.UTF8.GetBytes(json);
-
-            this.messageDispatcher.Dispatch(this.routingKey, body, this.contentType);
+            this.messageDispatcher.Dispatch(this.routingKey, body, this.contentType, headers);
         }
     }
 }

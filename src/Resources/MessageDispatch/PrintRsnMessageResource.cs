@@ -4,8 +4,6 @@
     {
         public int RsnNumber { get; set; }
         
-        public string Copy { get; set; }
-
         public string FacilityCode { get; set; }
     }
 }
