@@ -11,10 +11,7 @@ function InvoicesTab({
     exportBooks,
     printDocuments,
     printDocumentsWorking,
-    printDocumentsResult,
-    saveDocuments,
-    saveDocumentsWorking,
-    saveDocumentsResult
+    printDocumentsResult
 }) {
     return (
         <>
@@ -85,30 +82,6 @@ function InvoicesTab({
                         )}
                     </Grid>
                     <Grid item xs={2} />
-                    <Grid item xs={4}>
-                        <Button
-                            style={{ marginTop: '40px' }}
-                            onClick={saveDocuments}
-                            variant="outlined"
-                            color="primary"
-                            disabled={
-                                (!invoices || invoices.length === 0) &&
-                                (!exportBooks || exportBooks.length === 0)
-                            }
-                        >
-                            Save Documents
-                        </Button>
-                        {saveDocumentsWorking ? (
-                            <Loading />
-                        ) : (
-                            <Typography variant="h6"> {saveDocumentsResult?.message}</Typography>
-                        )}
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Typography variant="subtitle1" style={{ marginTop: '40px' }}>
-                            The pdf documents will be saved in W:\system\
-                        </Typography>
-                    </Grid>
                 </>
             </Grid>
         </>
@@ -123,12 +96,6 @@ InvoicesTab.propTypes = {
     printDocumentsResult: PropTypes.shape({
         success: PropTypes.bool,
         message: PropTypes.string
-    }),
-    saveDocuments: PropTypes.func.isRequired,
-    saveDocumentsWorking: PropTypes.bool,
-    saveDocumentsResult: PropTypes.shape({
-        success: PropTypes.bool,
-        message: PropTypes.string
     })
 };
 
@@ -136,9 +103,7 @@ InvoicesTab.defaultProps = {
     invoices: [],
     exportBooks: [],
     printDocumentsWorking: false,
-    printDocumentsResult: null,
-    saveDocumentsWorking: false,
-    saveDocumentsResult: null
+    printDocumentsResult: null
 };
 
 export default InvoicesTab;

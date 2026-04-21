@@ -12,8 +12,6 @@
 
         PackingList GetPackingList(int consignmentId);
 
-        ProcessResult SaveConsignmentDocuments(int resourceConsignmentId);
-
         IEnumerable<Consignment> GetByInvoiceNumber(int invoiceNumber);
     }
 }

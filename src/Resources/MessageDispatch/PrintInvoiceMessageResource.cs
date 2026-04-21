@@ -8,6 +8,8 @@
 
         public string CopyType { get; set; } = "COPY DOCUMENT";
 
-        public string ShowPrices { get; set; } = "Y";
+        public bool ShowPrices { get; set; }
+
+        public bool ShowTermsAndConditions { get; set; }
     }
 }

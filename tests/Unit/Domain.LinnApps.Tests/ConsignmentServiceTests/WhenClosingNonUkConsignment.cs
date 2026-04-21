@@ -38,24 +38,22 @@
         }
 
         [Test]
+        public void ShouldPrintExportBook()
+        {
+            this.PrintInvoiceDispatcher.Received().PrintInvoice(Arg.Any<string>(), "E", 1, false, true);
+        }
+
+        [Test]
         public void ShouldPrintConsignmentNote()
         {
             this.PrintConsignmentNoteDispatcher.Received().PrintConsignmentNote(this.ConsignmentId, Arg.Any<string>());
         }
 
         [Test]
-        public void ShouldPrintExportBookViaPrintProxyService()
+        public void ShouldPrintTwoInvoices()
         {
-            // some temporary proxy tests before we move to a message solution
-            this.PrintService.Received().PrintDocument("http://test:printer", "E", 1, false, true);
-        }
-
-        [Test]
-        public void ShouldPrintTwoInvoicesViaPrintProxyService()
-        {
-            // some temporary proxy tests before we move to a message solution
-            this.PrintService.Received().PrintDocument("http://test:printer", "I", 123, false, false);
-            this.PrintService.Received().PrintDocument("http://test:printer", "I", 123, false, true);
+            this.PrintInvoiceDispatcher.Received().PrintInvoice(Arg.Any<string>(), "I", 123, false, true);
+            this.PrintInvoiceDispatcher.Received().PrintInvoice(Arg.Any<string>(), "I", 123, false, false);
         }
     }
 }

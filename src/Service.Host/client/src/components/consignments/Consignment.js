@@ -74,10 +74,6 @@ function Consignment({
     clearCartonTypesSearch,
     cartonTypesSearchResults,
     cartonTypesSearchLoading,
-    saveDocuments,
-    saveDocumentsWorking,
-    saveDocumentsResult,
-    saveDocumentsClearData,
     salesOutlets,
     salesOutletsLoading,
     getSalesOutlets,
@@ -546,11 +542,6 @@ function Consignment({
         printDocuments({ consignmentId: item.consignmentId, userNumber });
     };
 
-    const handleSaveDocuments = () => {
-        saveDocumentsClearData();
-        saveDocuments({ consignmentId: item.consignmentId, userNumber });
-    };
-
     const cartonTypesResult = () => {
         return cartonTypesSearchResults?.map(cartonType => ({
             ...cartonType,
@@ -797,9 +788,6 @@ function Consignment({
                                         printDocuments={handlePrintDocuments}
                                         printDocumentsWorking={printDocumentsWorking}
                                         printDocumentsResult={printDocumentsResult}
-                                        saveDocuments={handleSaveDocuments}
-                                        saveDocumentsWorking={saveDocumentsWorking}
-                                        saveDocumentsResult={saveDocumentsResult}
                                     />
                                 )}
                                 {currentTab === 3 && (
@@ -1410,13 +1398,6 @@ Consignment.propTypes = {
     clearCartonTypesSearch: PropTypes.func.isRequired,
     cartonTypesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     cartonTypesSearchLoading: PropTypes.bool,
-    saveDocumentsWorking: PropTypes.bool,
-    saveDocuments: PropTypes.func.isRequired,
-    saveDocumentsResult: PropTypes.shape({
-        success: PropTypes.bool,
-        message: PropTypes.string
-    }),
-    saveDocumentsClearData: PropTypes.func.isRequired,
     salesOutlets: PropTypes.arrayOf(PropTypes.shape({})),
     salesOutletsLoading: PropTypes.bool,
     getSalesOutlets: PropTypes.func.isRequired,
@@ -1470,8 +1451,6 @@ Consignment.defaultProps = {
     consignmentPackingListLoading: false,
     cartonTypesSearchResults: [],
     cartonTypesSearchLoading: false,
-    saveDocumentsWorking: false,
-    saveDocumentsResult: null,
     salesOutlets: [],
     salesOutletsLoading: false,
     rsnsSearchResults: [],

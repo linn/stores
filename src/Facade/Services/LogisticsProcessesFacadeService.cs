@@ -127,21 +127,5 @@
 
             return new SuccessResult<ProcessResult>(result);
         }
-
-        public IResult<ProcessResult> SaveConsignmentDocuments(ConsignmentRequestResource resource)
-        {
-            ProcessResult result;
-
-            try
-            {
-                result = this.consignmentService.SaveConsignmentDocuments(resource.ConsignmentId);
-            }
-            catch (ProcessException exception)
-            {
-                return new BadRequestResult<ProcessResult>(exception.Message);
-            }
-
-            return new SuccessResult<ProcessResult>(result);
-        }
     }
 }

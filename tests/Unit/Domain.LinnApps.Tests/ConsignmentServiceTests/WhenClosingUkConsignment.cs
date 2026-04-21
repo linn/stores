@@ -47,19 +47,17 @@
         {
             this.PrintConsignmentNoteDispatcher.DidNotReceive().PrintConsignmentNote(Arg.Any<int>(), Arg.Any<string>());
         }
-
         [Test]
-        public void ShouldPrintOneInvoiceViaPrintProxy()
+        public void ShouldPrintOneInvoice()
         {
-            // some temporary proxy tests before we move to a message solution
-            this.PrintService.DidNotReceive().PrintDocument("http://test:printer", "I", 123, true, true);
-            this.PrintService.Received().PrintDocument("http://test:printer", "I", 123, false, false);
+            this.PrintInvoiceDispatcher.DidNotReceive().PrintInvoice("http://test:printer", "I", 123, true, true);
+            this.PrintInvoiceDispatcher.Received().PrintInvoice("http://test:printer", "I", 123, false, false);
         }
 
         [Test]
         public void ShouldNotPrintExportBook()
         {
-            this.PrintInvoiceDispatcher.DidNotReceive().PrintInvoice(1, "E", "CUSTOMER MASTER", "Y", Arg.Any<string>());
+            this.PrintInvoiceDispatcher.DidNotReceive().PrintInvoice(Arg.Any<string>(), "E",1, false, true);
         }
     }
 }

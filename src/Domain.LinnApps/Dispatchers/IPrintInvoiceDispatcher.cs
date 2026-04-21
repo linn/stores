@@ -2,8 +2,6 @@
 {
     public interface IPrintInvoiceDispatcher
     {
-        void PrintInvoice(int documentNumber, string documentType, string copyType, string showPrices, string printer);
-        
-        void SaveInvoice(int documentNumber, string documentType, string copyType, string showPrices, string fileName);
+        void PrintInvoice(string printerUri, string documentType, int documentNumber, bool showTermsAndConditions, bool showPrices);
     }
 }

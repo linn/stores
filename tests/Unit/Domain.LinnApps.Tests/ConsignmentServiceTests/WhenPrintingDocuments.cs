@@ -24,8 +24,8 @@
         [Test]
         public void ShouldPrintInvoices()
         {
-            this.PrintService.Received().PrintDocument("http://test:printer", "I", 123, false, false);
-            this.PrintService.Received().PrintDocument("http://test:printer", "I", 456, false, false);
+            this.PrintInvoiceDispatcher.Received().PrintInvoice("http://test:printer", "I", 123,  false, false);
+            this.PrintInvoiceDispatcher.Received().PrintInvoice("http://test:printer", "I", 456, false, false);
         }
     }
 }

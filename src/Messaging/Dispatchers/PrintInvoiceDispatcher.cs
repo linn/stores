@@ -13,7 +13,7 @@
     {
         private readonly string contentType = "application/json";
 
-        private readonly string routingKey = "orawin.invoice.print";
+        private readonly string routingKey = "print.invoice.document";
 
         private readonly IMessageDispatcher messageDispatcher;
 
@@ -23,42 +23,19 @@
         }
 
         public void PrintInvoice(
-            int documentNumber,
+            string printerUri,
             string documentType,
-            string copyType,
-            string showPrices,
-            string printer)
+            int documentNumber,
+            bool showTermsAndConditions,
+            bool showPrices)
         {
             var resource = new PrintInvoiceMessageResource
                                {
                                    DocumentNumber = documentNumber,
                                    DocumentType = documentType,
-                                   CopyType = copyType,
+                                   ShowTermsAndConditions = showTermsAndConditions, 
                                    ShowPrices = showPrices,
-                                   Printer = printer
-                               };
-
-            var json = JsonConvert.SerializeObject(
-                resource,
-                new JsonSerializerSettings
-                    {
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
-                    });
-
-            var body = Encoding.UTF8.GetBytes(json);
-
-            this.messageDispatcher.Dispatch(this.routingKey, body, this.contentType);
-        }
-
-        public void SaveInvoice(int documentNumber, string documentType, string copyType, string showPrices, string fileName)
-        {
-            var resource = new PrintInvoiceMessageResource
-                               {
-                                   DocumentNumber = documentNumber,
-                                   DocumentType = documentType,
-                                   CopyType = copyType,
-                                   ShowPrices = showPrices,
-                                   FileName = fileName
+                                   Printer = printerUri
                                };
 
             var json = JsonConvert.SerializeObject(
