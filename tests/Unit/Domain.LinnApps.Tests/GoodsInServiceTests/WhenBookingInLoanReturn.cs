@@ -22,10 +22,10 @@
         [SetUp]
         public void SetUp()
         {
-            this.PurchaseOrderPack.GetDocumentType(1).Returns("PO");
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
             this.GoodsInPack.GetNextBookInRef().ReturnsForAnyArgs(1);
             this.ReqRepository.FindById(1).Returns(new RequisitionHeader { ReqNumber = 1, });
+
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
                 .Returns(new Part
                 {
@@ -34,24 +34,11 @@
                     QcInformation = "Some Info"
                 });
 
-            this.GoodsInPack.When(x => x.GetPurchaseOrderDetails(
-                1,
-                1,
-                out var _,
-                out var _,
-                out var uom,
-                out var _,
-                out var _,
-                out var _,
-                out var _,
-                out var _))
-                .Do(x => x[4] = "ONES");
-
             this.GoodsInPack.When(x => x.DoBookIn(
                 1,
                 "L",
                 1,
-                "PART",
+                null,
                 1,
                 null,
                 null,
@@ -78,7 +65,7 @@
             this.result = this.Sut.DoBookIn(
                 "L",
                 1,
-                "PART",
+                null,
                 null,
                 1,
                 null,
@@ -118,7 +105,7 @@
                 1,
                 "L",
                 1,
-                "PART",
+                null,
                 1,
                 null,
                 null,

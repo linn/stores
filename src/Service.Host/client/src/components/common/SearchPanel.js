@@ -33,10 +33,9 @@ const useStyles = makeStyles(() => ({
     closeButton: {
         marginRight: '10px',
         marginTop: '10px',
-        position: 'absolute',
+        float: 'right',
         top: 0,
-        right: 0,
-        zIndex: 1
+        right: 0
     },
     searchInputField: {
         float: 'right'
