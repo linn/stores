@@ -93,6 +93,7 @@
         {
             var formattedDate = impbook.DateCreated.ToString("MMMyyyy").ToUpper();
             impbook.PeriodNumber = this.ledgerPeriodRepository.FindBy(x => x.MonthName == formattedDate).PeriodNumber;
+            impbook.DateReceived = impbook.DateCreated;
 
             if (impbook.OrderDetails != null && impbook.OrderDetails.Any(
                     d => d.RsnNumber.HasValue && d.OrderNumber.HasValue))

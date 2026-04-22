@@ -9,7 +9,7 @@
     "rules": {
         "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
         "prettier/prettier": ["error"],
-        "linebreak-style": ["error", "windows"],
+        "linebreak-style": "off",
         "react/jsx-filename-extension": 0,
         "spaced-comment": "off",
         "react-hooks/rules-of-hooks": "error",

@@ -67,7 +67,7 @@ function Part({
         dateCreated: new Date(),
         railMethod: 'LEADTIME',
         qcInformation: '',
-        qcOnReceipt: 'N',
+        qcOnReceipt: 'Y',
         orderHold: 'N',
         ourUnitOfMeasure: 'ONES'
     };

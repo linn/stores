@@ -3,8 +3,7 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 module.exports = {
     entry: {
-        app: ['babel-polyfill', './client/src/index.js'],
-        'silent-renew': './client/silent-renew/index.js'
+        app: ['babel-polyfill', './client/src/index.js']
     },
     output: {
         path: path.resolve(__dirname, '../client/build'), // string

@@ -12,8 +12,7 @@
         private readonly IQueryRepository<SalesOutlet> repository;
 
         private readonly IQueryRepository<SalesOrder> salesOrderRepository;
-
-
+        
         public SalesOutletService(
             IQueryRepository<SalesOutlet> repository,
             IQueryRepository<SalesOrder> salesOrderRepository)

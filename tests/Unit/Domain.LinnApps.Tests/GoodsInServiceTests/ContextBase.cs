@@ -1,17 +1,15 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.GoodsInServiceTests
 {
-    using System;
-    using System.Linq.Expressions;
-
     using Linn.Common.Domain.LinnApps.RemoteServices;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.Requisitions;
-
+    using Linn.Stores.Domain.LinnApps.StockLocators;
     using NSubstitute;
-
     using NUnit.Framework;
+    using System;
+    using System.Linq.Expressions;
 
     public class ContextBase
     {
@@ -43,6 +41,8 @@
 
         protected IPrintRsnService PrintRsnService { get; private set; }
 
+        protected IRepository<StorageLocation, int> StorageLocationRepository { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -61,7 +61,8 @@
             this.PrintRsnService = Substitute.For<IPrintRsnService>();
             this.StoragePlaceRepository.FindBy(Arg.Any<Expression<Func<StoragePlace, bool>>>())
                 .Returns(new StoragePlace());
-
+            this.StorageLocationRepository = Substitute.For<IRepository<StorageLocation, int>>();
+            
             this.Sut = new GoodsInService(
                 this.GoodsInPack, 
                 this.StoresPack, 
@@ -75,7 +76,8 @@
                 this.PurchaseOrderRepository,
                 this.AuthUserRepository,
                 this.PrintRsnService,
-                this.StoragePlaceRepository);
+                this.StoragePlaceRepository,
+                this.StorageLocationRepository);
         }
     }
 }

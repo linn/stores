@@ -424,8 +424,8 @@
            var connectionString = $"Data Source={dataSource};User Id={userId};Password={password};";
 
             optionsBuilder.UseOracle(connectionString, options => options.UseOracleSQLCompatibility("11"));
-            optionsBuilder.UseLoggerFactory(MyLoggerFactory);
-            optionsBuilder.EnableSensitiveDataLogging(true);
+            // optionsBuilder.UseLoggerFactory(MyLoggerFactory);
+            // optionsBuilder.EnableSensitiveDataLogging(true);
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -568,6 +568,7 @@
             e.HasOne(p => p.MechPartSource).WithOne(m => m.Part);
             e.HasOne(p => p.SalesArticle).WithOne(a => a.Part).HasForeignKey<Part>(x => x.PartNumber);
             e.HasMany(p => p.QcControls).WithOne().HasForeignKey(q => q.PartNumber);
+            e.HasMany(p => p.StorageTypes).WithOne().HasForeignKey(q => q.PartNumber);
             e.Property(p => p.LibraryName).HasColumnName("LIBRARY_NAME").HasMaxLength(200);
             e.Property(p => p.LibraryRef).HasColumnName("LIBRARY_REF").HasMaxLength(100);
             e.Property(p => p.FootprintRef1).HasColumnName("FOOTPRINT_REF").HasMaxLength(100);
@@ -1130,6 +1131,7 @@
             q.Property(e => e.LinnDuty).HasColumnName("LINN_DUTY");
             q.Property(e => e.LinnVat).HasColumnName("LINN_VAT");
             q.Property(e => e.DateCancelled).HasColumnName("DATE_CANCELLED");
+            q.Property(e => e.DateReceived).HasColumnName("DATE_RECEIVED");
             q.Property(e => e.CancelledBy).HasColumnName("CANCELLED_BY");
             q.Property(e => e.CancelledReason).HasColumnName("CANCELLED_REASON").HasMaxLength(500);
             q.Property(e => e.NumCartons).HasColumnName("NUM_CARTONS");
