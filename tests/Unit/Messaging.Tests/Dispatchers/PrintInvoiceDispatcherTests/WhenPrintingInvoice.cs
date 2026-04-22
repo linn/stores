@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Messaging.Tests.Dispatchers.PrintInvoiceDispatcherTests
 {
+    using System.Collections.Generic;
+
     using NSubstitute;
 
     using NUnit.Framework;
@@ -24,7 +26,7 @@
                 "print.invoice.document",
                 Arg.Any<byte[]>(),
                 "application/json",
-                Arg.Any<System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object, object>>>());
+                Arg.Any<IEnumerable<KeyValuePair<object, object>>>());
         }
     }
 }
