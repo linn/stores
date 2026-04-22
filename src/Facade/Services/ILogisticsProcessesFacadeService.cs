@@ -9,7 +9,5 @@
         IResult<ProcessResult> PrintLabel(LogisticsLabelRequestResource resource);
 
         IResult<ProcessResult> PrintConsignmentDocuments(ConsignmentRequestResource resource);
-
-        IResult<ProcessResult> SaveConsignmentDocuments(ConsignmentRequestResource resource);
     }
 }

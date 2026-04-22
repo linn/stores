@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Messaging.Tests.Dispatchers.PrintConsignmentNoteDispatcherTests
 {
+    using System.Collections.Generic;
+
     using NSubstitute;
 
     using NUnit.Framework;
@@ -19,9 +21,10 @@
         public void ShouldSendMessage()
         {
             this.MessageDispatcher.Received().Dispatch(
-                "orawin.consignment-note.print",
+                "print.packing-list.document",
                 Arg.Any<byte[]>(),
-                "application/json");
+                "application/json",
+                Arg.Any<IEnumerable<KeyValuePair<object, object>>>());
         }
     }
 }

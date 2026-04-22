@@ -32,8 +32,6 @@ import printConsignmentDocumentsActions from '../../actions/printConsignmentDocu
 import printConsignmentDocumentsSelectors from '../../selectors/printConsignmentDocumentsSelectors';
 import consignmentPackingListSelectors from '../../selectors/consignmentPackingListSelectors';
 import consignmentPackingListActions from '../../actions/consignmentPackingListActions';
-import saveConsignmentDocumentsActions from '../../actions/saveConsignmentDocumentsActions';
-import saveConsignmentDocumentsSelectors from '../../selectors/saveConsignmentDocumentsSelectors';
 import salesOutletsSelectors from '../../selectors/salesOutletsSelectors';
 import salesOutletsActions from '../../actions/salesOutletsActions';
 import exportRsnsActions from '../../actions/exportRsnsActions';
@@ -100,8 +98,6 @@ const mapStateToProps = (state, ownProps) => ({
     consignmentPackingListLoading: consignmentPackingListSelectors.getLoading(state),
     cartonTypesSearchResults: cartonTypesSelectors.getSearchItems(state),
     cartonTypesSearchLoading: cartonTypesSelectors.getSearchLoading(state),
-    saveDocumentsWorking: saveConsignmentDocumentsSelectors.getWorking(state),
-    saveDocumentsResult: saveConsignmentDocumentsSelectors.getData(state),
     salesOutlets: salesOutletsSelectors.getSearchItems(state),
     salesOutletsLoading: salesOutletsSelectors.getLoading(state),
     rsnsSearchResults: exportRsnsSelectors.getSearchItems(state),
@@ -138,8 +134,6 @@ const mapDispatchToProps = {
     clearConsignmentPackingList: consignmentPackingListActions.clearItem,
     searchCartonTypes: cartonTypesActions.search,
     clearCartonTypesSearch: cartonTypesActions.clearSearch,
-    saveDocuments: saveConsignmentDocumentsActions.requestProcessStart,
-    saveDocumentsClearData: saveConsignmentDocumentsActions.clearProcessData,
     getSalesOutlets: salesOutletsActions.searchWithOptions,
     searchRsns: exportRsnsActions.searchWithOptions,
     clearRsnsSearch: exportRsnsActions.clearSearch,

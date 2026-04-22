@@ -143,7 +143,7 @@
         [Test]
         public void ShouldPrintRsn()
         {
-            this.PrintRsnService.Received().PrintRsn(123456, 1, "Service Copy");
+            this.PrintRsnService.Received().PrintRsn(123456, 1, "Service");
         }
     }
 }

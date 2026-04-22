@@ -98,12 +98,6 @@ export const printConsignmentDocuments = new ItemType(
     '/logistics/print-consignment-documents'
 );
 
-export const saveConsignmentDocuments = new ItemType(
-    'saveConsignmentDocuments',
-    'SAVE_CONSIGNMENT_DOCUMENTS',
-    '/logistics/save-consignment-documents'
-);
-
 export const unpickStock = new ItemType(
     'unpickStock',
     'UNPICK_STOCK',

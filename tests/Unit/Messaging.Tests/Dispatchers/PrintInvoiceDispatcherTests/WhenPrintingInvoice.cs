@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Messaging.Tests.Dispatchers.PrintInvoiceDispatcherTests
 {
+    using System.Collections.Generic;
+
     using NSubstitute;
 
     using NUnit.Framework;
@@ -9,16 +11,22 @@
         [SetUp]
         public void SetUp()
         {
-            this.Sut.PrintInvoice(4321, "I", "MASTER", "Y", "invoice");
+            this.Sut.PrintInvoice(
+                "invoice",
+                "I",
+                4321,
+                false, 
+                true);
         }
 
         [Test]
         public void ShouldSendMessage()
         {
             this.MessageDispatcher.Received().Dispatch(
-                "orawin.invoice.print",
+                "print.invoice.document",
                 Arg.Any<byte[]>(),
-                "application/json");
+                "application/json",
+                Arg.Any<IEnumerable<KeyValuePair<object, object>>>());
         }
     }
 }

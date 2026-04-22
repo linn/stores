@@ -62,7 +62,6 @@
             this.Post("/logistics/labels", _ => this.PrintLabels());
             this.Post("/logistics/labels-reprint", _ => this.GetApp());
             this.Post("/logistics/print-consignment-documents", _ => this.PrintDocuments());
-            this.Post("/logistics/save-consignment-documents", _ => this.SaveDocuments());
         }
 
         private object AddConsignment()
@@ -86,12 +85,6 @@
             var resource = this.Bind<ConsignmentRequestResource>();
             var result = this.logisticsProcessesFacadeService.PrintConsignmentDocuments(resource);
             return this.Negotiate.WithModel(result);
-        }
-
-        private object SaveDocuments()
-        {
-            var resource = this.Bind<ConsignmentRequestResource>();
-            return this.Negotiate.WithModel(this.logisticsProcessesFacadeService.SaveConsignmentDocuments(resource));
         }
 
         private object PrintLabels()

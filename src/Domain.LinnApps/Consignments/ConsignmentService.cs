@@ -25,8 +25,6 @@
 
         private readonly IPrintConsignmentNoteDispatcher printConsignmentNoteDispatcher;
 
-        private readonly IPrintService printService;
-
         private readonly ILog log; 
 
         private readonly IRepository<PrinterMapping, int> printerMappingRepository;
@@ -41,7 +39,6 @@
             IRepository<Consignment, int> consignmentRepository,
             IRepository<ExportBook, int> exportBookRepository,
             IConsignmentProxyService consignmentProxyService,
-            IPrintService printService,
             ILog log,
             IInvoicingPack invoicingPack,
             IExportBookPack exportBookPack,
@@ -55,7 +52,6 @@
             this.exportBookPack = exportBookPack;
             this.printInvoiceDispatcher = printInvoiceDispatcher;
             this.printConsignmentNoteDispatcher = printConsignmentNoteDispatcher;
-            this.printService = printService;
             this.log = log;
             this.printerMappingRepository = printerMappingRepository;
             this.consignmentRepository = consignmentRepository;
@@ -103,8 +99,6 @@
 
         public ProcessResult PrintConsignmentDocuments(int consignmentId, int userNumber)
         {
-            var printerName = this.GetPrinter(userNumber);
-            var printerUri = this.GetPrinterUri(userNumber);
             var consignment = this.consignmentRepository.FindById(consignmentId);
             
             this.PrintDocuments(consignment, userNumber);
@@ -176,27 +170,6 @@
             return result;
         }
 
-        public ProcessResult SaveConsignmentDocuments(int consignmentId)
-        {
-            var consignment = this.consignmentRepository.FindById(consignmentId);
-
-            foreach (var consignmentInvoice in consignment.Invoices)
-            {
-                this.printInvoiceDispatcher.SaveInvoice(
-                    consignmentInvoice.DocumentNumber,
-                    consignmentInvoice.DocumentType,
-                    "CUSTOMER MASTER",
-                    "Y",
-                    $"Invoice {consignmentInvoice.DocumentNumber}.pdf");
-            }
-
-            this.printConsignmentNoteDispatcher.SaveConsignmentNote(
-                consignment.ConsignmentId,
-                $"Packing List {consignment.ConsignmentId}.pdf");
-
-            return new ProcessResult(true, $"Documents saved for consignment {consignmentId}");
-        }
-
         public IEnumerable<Consignment> GetByInvoiceNumber(int invoiceNumber)
         {
             var invoice = this.invoiceRepository.FindById(invoiceNumber);
@@ -253,7 +226,6 @@
         private void PrintDocuments(Consignment consignment, int userNumber)
         {
             var printerUri = this.GetPrinterUri(userNumber);
-            var printerName = this.GetPrinter(userNumber);
 
             var updatedConsignment = this.consignmentRepository.FindById(consignment.ConsignmentId);
             var numberOfCopies = consignment.Address.Country.NumberOfCopiesOfDispatchDocuments ?? 1;
@@ -262,24 +234,22 @@
             {
                 this.log.Info($"Printing Consignment note via msg");
 
-                this.PrintConsignmentNote(consignment, numberOfCopies, printerName);
+                this.PrintConsignmentNote(consignment, numberOfCopies, printerUri);
             }
 
             this.PrintInvoices(
                 updatedConsignment,
                 consignment.Address.Country.CountryCode,
                 numberOfCopies,
-                printerName,
                 printerUri);
 
-            this.MaybePrintExportBook(consignment, printerName, printerUri);
+            this.MaybePrintExportBook(consignment, printerUri);
         }
 
         private void PrintInvoices(
             Consignment updatedConsignment,
             string countryCode,
             int numberOfCopies,
-            string printerName,
             string printerUri)
         {
             foreach (var consignmentInvoice in updatedConsignment.Invoices)
@@ -292,8 +262,7 @@
                         {
                             this.log.Info($"Document with {consignmentInvoice.DocumentType} {consignmentInvoice.DocumentNumber} {countryCode} sent to {printerUri}. Regular invoice.");
 
-                            // new temporary proxy print service
-                            this.printService.PrintDocument(
+                            this.printInvoiceDispatcher.PrintInvoice(
                                 printerUri,
                                 consignmentInvoice.DocumentType,
                                 consignmentInvoice.DocumentNumber,
@@ -312,11 +281,10 @@
                             $"Document with {consignmentInvoice.DocumentType} {consignmentInvoice.DocumentNumber} " +
                             $"{countryCode} sent to {printerUri}. Delivery note with no prices.");
 
-                        // new temporary proxy print service
-                        this.printService.PrintDocument(
+                        this.printInvoiceDispatcher.PrintInvoice(
                             printerUri,
-                            consignmentInvoice.DocumentType,
-                            consignmentInvoice.DocumentNumber,
+                            consignmentInvoice.DocumentType, 
+                            consignmentInvoice.DocumentNumber, 
                             false,
                             false);
                     }
@@ -328,15 +296,15 @@
             }
         }
 
-        private void PrintConsignmentNote(Consignment consignment, int numberOfCopies, string printerName)
+        private void PrintConsignmentNote(Consignment consignment, int numberOfCopies, string printerUri)
         {
             for (var i = 1; i <= numberOfCopies; i++)
             {
-                this.printConsignmentNoteDispatcher.PrintConsignmentNote(consignment.ConsignmentId, printerName);
+                this.printConsignmentNoteDispatcher.PrintConsignmentNote(consignment.ConsignmentId, printerUri);
             }
         }
 
-        private void MaybePrintExportBook(Consignment consignment, string printerName, string printerUri)
+        private void MaybePrintExportBook(Consignment consignment, string printerUri)
         {
             this.log.Info($"Search for Export Books. Consignment Id {consignment.ConsignmentId}");
 
@@ -353,30 +321,13 @@
                         $"Consignment with Id {exportBook.ConsignmentId} Export Id {exportBook.ExportId} " +
                         $"sent to {printerUri}. Export Book.");
 
-                    // new temporary proxy print service
-                    this.printService.PrintDocument(printerUri, "E", exportBook.ExportId, false, true);
+                    this.printInvoiceDispatcher.PrintInvoice(printerUri, "E", exportBook.ExportId, false, true);
                 }
                 catch (PrintServiceException exception)
                 {
                     this.log.Error($"Printing failed for document {consignment.ConsignmentId} Export Id {exportBook.ExportId} to {printerUri}. Export Book.");
                 }
             }
-        }
-
-        private string GetPrinter(int userNumber)
-        {
-            var printer = this.printerMappingRepository.FindBy(
-                a => a.UserNumber == userNumber && a.PrinterGroup == "DISPATCH-INVOICE");
-
-            if (!string.IsNullOrEmpty(printer?.PrinterName))
-            {
-                return printer.PrinterName;
-            }
-
-            printer = this.printerMappingRepository.FindBy(
-                a => a.DefaultForGroup == "Y" && a.PrinterGroup == "DISPATCH-INVOICE");
-
-            return printer?.PrinterName;
         }
 
         private string GetPrinterUri(int userNumber)

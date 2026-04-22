@@ -17,7 +17,7 @@
             builder.RegisterInfiniteRetryStrategy();
             builder.RegisterConnector();
             builder.RegisterMessageDispatcher();
-            builder.RegisterSender("orawin.x", "Stores Message Dispatcher");
+            builder.RegisterSender("print.x", "Stores Message Dispatcher");
 
             builder.RegisterType<PrintConsignmentNoteDispatcher>().As<IPrintConsignmentNoteDispatcher>();
             builder.RegisterType<PrintInvoiceDispatcher>().As<IPrintInvoiceDispatcher>();
