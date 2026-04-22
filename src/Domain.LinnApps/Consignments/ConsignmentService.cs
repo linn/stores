@@ -25,8 +25,6 @@
 
         private readonly IPrintConsignmentNoteDispatcher printConsignmentNoteDispatcher;
 
-        private readonly IPrintService printService;
-
         private readonly ILog log; 
 
         private readonly IRepository<PrinterMapping, int> printerMappingRepository;
@@ -41,7 +39,6 @@
             IRepository<Consignment, int> consignmentRepository,
             IRepository<ExportBook, int> exportBookRepository,
             IConsignmentProxyService consignmentProxyService,
-            IPrintService printService,
             ILog log,
             IInvoicingPack invoicingPack,
             IExportBookPack exportBookPack,
@@ -55,7 +52,6 @@
             this.exportBookPack = exportBookPack;
             this.printInvoiceDispatcher = printInvoiceDispatcher;
             this.printConsignmentNoteDispatcher = printConsignmentNoteDispatcher;
-            this.printService = printService;
             this.log = log;
             this.printerMappingRepository = printerMappingRepository;
             this.consignmentRepository = consignmentRepository;
@@ -332,22 +328,6 @@
                     this.log.Error($"Printing failed for document {consignment.ConsignmentId} Export Id {exportBook.ExportId} to {printerUri}. Export Book.");
                 }
             }
-        }
-
-        private string GetPrinter(int userNumber)
-        {
-            var printer = this.printerMappingRepository.FindBy(
-                a => a.UserNumber == userNumber && a.PrinterGroup == "DISPATCH-INVOICE");
-
-            if (!string.IsNullOrEmpty(printer?.PrinterName))
-            {
-                return printer.PrinterName;
-            }
-
-            printer = this.printerMappingRepository.FindBy(
-                a => a.DefaultForGroup == "Y" && a.PrinterGroup == "DISPATCH-INVOICE");
-
-            return printer?.PrinterName;
         }
 
         private string GetPrinterUri(int userNumber)
