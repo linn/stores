@@ -106,6 +106,7 @@
         {
             var result = this.serviceDbContext.Parts
                 .Include(p => p.MechPartSource)
+                .Include(p => p.PreferredSupplier)
                 .AsNoTracking()
                 .Where(x => EF.Functions.Like(x.PartNumber, $"%{searchTerm}%"))
                 .Union(this.serviceDbContext.Parts
@@ -136,7 +137,7 @@
             bool newestFirst = false,
             int? limit = null)
         {
-            var result = this.serviceDbContext.Parts.Include(x => x.ProductAnalysisCode).AsNoTracking().Where(
+            var result = this.serviceDbContext.Parts.Include(x => x.ProductAnalysisCode).Include(x => x.PreferredSupplier).AsNoTracking().Where(
                 x => (string.IsNullOrEmpty(partNumberSearchTerm) || EF.Functions.Like(
                           x.PartNumber,
                           $"{partNumberSearchTerm.Replace("*", "%")}"))
