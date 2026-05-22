@@ -19,12 +19,12 @@
             this.messageDispatcher = messageDispatcher;
         }
 
-        public void PrintConsignmentNote(int consignmentId, string printerUri)
+        public void PrintConsignmentNote(int consignmentId, string printerGroup)
         {
             var headers = new List<KeyValuePair<object, object>>
                               {
                                   new KeyValuePair<object, object>("consignmentId", consignmentId.ToString()),
-                                  new KeyValuePair<object, object>("printerUri", printerUri ?? string.Empty)
+                                  new KeyValuePair<object, object>("printerGroup", printerGroup ?? string.Empty)
                               };
 
             var body = Encoding.UTF8.GetBytes(string.Empty);

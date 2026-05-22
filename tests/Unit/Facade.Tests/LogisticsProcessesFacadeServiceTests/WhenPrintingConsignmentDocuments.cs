@@ -30,7 +30,7 @@
             this.serviceResult = new ProcessResult(true, "ok");
 
             this.ConsignmentService
-                .PrintConsignmentDocuments(this.resource.ConsignmentId, this.resource.UserNumber)
+                .PrintConsignmentDocuments(this.resource.ConsignmentId)
                 .Returns(this.serviceResult);
 
             this.result = this.Sut.PrintConsignmentDocuments(this.resource);
@@ -39,9 +39,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ConsignmentService.Received().PrintConsignmentDocuments(
-                this.resource.ConsignmentId,
-                this.resource.UserNumber);
+            this.ConsignmentService.Received().PrintConsignmentDocuments(this.resource.ConsignmentId);
         }
 
         [Test]

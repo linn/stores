@@ -28,21 +28,12 @@ namespace Linn.Stores.Messaging.Dispatchers
 
         public void PrintRsn(int rsnNumber, int userNumber, string copy, string facilityCode = null)
         {
-            var printer = this.printerRepository
-                .FindBy(a => a.UserNumber == userNumber && a.PrinterGroup == "GOODS-IN")?.PrinterUri;
-
-            if (string.IsNullOrEmpty(printer))
-            {
-                 printer = this.printerRepository.FindBy(
-                    a => a.DefaultForGroup == "Y" && a.PrinterGroup == "GOODS-IN").PrinterUri;
-            }
-
             var headers = new List<KeyValuePair<object, object>>
                               {
                                   new KeyValuePair<object, object>("rsnNumber", rsnNumber.ToString()),
                                   new KeyValuePair<object, object>("copyType", copy),
                                   new KeyValuePair<object, object>("facilityCode", facilityCode ?? string.Empty),
-                                  new KeyValuePair<object, object>("printerUri", printer ?? string.Empty)
+                                  new KeyValuePair<object, object>("printerGroup", "GOODS-IN")
                               };
 
             var body = Encoding.UTF8.GetBytes(string.Empty);

@@ -20,7 +20,7 @@
         }
 
         public void PrintInvoice(
-            string printerUri,
+            string printerGroup,
             string documentType,
             int documentNumber,
             bool showTermsAndConditions,
@@ -32,7 +32,7 @@
                                   new KeyValuePair<object, object>("documentType", documentType ?? string.Empty),
                                   new KeyValuePair<object, object>("showTermsAndConditions", showTermsAndConditions.ToString()),
                                   new KeyValuePair<object, object>("showPrices", showPrices.ToString()),
-                                  new KeyValuePair<object, object>("printerUri", printerUri ?? string.Empty)
+                                  new KeyValuePair<object, object>("printerGroup", printerGroup ?? string.Empty)
                               };
 
             var body = Encoding.UTF8.GetBytes(string.Empty);

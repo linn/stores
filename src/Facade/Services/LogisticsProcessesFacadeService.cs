@@ -114,7 +114,7 @@
 
             try
             {
-                result = this.consignmentService.PrintConsignmentDocuments(resource.ConsignmentId, resource.UserNumber);
+                result = this.consignmentService.PrintConsignmentDocuments(resource.ConsignmentId);
             }
             catch (ProcessException exception)
             {
