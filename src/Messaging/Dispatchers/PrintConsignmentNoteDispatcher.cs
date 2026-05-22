@@ -1,10 +1,12 @@
 ﻿namespace Linn.Stores.Messaging.Dispatchers
 {
-    using System.Collections.Generic;
     using System.Text;
 
     using Linn.Common.Messaging.RabbitMQ;
     using Linn.Stores.Domain.LinnApps.Dispatchers;
+    using Linn.Stores.Resources.MessageDispatch;
+
+    using Newtonsoft.Json;
 
     public class PrintConsignmentNoteDispatcher : IPrintConsignmentNoteDispatcher
     {
@@ -21,15 +23,15 @@
 
         public void PrintConsignmentNote(int consignmentId, string printerGroup)
         {
-            var headers = new List<KeyValuePair<object, object>>
-                              {
-                                  new KeyValuePair<object, object>("consignmentId", consignmentId.ToString()),
-                                  new KeyValuePair<object, object>("printerGroup", printerGroup ?? string.Empty)
-                              };
+            var messageBody = new PrintPackingListMessageBody
+                                  {
+                                      ConsignmentId = consignmentId,
+                                      PrinterGroup = printerGroup ?? string.Empty
+                                  };
 
-            var body = Encoding.UTF8.GetBytes(string.Empty);
+            var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(messageBody));
 
-            this.messageDispatcher.Dispatch(this.routingKey, body, this.contentType, headers);
+            this.messageDispatcher.Dispatch(this.routingKey, body, this.contentType);
         }
     }
 }

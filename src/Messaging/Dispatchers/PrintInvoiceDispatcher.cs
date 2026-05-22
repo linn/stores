@@ -1,10 +1,12 @@
 ﻿namespace Linn.Stores.Messaging.Dispatchers
 {
-    using System.Collections.Generic;
     using System.Text;
 
     using Linn.Common.Messaging.RabbitMQ;
     using Linn.Stores.Domain.LinnApps.Dispatchers;
+    using Linn.Stores.Resources.MessageDispatch;
+
+    using Newtonsoft.Json;
 
     public class PrintInvoiceDispatcher : IPrintInvoiceDispatcher
     {
@@ -26,18 +28,18 @@
             bool showTermsAndConditions,
             bool showPrices)
         {
-            var headers = new List<KeyValuePair<object, object>>
-                              {
-                                  new KeyValuePair<object, object>("documentNumber", documentNumber.ToString()),
-                                  new KeyValuePair<object, object>("documentType", documentType ?? string.Empty),
-                                  new KeyValuePair<object, object>("showTermsAndConditions", showTermsAndConditions.ToString()),
-                                  new KeyValuePair<object, object>("showPrices", showPrices.ToString()),
-                                  new KeyValuePair<object, object>("printerGroup", printerGroup ?? string.Empty)
-                              };
+            var messageBody = new PrintInvoiceDocumentMessageBody
+                                  {
+                                      DocumentNumber = documentNumber,
+                                      DocumentType = documentType ?? string.Empty,
+                                      ShowTermsAndConditions = showTermsAndConditions,
+                                      ShowPrices = showPrices,
+                                      PrinterGroup = printerGroup ?? string.Empty
+                                  };
 
-            var body = Encoding.UTF8.GetBytes(string.Empty);
+            var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(messageBody));
 
-            this.messageDispatcher.Dispatch(this.routingKey, body, this.contentType, headers);
+            this.messageDispatcher.Dispatch(this.routingKey, body, this.contentType);
         }
     }
 }
