@@ -8,7 +8,7 @@
     {
         void CloseConsignment(Consignment consignment, int closedById);
 
-        ProcessResult PrintConsignmentDocuments(int consignmentId, int userNumber);
+        ProcessResult PrintConsignmentDocuments(int consignmentId);
 
         PackingList GetPackingList(int consignmentId);
 

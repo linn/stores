@@ -18,14 +18,14 @@
         public void SetUp()
         {
             this.userNumber = 12345;
-            this.result = this.Sut.PrintConsignmentDocuments(this.ConsignmentId, this.userNumber);
+            this.result = this.Sut.PrintConsignmentDocuments(this.ConsignmentId);
         }
 
         [Test]
         public void ShouldPrintInvoices()
         {
-            this.PrintInvoiceDispatcher.Received().PrintInvoice("http://test:printer", "I", 123,  false, false);
-            this.PrintInvoiceDispatcher.Received().PrintInvoice("http://test:printer", "I", 456, false, false);
+            this.PrintInvoiceDispatcher.Received().PrintInvoice("DISPATCH-INVOICE", "I", 123,  false, false);
+            this.PrintInvoiceDispatcher.Received().PrintInvoice("DISPATCH-INVOICE", "I", 456, false, false);
         }
     }
 }

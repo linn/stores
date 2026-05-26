@@ -50,8 +50,8 @@
         [Test]
         public void ShouldPrintOneInvoice()
         {
-            this.PrintInvoiceDispatcher.DidNotReceive().PrintInvoice("http://test:printer", "I", 123, true, true);
-            this.PrintInvoiceDispatcher.Received().PrintInvoice("http://test:printer", "I", 123, false, false);
+            this.PrintInvoiceDispatcher.DidNotReceive().PrintInvoice("DISPATCH-INVOICE", "I", 123, true, true);
+            this.PrintInvoiceDispatcher.Received().PrintInvoice("DISPATCH-INVOICE", "I", 123, false, false);
         }
 
         [Test]
